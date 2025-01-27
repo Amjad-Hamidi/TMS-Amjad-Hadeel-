@@ -1,10 +1,10 @@
 import React from 'react';
 import LoginForm from '../components/LoginForm';
 
-const LoginPage: React.FC = () => {
+const SignIn: React.FC = () => {
     const handleLogin = (data: { email: string; password: string }) => {
         console.log('Login data:', data);
-        // Add API call or logic here
+
     };
 
     return (
@@ -14,4 +14,4 @@ const LoginPage: React.FC = () => {
     );
 };
 
-export default LoginPage;
+export default SignIn;
