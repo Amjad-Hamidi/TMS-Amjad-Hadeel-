@@ -7,8 +7,8 @@ namespace TMS.API.Services.TrainingPrograms
     {
         IEnumerable<TrainingProgram> GetTrainingPrograms();
         TrainingProgram? Get(Expression<Func<TrainingProgram, bool>> expression);
-        TrainingProgram Add(TrainingProgram trainingProgram);
-        bool Edit(int id, TrainingProgram trainingProgram);
+        TrainingProgram Add(TrainingProgram trainingProgram, IFormFile file); // IFormFile is used to get the file from the form
+        bool Edit(int id, TrainingProgram trainingProgram, IFormFile file); // IFormFile is used to get the file from the form
         bool Remove(int id);
     }
 }

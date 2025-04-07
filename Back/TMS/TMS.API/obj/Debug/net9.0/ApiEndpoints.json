@@ -85,7 +85,23 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.CategoriesController",
-    "Method": "GetCategoryById",
+    "Method": "Create",
+    "RelativePath": "api/Categories",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryRequest",
+        "Type": "TMS.API.DTOs.Categories.Requests.CategoryRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.CategoriesController",
+    "Method": "GetById",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -101,7 +117,7 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.CategoriesController",
-    "Method": "UpdateCategory",
+    "Method": "Update",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -148,7 +164,23 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
-    "Method": "GetTrainingProgramById",
+    "Method": "Create",
+    "RelativePath": "api/TrainingPrograms",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trainingProgramRequest",
+        "Type": "TMS.API.DTOs.TrainingPrograms.Requests.TrainingProgramRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
+    "Method": "GetById",
     "RelativePath": "api/TrainingPrograms/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -164,7 +196,7 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
-    "Method": "UpdateTrainingProgram",
+    "Method": "Update",
     "RelativePath": "api/TrainingPrograms/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -176,9 +208,59 @@
         "IsRequired": true
       },
       {
-        "Name": "trainingProgramRequest",
-        "Type": "TMS.API.DTOs.TrainingPrograms.Requests.TrainingProgramRequest",
-        "IsRequired": true
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Duration",
+        "Type": "System.TimeSpan",
+        "IsRequired": false
+      },
+      {
+        "Name": "StartDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "EndDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "Location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "ImagePath",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "SeatsAvailable",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Rating",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

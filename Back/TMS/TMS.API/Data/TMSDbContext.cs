@@ -15,6 +15,12 @@ namespace TMS.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // DB في Category.Name منع تكرار ال   
+            modelBuilder.Entity<Category>() // وبحط شرط CategoriesController هاي مش كافية بروح عال backend لو بدي اشتغل على مستوى
+                .HasIndex(c => c.Name)
+                .IsUnique(); // بمنعني SQL DB فقط, لو اجيت اضيف يدوي في DB بشتغل على نطاق ال 
+
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<UserAccount>().ToTable("Users");

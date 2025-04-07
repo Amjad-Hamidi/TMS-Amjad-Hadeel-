@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TMS.API.Data;
 using TMS.API.Models;
@@ -9,25 +10,60 @@ namespace TMS.API.Services.Programs
     public class TrainingProgramService : ITrainingProgramService
     {
         private readonly TMSDbContext tMSDbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public TrainingProgramService(TMSDbContext tMSDbContext)
+        public TrainingProgramService(TMSDbContext tMSDbContext, IHttpContextAccessor httpContextAccessor)
         {
             this.tMSDbContext = tMSDbContext;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
-        public TrainingProgram Add(TrainingProgram trainingProgram)
+        public TrainingProgram Add(TrainingProgram trainingProgram, IFormFile formFile)
         {
+            var file = formFile;
+
+            if (file != null && file.Length > 0)
+            {
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); // OR:  Guid.NewGuid().ToString() + Path.GetFileName(file.FileName);
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create)) // OR: using (var stream = System.IO.File.Create(filePath))
+                {
+                    file.CopyTo(stream);
+                }
+                string baseUrl = $"{httpContextAccessor.HttpContext?.Request.Scheme}://{httpContextAccessor.HttpContext?.Request.Host}";
+                trainingProgram.ImagePath = $"{baseUrl}/images/{fileName}"; // OR: trainingProgram.ImagePath = fileName;
+            }
+
             tMSDbContext.TrainingPrograms.Add(trainingProgram);
             tMSDbContext.SaveChanges();
             return trainingProgram;
         }
 
-        public bool Edit(int id, TrainingProgram trainingProgram)
+        public bool Edit(int id, TrainingProgram trainingProgram, IFormFile formFile)
         {
             TrainingProgram? trainingProgramInDb = tMSDbContext.TrainingPrograms.AsNoTracking().FirstOrDefault(tP => tP.TrainingProgramId == id);
             if (trainingProgramInDb == null) return false;
 
             trainingProgram.TrainingProgramId = id;
+
+            var file = formFile;
+            if (file != null && file.Length > 0)
+            {
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); // OR:  Guid.NewGuid().ToString() + Path.GetFileName(file.FileName);
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create)) // OR: using (var stream = System.IO.File.Create(filePath))
+                {
+                    file.CopyTo(stream);
+                }
+                string baseUrl = $"{httpContextAccessor.HttpContext?.Request.Scheme}://{httpContextAccessor.HttpContext?.Request.Host}";
+                trainingProgram.ImagePath = $"{baseUrl}/images/{fileName}"; // OR: trainingProgram.ImagePath = fileName;
+            }
+            /* // من حاله اصلا بمنعه لما يعدل الا يضيف صورة اجباري
+            else
+            {
+                trainingProgram.ImagePath = trainingProgramInDb.ImagePath;
+            }
+            */
             tMSDbContext.TrainingPrograms.Update(trainingProgram);
             tMSDbContext.SaveChanges();
             return true;
@@ -48,6 +84,14 @@ namespace TMS.API.Services.Programs
             TrainingProgram? trainingProgramInDb = tMSDbContext.TrainingPrograms.Find(id);
             if (trainingProgramInDb == null) return false;
 
+            // Delete the image file from the server
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", trainingProgramInDb.ImagePath);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            // Remove the training program from the database
             tMSDbContext.TrainingPrograms.Remove(trainingProgramInDb);
             tMSDbContext.SaveChanges();
             return true;

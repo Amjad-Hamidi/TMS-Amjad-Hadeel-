@@ -27,17 +27,27 @@ namespace TMS.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTrainingProgramById(int id)
+        public IActionResult GetById(int id)
         {
             var trainingProgram = trainingProgramService.Get(tP => tP.TrainingProgramId == id);
 
             return trainingProgram == null ? NotFound() : Ok(trainingProgram.Adapt<TrainingProgramResponse>());
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateTrainingProgram([FromRoute] int id, [FromBody] TrainingProgramRequest trainingProgramRequest)
+        [HttpPost("")]
+        public IActionResult Create([FromBody] TrainingProgramRequest trainingProgramRequest)
         {
-            var trainingProgramInDb = trainingProgramService.Edit(id, trainingProgramRequest.Adapt<TrainingProgram>());
+            var trainingProgramInDb = trainingProgramService.Add(trainingProgramRequest.Adapt<TrainingProgram>(), trainingProgramRequest.ImagePath);
+
+            if (trainingProgramInDb is null)
+                return BadRequest("Error creating training program");
+            return CreatedAtAction(nameof(GetById), new { id = trainingProgramInDb.TrainingProgramId }, trainingProgramInDb); // Adapt<TrainingProgramResponse>() من حاله بعمل GetTrainingProgramById بس يحوله على
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromForm] TrainingProgramRequest trainingProgramRequest)
+        {
+            var trainingProgramInDb = trainingProgramService.Edit(id, trainingProgramRequest.Adapt<TrainingProgram>(), trainingProgramRequest.ImagePath);
             if (!trainingProgramInDb)
                 return NotFound();
             return NoContent();

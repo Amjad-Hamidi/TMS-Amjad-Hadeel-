@@ -58,6 +58,9 @@ namespace TMS.API
             // ITrainingProgramService عملنا حقن فيه لل TrainingProgramsController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
             builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
 
+            // ASP.NET Core. داخل  Dependency Injection container في الـ IHttpContextAccessor بتسجل خدمة 
+            builder.Services.AddHttpContextAccessor(); // عشان موضوع توليد الملف وحفظه مع الامتداد كامل TrainingProgramService.cs مربوطة مع 
+
 
             /*
             builder.Services.AddSwaggerGen(options =>
@@ -131,7 +134,11 @@ namespace TMS.API
 
             var app = builder.Build();
 
-            
+            // CORS لامكانية الربط مع الفرونت
+            app.UseCors(policy =>
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader());
 
 
 
@@ -152,6 +159,8 @@ namespace TMS.API
             app.UseAuthentication(); // middleware (انا ضفتها)
             app.UseAuthorization(); // middleware (هي موجودة من حالها)
 
+            // wwwroot/images السماح للمتصفح بتحميل الصور من ال 
+            app.UseStaticFiles(); // wwwroot/images لتحميل الصور من ال 
 
             app.MapControllers();
 

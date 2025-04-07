@@ -9,7 +9,7 @@
         public DateTime EndDate { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; } // true = Active, false = Inactive
-        public string ImagePath { get; set; }
+        public IFormFile ImagePath { get; set; }
         public int SeatsAvailable { get; set; }
         public decimal Rating { get; set; }
         public int CategoryId { get; set; } // لإرسال التصنيف المرتبط

@@ -3,28 +3,8 @@
   "WorkspaceRootPath": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\dtos\\trainingprograms\\requests\\trainingprogramrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\dtos\\trainingprograms\\requests\\trainingprogramrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\controllers\\trainingprogramscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\trainingprogramscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\trainingprograms\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,24 +15,20 @@
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\categories\\icategoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\categories\\icategoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\controllers\\trainingprogramscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\trainingprogramscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\categories\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\categories\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\trainingprograms\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\dtos\\categories\\requests\\categoryrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\dtos\\categories\\requests\\categoryrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\dtos\\categories\\responses\\categoryresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\dtos\\categories\\responses\\categoryresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\data\\tmsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\data\\tmsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\controllers\\useraccountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -74,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -83,39 +59,65 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "TrainingProgramRequest.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "RelativeToolTip": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAxwAsAAAAkAAAAAAAAAA==",
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\CategoriesController.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T14:42:46.605Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TrainingProgram.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\TrainingProgram.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Models\\TrainingProgram.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\TrainingProgram.cs",
-              "RelativeToolTip": "TMS.API\\Models\\TrainingProgram.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T11:14:53.599Z",
+              "WhenOpened": "2025-04-07T12:28:38.431Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Program.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Program.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Program.cs",
+              "RelativeToolTip": "TMS.API\\Program.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAiwBUAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T01:12:27.234Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "TrainingProgramService.cs",
               "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
               "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
               "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
               "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T11:07:28.902Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ITrainingProgramService.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAlwAcAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T13:20:43.677Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TrainingProgramRequest.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "RelativeToolTip": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAA1wAoAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T14:42:46.605Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -125,85 +127,25 @@
               "RelativeDocumentMoniker": "TMS.API\\Controllers\\TrainingProgramsController.cs",
               "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\TrainingProgramsController.cs",
               "RelativeToolTip": "TMS.API\\Controllers\\TrainingProgramsController.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAQwBcAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T11:02:21.601Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ITrainingProgramService.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T13:20:43.677Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Category.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\Category.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Models\\Category.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\Category.cs",
-              "RelativeToolTip": "TMS.API\\Models\\Category.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T11:26:53.17Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Program.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Program.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Program.cs",
-              "RelativeToolTip": "TMS.API\\Program.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAYwDwAAAAAAAAAAAAAAA==",
+              "Title": "TrainingProgram.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\TrainingProgram.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Models\\TrainingProgram.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\TrainingProgram.cs",
+              "RelativeToolTip": "TMS.API\\Models\\TrainingProgram.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAgwBAAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T01:12:27.234Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CategoriesController.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\CategoriesController.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAQwBwAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T02:37:03.634Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ICategoryService.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Categories\\ICategoryService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\Categories\\ICategoryService.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Categories\\ICategoryService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\Categories\\ICategoryService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T10:25:49.639Z"
+              "WhenOpened": "2025-04-06T11:14:53.599Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "CategoryService.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Categories\\CategoryService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\Categories\\CategoryService.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Categories\\CategoryService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\Categories\\CategoryService.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwCsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T10:34:28.674Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
               "Title": "20250406111946_change-NameOf-TrainingProgramId in TrainingProgram.cs.cs",
               "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Migrations\\20250406111946_change-NameOf-TrainingProgramId in TrainingProgram.cs.cs",
               "RelativeDocumentMoniker": "TMS.API\\Migrations\\20250406111946_change-NameOf-TrainingProgramId in TrainingProgram.cs.cs",
@@ -215,31 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "CategoryRequest.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\Categories\\Requests\\CategoryRequest.cs",
-              "RelativeDocumentMoniker": "TMS.API\\DTOs\\Categories\\Requests\\CategoryRequest.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\Categories\\Requests\\CategoryRequest.cs",
-              "RelativeToolTip": "TMS.API\\DTOs\\Categories\\Requests\\CategoryRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T10:53:37.518Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "CategoryResponse.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\Categories\\Responses\\CategoryResponse.cs",
-              "RelativeDocumentMoniker": "TMS.API\\DTOs\\Categories\\Responses\\CategoryResponse.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\DTOs\\Categories\\Responses\\CategoryResponse.cs",
-              "RelativeToolTip": "TMS.API\\DTOs\\Categories\\Responses\\CategoryResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T10:45:28.553Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 7,
               "Title": "UserAccountsController.cs",
               "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\UserAccountsController.cs",
               "RelativeDocumentMoniker": "TMS.API\\Controllers\\UserAccountsController.cs",
@@ -251,19 +169,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "TMSDbContext.cs",
-              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Data\\TMSDbContext.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Data\\TMSDbContext.cs",
-              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Data\\TMSDbContext.cs",
-              "RelativeToolTip": "TMS.API\\Data\\TMSDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-30T10:39:52.791Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 8,
               "Title": "UserAccount.cs",
               "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\UserAccount.cs",
               "RelativeDocumentMoniker": "TMS.API\\Models\\UserAccount.cs",
