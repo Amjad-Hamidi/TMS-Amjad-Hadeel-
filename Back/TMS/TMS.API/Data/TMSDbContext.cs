@@ -15,6 +15,41 @@ namespace TMS.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Fluent API
+            modelBuilder.Entity<ProgramTrainee>()
+                .HasKey(tp => new { tp.TraineeId, tp.TrainingProgramId }); // Composite Key
+
+            // Many-to-Many (Trainee <-> TrainingProgram) => ProgramTrainee لذلك بنعمل جدول وسيط اسمه 
+            // 1-to-Many (Trainee <-> ProgramTrainee)
+            modelBuilder.Entity<ProgramTrainee>()
+                .HasOne(tp => tp.Trainee)
+                .WithMany(u => u.EnrolledPrograms)
+                .HasForeignKey(tp => tp.TraineeId)
+                .OnDelete(DeleteBehavior.Cascade);
+            // 1-to-Many (TrainingProgram <-> ProgramTrainee)
+            modelBuilder.Entity<ProgramTrainee>()
+                .HasOne(tp => tp.TrainingProgram)
+                .WithMany(p => p.ProgramTrainees)
+                .HasForeignKey(tp => tp.TrainingProgramId)
+                .OnDelete(DeleteBehavior.Cascade);
+            // 1-to-Many (Company <-> TrainingProgram)
+            modelBuilder.Entity<TrainingProgram>()
+                .HasOne(p => p.Company)
+                .WithMany(u => u.CreatedPrograms)
+                .HasForeignKey(p => p.CompanyId)
+                .OnDelete(DeleteBehavior.Restrict); // Restrict: إذا تم حذف الشركة، لا يمكن حذف البرامج التدريبية المرتبطة بها، يجب حذفها أولاً
+            // 1-to-Many (Supervisor <-> TrainingProgram)
+            modelBuilder.Entity<TrainingProgram>()
+                .HasOne(p => p.Supervisor)
+                .WithMany(u => u.SupervisedPrograms)
+                .HasForeignKey(p => p.SupervisorId)
+                .OnDelete(DeleteBehavior.SetNull); // SetNull: في البرامج التدريبية المرتبطة به SupervisorId = null إذا تم حذف المشرف، يتم تعيين قيمة       
+            // SupervisorId in TrainingProgram can be null
+            modelBuilder.Entity<TrainingProgram>()
+                .Property(p => p.SupervisorId)
+                .IsRequired(false);
+
+
             // DB في Category.Name منع تكرار ال   
             modelBuilder.Entity<Category>() // وبحط شرط CategoriesController هاي مش كافية بروح عال backend لو بدي اشتغل على مستوى
                 .HasIndex(c => c.Name)
@@ -60,9 +95,12 @@ namespace TMS.API.Data
 
         }
 
-        public DbSet<UserAccount> UserAccounts { get; set; }
+        public DbSet<UserAccount> UserAccounts { get; set; } // Users in DB
         public DbSet<Category> Categories { get; set; }
         public DbSet<TrainingProgram> TrainingPrograms { get; set; }
+
+
+        public DbSet<ProgramTrainee> ProgramTrainees { get; set; }
 
 
     }

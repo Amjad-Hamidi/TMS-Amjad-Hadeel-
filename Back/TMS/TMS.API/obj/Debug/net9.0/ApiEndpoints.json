@@ -153,6 +153,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "TMS.API.Controllers.CategoriesController",
+    "Method": "DeleteAll",
+    "RelativePath": "api/Categories/Delete All",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
     "Method": "GetAll",
     "RelativePath": "api/TrainingPrograms",

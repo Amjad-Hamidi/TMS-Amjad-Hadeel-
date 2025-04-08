@@ -6,7 +6,9 @@
         public string Name { get; set; }
         public string Description { get; set; }
 
+
         // Navigation Property
-        public ICollection<TrainingProgram> TrainingPrograms { get;} = new List<TrainingProgram>();
+        public ICollection<TrainingProgram> TrainingPrograms { get; set; } = new List<TrainingProgram>();
+
     }
 }

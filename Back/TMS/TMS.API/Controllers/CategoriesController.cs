@@ -11,7 +11,7 @@ using TMS.API.Services.Categories;
 namespace TMS.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController]              // Primary Constructor
     public class CategoriesController(ICategoryService categoryService) : ControllerBase
     {
         private readonly ICategoryService categoryService = categoryService;
@@ -85,6 +85,19 @@ namespace TMS.API.Controllers
             if (!categoryInDb)
                 return NotFound();
             return NoContent();
-        } 
+        }
+
+        [HttpDelete("Delete All")]
+        public IActionResult DeleteAll()
+        {
+            var categoriesInDb = categoryService.GetCategories();
+            if (categoriesInDb.Count() == 0)
+                return NotFound();
+            foreach (var category in categoriesInDb)
+            {
+                categoryService.Remove(category.Id);
+            }
+            return NoContent();
+        }
     }
 }

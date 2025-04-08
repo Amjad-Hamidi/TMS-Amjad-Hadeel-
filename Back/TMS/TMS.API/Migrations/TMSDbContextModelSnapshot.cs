@@ -179,6 +179,27 @@ namespace TMS.API.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("TMS.API.Models.ProgramTrainee", b =>
+                {
+                    b.Property<string>("TraineeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TrainingProgramId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EnrolledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("TraineeId", "TrainingProgramId");
+
+                    b.HasIndex("TrainingProgramId");
+
+                    b.ToTable("ProgramTrainees");
+                });
+
             modelBuilder.Entity("TMS.API.Models.TrainingProgram", b =>
                 {
                     b.Property<int>("TrainingProgramId")
@@ -189,6 +210,10 @@ namespace TMS.API.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CompanyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -223,6 +248,9 @@ namespace TMS.API.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
+                    b.Property<string>("SupervisorId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -230,6 +258,10 @@ namespace TMS.API.Migrations
                     b.HasKey("TrainingProgramId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("SupervisorId");
 
                     b.ToTable("TrainingPrograms");
                 });
@@ -369,6 +401,25 @@ namespace TMS.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TMS.API.Models.ProgramTrainee", b =>
+                {
+                    b.HasOne("TMS.API.Models.UserAccount", "Trainee")
+                        .WithMany("EnrolledPrograms")
+                        .HasForeignKey("TraineeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TMS.API.Models.TrainingProgram", "TrainingProgram")
+                        .WithMany("ProgramTrainees")
+                        .HasForeignKey("TrainingProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trainee");
+
+                    b.Navigation("TrainingProgram");
+                });
+
             modelBuilder.Entity("TMS.API.Models.TrainingProgram", b =>
                 {
                     b.HasOne("TMS.API.Models.Category", "Category")
@@ -377,12 +428,41 @@ namespace TMS.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TMS.API.Models.UserAccount", "Company")
+                        .WithMany("CreatedPrograms")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TMS.API.Models.UserAccount", "Supervisor")
+                        .WithMany("SupervisedPrograms")
+                        .HasForeignKey("SupervisorId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Category");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("TMS.API.Models.Category", b =>
                 {
                     b.Navigation("TrainingPrograms");
+                });
+
+            modelBuilder.Entity("TMS.API.Models.TrainingProgram", b =>
+                {
+                    b.Navigation("ProgramTrainees");
+                });
+
+            modelBuilder.Entity("TMS.API.Models.UserAccount", b =>
+                {
+                    b.Navigation("CreatedPrograms");
+
+                    b.Navigation("EnrolledPrograms");
+
+                    b.Navigation("SupervisedPrograms");
                 });
 #pragma warning restore 612, 618
         }

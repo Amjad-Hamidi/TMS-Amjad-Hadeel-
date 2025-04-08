@@ -19,6 +19,17 @@ namespace TMS.API.Models
         public string? RefreshToken { get; set; } // جديد دون الحاجة لتسجيل الدخول من جديد Access Token للحصول على 
         public DateTime? RefreshTokenExpiryTime { get; set; } // لتحديد وقت انتهاء صلاحية التوكن
 
+
+        // every Company can create many Training Programs
+        public ICollection<TrainingProgram> CreatedPrograms { get; set; } = new List<TrainingProgram>();
+
+        // every Supervisor can supervise many Training Programs
+        public ICollection<TrainingProgram> SupervisedPrograms { get; set; } = new List<TrainingProgram>();
+
+        // every Trainee can enroll in many Training Programs
+        public ICollection<ProgramTrainee> EnrolledPrograms { get; set; } = new List<ProgramTrainee>();
+
+
         // اله هي الايميل value فقط , الي ال UserName هو ان ترجع IdentityUser في ToString السلوك الافتراضي ل
         public override string ToString()
         {
