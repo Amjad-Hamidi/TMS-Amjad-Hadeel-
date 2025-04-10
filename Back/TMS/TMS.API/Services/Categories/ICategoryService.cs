@@ -10,5 +10,6 @@ namespace TMS.API.Services.Categories
         Category Add(Category category);
         bool Edit(int id, Category category);
         bool Remove(int id);
+        int RemoveAll();
     }
 }

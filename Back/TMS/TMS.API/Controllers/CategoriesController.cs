@@ -57,7 +57,7 @@ namespace TMS.API.Controllers
             var categoryInDb = categoryService.Add(categoryRequest.Adapt<Category>()); // Navigation => ICollection <TrainingProgram> الوضع الافتراضي هون بحتوي برضو ال
             if (categoryInDb is null)
                 return BadRequest("Error creating category");
-            return CreatedAtAction(nameof(GetById), new { id = categoryInDb.Id }, categoryInDb); // Adapt<CategoryResponse>() من حاله بعمل GetCategoryById بس يحوله على
+            return CreatedAtAction(nameof(GetById), new { id = categoryInDb.Id }, categoryInDb.Adapt<CategoryResponse>()); // Adapt<CategoryResponse>() من حاله بعمل GetCategoryById بس يحوله على
         }
 
         [HttpPut("{id}")]
@@ -90,13 +90,11 @@ namespace TMS.API.Controllers
         [HttpDelete("Delete All")]
         public IActionResult DeleteAll()
         {
-            var categoriesInDb = categoryService.GetCategories();
-            if (categoriesInDb.Count() == 0)
-                return NotFound();
-            foreach (var category in categoriesInDb)
-            {
-                categoryService.Remove(category.Id);
-            }
+            var count = categoryService.RemoveAll();
+
+            if (count == 0)
+                return NotFound("No categories to delete.");
+
             return NoContent();
         }
     }

@@ -24,7 +24,7 @@ namespace TMS.API.Services.Categories
         public bool Edit(int id, Category category)
         {
             Category? categoryInDb = tMSDbContext.Categories.AsNoTracking().FirstOrDefault(c => c.Id == id);
-            if(categoryInDb == null) return false;
+            if (categoryInDb == null) return false;
 
             category.Id = id;
             tMSDbContext.Categories.Update(category);
@@ -45,11 +45,23 @@ namespace TMS.API.Services.Categories
         public bool Remove(int id)
         {
             Category? categoryInDb = tMSDbContext.Categories.Find(id);
-            if(categoryInDb == null) return false;
+            if (categoryInDb == null) return false;
 
             tMSDbContext.Categories.Remove(categoryInDb);
             tMSDbContext.SaveChanges();
             return true;
+        }
+
+        public int RemoveAll()
+        {
+            var all = tMSDbContext.Categories.ToList();
+            tMSDbContext.Categories.RemoveRange(all);
+            var count = tMSDbContext.SaveChanges();
+
+            // Reset the identity column (using SQL Server)
+            tMSDbContext.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Categories', RESEED, 0)");
+
+            return count;
         }
     }
 }

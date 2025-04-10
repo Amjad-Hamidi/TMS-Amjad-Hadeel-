@@ -9,6 +9,8 @@ D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\TMS.API.pdb
 D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Azure.Core.dll
 D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Azure.Identity.dll
 D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Humanizer.dll
+D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Mapster.dll
+D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Mapster.Core.dll
 D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -169,5 +171,3 @@ D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\refint\TMS.API.dll
 D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\TMS.API.pdb
 D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\TMS.API.genruntimeconfig.cache
 D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\ref\TMS.API.dll
-D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Mapster.dll
-D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\Mapster.Core.dll

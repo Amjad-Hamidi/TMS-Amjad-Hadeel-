@@ -1,4 +1,4 @@
-﻿insert into Categories (Name, Description) values ('Web Development', 'Learn the rules for proper recitation of the Quran.');
+﻿insert into Categories (Name, Description) values ('Web Development', 'Learn how to design, develop, and deploy responsive websites.');
 insert into Categories (Name, Description) values ('Data Science', 'Analyze complex datasets to extract meaningful insights.');
 insert into Categories (Name, Description) values ('Cybersecurity', 'Protect systems and networks from cyber threats.');
 insert into Categories (Name, Description) values ('Mobile App Development', 'Build engaging mobile applications for Android and iOS.');

@@ -88,38 +88,31 @@ namespace TMS.API.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequestModel request)
         {
+            /*
             // انا مبرمجها تكون مقدار 30 دقيقة بداية وبصير يتناقص Access Token الوقت المتبقي لانتهاء ال 
             var remainingTime = jwtService.GetAccessTokenRemainingTime(request.AccessToken);
 
             if (remainingTime > TimeSpan.Zero)
             {
                 Console.WriteLine($"Access Token remaining : {remainingTime.TotalMinutes} minutes.");
-            }
-            else
-            {
-                return Unauthorized(new { message = "Access token has expired." });
-            }
-
-
-            string userId;
-            var isTokenValid = jwtService.ValidateToken(request.AccessToken);
-            if (!isTokenValid)
-            {
-                // userId هي عبارة عن Access Token فقط إذا انتهت الصلاحية، نسمح بعملية التحديث , نجعل ال 
-                userId = jwtService.ExtractUserIdFromExpiredToken(request.AccessToken);
-                if (string.IsNullOrEmpty(userId))
-                    return Unauthorized(new { message = "Invalid access token." });
-            }
-            else
-            {
-                // إذا كان التوكن صالحًا، يمكن رفض الطلب أو إعطاء إشعار
                 return BadRequest(new { message = "Access token is still valid. No need to refresh." });
             }
+            */
 
             // اذا كان الطلب غير موجود او غير صالح
             if (request is null || string.IsNullOrEmpty(request.AccessToken) || string.IsNullOrEmpty(request.RefreshToken))
                 return BadRequest("Invalid client request. Please add Access Token and Refresh Token.");
 
+            var isTokenValid = jwtService.ValidateToken(request.AccessToken);
+            if (isTokenValid)
+            {
+                // إذا كان التوكن صالحًا، يمكن رفض الطلب أو إعطاء إشعار
+                return BadRequest(new { message = "Access token is still valid. No need to refresh." });
+            }
+
+            string userId = jwtService.ExtractUserIdFromExpiredToken(request.AccessToken);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "Invalid access token." });
 
             // userId التحقق من وجود اليوزر بالـ 
             //var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
