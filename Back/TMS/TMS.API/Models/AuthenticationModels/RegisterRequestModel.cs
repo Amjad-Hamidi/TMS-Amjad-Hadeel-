@@ -22,6 +22,6 @@ namespace TMS.API.Models.AuthenticationModels
         [Required, Compare("Password", ErrorMessage = "Passwords don't match.")]
         public string ConfirmPassword { get; set; }
 
-        public string Role { get; set; }
+        public UserRole Role { get; set; }
     }
 }

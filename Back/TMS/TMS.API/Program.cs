@@ -11,6 +11,7 @@ using TMS.API.Helpers;
 using TMS.API.Models;
 using TMS.API.Services.Categories;
 using TMS.API.Services.Programs;
+using TMS.API.Services.Registers;
 using TMS.API.Services.Tokens;
 using TMS.API.Services.TrainingPrograms;
 
@@ -45,7 +46,7 @@ namespace TMS.API
 
 
             // Identity تسجيل ال
-            builder.Services.AddIdentity<UserAccount, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TMSDbContext>() // Identity كمخزن لل EF لاستخدام
                 .AddDefaultTokenProviders(); // لدعم التحقق من الايميل واعادة تعيين الباسورد
 
@@ -57,6 +58,9 @@ namespace TMS.API
 
             // ITrainingProgramService عملنا حقن فيه لل TrainingProgramsController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
             builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
+
+            // IUserRegistrationService عملنا حقن فيه لل ApplicationsController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>(); 
 
             // ASP.NET Core. داخل  Dependency Injection container في الـ IHttpContextAccessor بتسجل خدمة 
             builder.Services.AddHttpContextAccessor(); // عشان موضوع توليد الملف وحفظه مع الامتداد كامل TrainingProgramService.cs مربوطة مع 

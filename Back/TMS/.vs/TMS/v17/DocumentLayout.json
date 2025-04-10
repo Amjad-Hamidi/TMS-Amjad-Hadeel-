@@ -3,20 +3,56 @@
   "WorkspaceRootPath": "D:\\TMS Asp.net\\TMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\controllers\\accountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\accountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\controllers\\applicationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\applicationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\tokens\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\tokens\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\registers\\iuserregistrationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\registers\\iuserregistrationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\authenticationmodels\\loginresponsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\authenticationmodels\\loginresponsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\registers\\userregistrationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\registers\\userregistrationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\useraccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\useraccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\helpers\\filehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\helpers\\filehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\authenticationmodels\\registerrequestmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\authenticationmodels\\registerrequestmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\trainingprograms\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\helpers\\filehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\helpers\\filehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\dtos\\trainingprograms\\requests\\trainingprogramrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,24 +63,8 @@
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\trainingprogramscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\data\\tmsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\data\\tmsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\trainingprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\dtos\\trainingprograms\\responses\\trainingprogramresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\dtos\\trainingprograms\\responses\\trainingprogramresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\programtrainee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\programtrainee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,7 +74,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -62,100 +82,107 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "JwtService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Tokens\\JwtService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Tokens\\JwtService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Tokens\\JwtService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Tokens\\JwtService.cs",
+              "ViewState": "AgIAALsAAAAAAAAAAAAUwMkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T21:04:03.4Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AccountsController.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\AccountsController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\AccountsController.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\AccountsController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\AccountsController.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAAwwCsAAAAAAAAAAAAAAA==",
+              "Title": "ApplicationsController.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\ApplicationsController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\ApplicationsController.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\ApplicationsController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\ApplicationsController.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAqwC0AAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-08T22:19:52.137Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TrainingProgramRequest.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "RelativeToolTip": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAowBIAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "IUserRegistrationService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Registers\\IUserRegistrationService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Registers\\IUserRegistrationService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Registers\\IUserRegistrationService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Registers\\IUserRegistrationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T15:56:20.557Z"
+              "WhenOpened": "2025-04-09T23:19:20.98Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserRegistrationService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAiwBkAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T23:19:44.214Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ITrainingProgramService.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAWwAkAAAAeAAAAAAAAAA==",
+              "Title": "LoginResponseModel.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\AuthenticationModels\\LoginResponseModel.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Models\\AuthenticationModels\\LoginResponseModel.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\AuthenticationModels\\LoginResponseModel.cs",
+              "RelativeToolTip": "TMS.API\\Models\\AuthenticationModels\\LoginResponseModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T17:56:19.296Z"
+              "WhenOpened": "2025-04-10T00:16:22.351Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "FileHelper.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\FileHelper.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Helpers\\FileHelper.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\FileHelper.cs",
-              "RelativeToolTip": "TMS.API\\Helpers\\FileHelper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA6AAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Program.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Program.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Program.cs",
+              "RelativeToolTip": "TMS.API\\Program.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAowD0AAABWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T17:46:13.636Z"
+              "WhenOpened": "2025-04-09T20:45:26.462Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "UserAccount.cs",
               "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\UserAccount.cs",
               "RelativeDocumentMoniker": "TMS.API\\Models\\UserAccount.cs",
               "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\UserAccount.cs",
               "RelativeToolTip": "TMS.API\\Models\\UserAccount.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAkwCcAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T14:56:48.374Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "TrainingProgramsController.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\TrainingProgramsController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\TrainingProgramsController.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\TrainingProgramsController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\TrainingProgramsController.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAIA6wCUAAABRAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T16:04:23.777Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "TrainingProgramService.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAiwBoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T12:14:57.472Z"
+              "WhenOpened": "2025-04-09T14:56:48.374Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "TMSDbContext.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Data\\TMSDbContext.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Data\\TMSDbContext.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Data\\TMSDbContext.cs",
-              "RelativeToolTip": "TMS.API\\Data\\TMSDbContext.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Title": "RegisterRequestModel.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\AuthenticationModels\\RegisterRequestModel.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Models\\AuthenticationModels\\RegisterRequestModel.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\AuthenticationModels\\RegisterRequestModel.cs",
+              "RelativeToolTip": "TMS.API\\Models\\AuthenticationModels\\RegisterRequestModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T16:58:54.649Z"
+              "WhenOpened": "2025-04-09T23:49:24.21Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -165,13 +192,92 @@
               "RelativeDocumentMoniker": "TMS.API\\Models\\TrainingProgram.cs",
               "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\TrainingProgram.cs",
               "RelativeToolTip": "TMS.API\\Models\\TrainingProgram.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAkwB8AAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAA8wCcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T17:27:29.315Z"
+              "WhenOpened": "2025-04-07T17:27:29.315Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Models\\ApplicationUser.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\ApplicationUser.cs",
+              "RelativeToolTip": "TMS.API\\Models\\ApplicationUser.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAwA0AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T20:04:49.525Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TrainingProgramService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\TrainingProgramService.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAuwBsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-08T12:14:57.472Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ITrainingProgramService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\ITrainingProgramService.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAWwAkAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T17:56:19.296Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "FileHelper.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\FileHelper.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Helpers\\FileHelper.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\FileHelper.cs",
+              "RelativeToolTip": "TMS.API\\Helpers\\FileHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T17:46:13.636Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "TrainingProgramRequest.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "RelativeToolTip": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\TrainingProgramRequest.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAowBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T15:56:20.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "TrainingProgramsController.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\TrainingProgramsController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\TrainingProgramsController.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\TrainingProgramsController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\TrainingProgramsController.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAIA6wCUAAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T16:04:23.777Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "TrainingProgramResponse.cs",
               "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Responses\\TrainingProgramResponse.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Responses\\TrainingProgramResponse.cs",
@@ -179,19 +285,8 @@
               "RelativeToolTip": "TMS.API\\DTOs\\TrainingPrograms\\Responses\\TrainingProgramResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T22:12:49.942Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ProgramTrainee.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\ProgramTrainee.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Models\\ProgramTrainee.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\ProgramTrainee.cs",
-              "RelativeToolTip": "TMS.API\\Models\\ProgramTrainee.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T17:44:20.995Z"
+              "WhenOpened": "2025-04-08T22:12:49.942Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -4,7 +4,7 @@
     {
         // By Convention, P.K is the name of the class + Id
         // By Convention, F.K is the name of the class + Id
-        public string TraineeId { get; set; }
+        public int TraineeId { get; set; }
         public UserAccount Trainee { get; set; }
         public int TrainingProgramId { get; set; }
         public TrainingProgram TrainingProgram { get; set; }

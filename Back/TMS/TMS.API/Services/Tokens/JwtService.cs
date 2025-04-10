@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using TMS.API.Data;
 using TMS.API.Models;
 using TMS.API.Models.AuthenticationModels;
 
@@ -12,13 +14,16 @@ namespace TMS.API.Services.Tokens
 {
     public class JwtService
     {
-        private readonly UserManager<UserAccount> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
 
-        public JwtService(UserManager<UserAccount> userManager, IConfiguration configuration)
+        public TMSDbContext dbContext { get; }
+
+        public JwtService(UserManager<ApplicationUser> userManager, IConfiguration configuration, TMSDbContext dbContext)
         {
             this.userManager = userManager;
             this.configuration = configuration;
+            this.dbContext = dbContext;
         }
 
         public async Task<LoginResponseModel?> Authenticate(LoginRequestModel request)
@@ -26,7 +31,7 @@ namespace TMS.API.Services.Tokens
             if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
                 return null;
 
-            var user = await userManager.FindByNameAsync(request.Email);
+            var user = await userManager.FindByEmailAsync(request.Email);
             if (user == null || !await userManager.CheckPasswordAsync(user, request.Password))
                 return null;
 
@@ -48,20 +53,29 @@ namespace TMS.API.Services.Tokens
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7); // تحديد فترة صلاحية Refresh Token ل 7 ايام
             await userManager.UpdateAsync(user); // DB لهاد اليوزر في ال Refresh Token تحديث ال
 
+            // ✅ استرجع الـ UserAccountId
+            var userAccount = dbContext.UserAccounts.FirstOrDefault(u => u.ApplicationUserId == user.Id);
+            var userAccountId = userAccount?.Id ?? 0;
+
             return new LoginResponseModel
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
                 UserName = user.UserName,
-                ExpiresIn = configuration.GetValue<int>("JwtConfig:TokenValidityMins") * 60
+                Role = role,
+                UserAccountId = userAccountId, // ✅ UserAccountId
+                ExpiresIn = configuration.GetValue<int>("JwtConfig:TokenValidityMins") * 60,
             };
         }
 
 
-        public string GenerateJwtToken(UserAccount user, string role) // IList<string> roles
+        public string GenerateJwtToken(ApplicationUser user, string role) // IList<string> roles
         {
             var key = Encoding.UTF8.GetBytes(configuration["JwtConfig:Key"]);
             var tokenValidityMins = configuration.GetValue<int>("JwtConfig:TokenValidityMins");
+
+            // 🟡 استعلام عن userAccount (المستخدم الداخلي)
+            var userAccount = dbContext.UserAccounts.FirstOrDefault(u => u.ApplicationUserId == user.Id);
 
             var claims = new List<Claim>
             {
@@ -71,11 +85,21 @@ namespace TMS.API.Services.Tokens
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),// اسم المستخدم
                 new Claim(ClaimTypes.Role, role),
                 new Claim(ClaimTypes.Name, user.FirstName), // user.FirstName بستدعي مباشرة ClaimTypes.Name بس يستدعي ال
+                
+                // ✅ Full Name
+                new Claim("fullName", $"{user.FirstName} {user.LastName}"),
+
+                // ✅ Role Name (مرجع إضافي، لو بدك تستخدمه باسم مختلف)
+                new Claim("roleName", role)
             };
             /*
             // ✅ إضافة الأدوار كـ Claims
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             */
+
+            // 🟢 أضف الـ userAccountId إذا لقيته
+            if (userAccount != null)
+                claims.Add(new Claim("userAccountId", userAccount.Id.ToString()));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

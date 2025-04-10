@@ -5,7 +5,7 @@ using TMS.API.Models;
 
 namespace TMS.API.Data
 {
-    public class TMSDbContext : IdentityDbContext<UserAccount>
+    public class TMSDbContext : IdentityDbContext<ApplicationUser>
     {
         public TMSDbContext(DbContextOptions options) : base(options)
         {
@@ -15,7 +15,21 @@ namespace TMS.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<TrainingProgram>() // double مش decimal عشنه Rating عشان بس اخلص من التحذير لل
+                .Property(p => p.Rating)
+                .HasPrecision(18, 2);
+
+
+
+            // 1-1 (UserAccount <-> ApplicationUser)
+            modelBuilder.Entity<UserAccount>()
+                .HasOne(u => u.ApplicationUser)
+                .WithOne(a => a.UserAccount)
+                .HasForeignKey<UserAccount>(u => u.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Cascade); // Cascade: إذا تم حذف ال UserAccount, يتم حذف ال ApplicationUser المرتبط به
+
+
+
             modelBuilder.Entity<UserAccount>()
                 .Property(u => u.Role)
                 .HasConversion<string>(); // Convert enum to string in DB
@@ -51,11 +65,10 @@ namespace TMS.API.Data
                 .WithMany(u => u.SupervisedPrograms)
                 .HasForeignKey(p => p.SupervisorId)
                 .OnDelete(DeleteBehavior.SetNull); // SetNull: في البرامج التدريبية المرتبطة به SupervisorId = null إذا تم حذف المشرف، يتم تعيين قيمة       
-            // SupervisorId in TrainingProgram can be null
+            // SetNull means SupervisorId must be nullable in TrainingProgram
             modelBuilder.Entity<TrainingProgram>()
                 .Property(p => p.SupervisorId)
                 .IsRequired(false);
-
 
             // DB في Category.Name منع تكرار ال   
             modelBuilder.Entity<Category>() // وبحط شرط CategoriesController هاي مش كافية بروح عال backend لو بدي اشتغل على مستوى
@@ -65,13 +78,13 @@ namespace TMS.API.Data
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserAccount>().ToTable("Users");
+            modelBuilder.Entity<ApplicationUser>().ToTable("ApplicationUsers");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles");
-            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
-            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
-            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("ApplicationUsersRoles");
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("ApplicationUsersClaims");
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("ApplicationUsersLogins");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
-            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("ApplicationUsersTokens");
 
             /* // اذا بدي اضيف اشي جاهز يدويا
             var admin = new UserAccount
@@ -102,7 +115,8 @@ namespace TMS.API.Data
 
         }
 
-        public DbSet<UserAccount> UserAccounts { get; set; } // Users in DB
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; } // Users in DB
+        public DbSet<UserAccount> UserAccounts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<TrainingProgram> TrainingPrograms { get; set; }
 

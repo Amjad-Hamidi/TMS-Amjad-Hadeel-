@@ -25,11 +25,11 @@ namespace TMS.API.Models
         public Category Category { get; set; }
 
         // every Training Program has made by one Company
-        public string CompanyId { get; set; }
+        public int CompanyId { get; set; }
         public UserAccount Company { get; set; } // كل برنامج تدريبي له شركة واحدة
 
         // every Training Program has one Supervisor
-        public string SupervisorId { get; set; }
+        public int? SupervisorId { get; set; } // nullable int عشان يمكن ما يكون في مشرف
         public UserAccount Supervisor { get; set; } // كل برنامج تدريبي له مشرف واحد
 
         // every Training Program has many Trainees

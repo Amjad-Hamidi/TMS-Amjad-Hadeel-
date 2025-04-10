@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TMS.API.Data;
 
@@ -11,9 +12,11 @@ using TMS.API.Data;
 namespace TMS.API.Migrations
 {
     [DbContext(typeof(TMSDbContext))]
-    partial class TMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250409230552_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +263,7 @@ namespace TMS.API.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TMS.API.Models.ProgramTrainee", b =>
@@ -281,7 +284,7 @@ namespace TMS.API.Migrations
 
                     b.HasIndex("TrainingProgramId");
 
-                    b.ToTable("ProgramTrainees", (string)null);
+                    b.ToTable("ProgramTrainees");
                 });
 
             modelBuilder.Entity("TMS.API.Models.TrainingProgram", b =>
@@ -346,7 +349,7 @@ namespace TMS.API.Migrations
 
                     b.HasIndex("SupervisorId");
 
-                    b.ToTable("TrainingPrograms", (string)null);
+                    b.ToTable("TrainingPrograms");
                 });
 
             modelBuilder.Entity("TMS.API.Models.UserAccount", b =>
@@ -370,7 +373,7 @@ namespace TMS.API.Migrations
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.ToTable("UserAccounts", (string)null);
+                    b.ToTable("UserAccounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

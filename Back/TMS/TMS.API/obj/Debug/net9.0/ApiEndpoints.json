@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "TMS.API.Controllers.AccountsController",
+    "ContainingType": "TMS.API.Controllers.ApplicationsController",
     "Method": "ChangePassword",
-    "RelativePath": "api/Accounts/ChangePassword",
+    "RelativePath": "api/Applications/ChangePassword",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -16,9 +16,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.AccountsController",
+    "ContainingType": "TMS.API.Controllers.ApplicationsController",
     "Method": "Login",
-    "RelativePath": "api/Accounts/Login",
+    "RelativePath": "api/Applications/Login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -32,9 +32,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.AccountsController",
+    "ContainingType": "TMS.API.Controllers.ApplicationsController",
     "Method": "GetProtectedData",
-    "RelativePath": "api/Accounts/protected-endpoint",
+    "RelativePath": "api/Applications/protected-endpoint",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -42,9 +42,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.AccountsController",
+    "ContainingType": "TMS.API.Controllers.ApplicationsController",
     "Method": "Refresh",
-    "RelativePath": "api/Accounts/refresh",
+    "RelativePath": "api/Applications/refresh",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -58,9 +58,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.AccountsController",
+    "ContainingType": "TMS.API.Controllers.ApplicationsController",
     "Method": "Register",
-    "RelativePath": "api/Accounts/Register",
+    "RelativePath": "api/Applications/Register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
