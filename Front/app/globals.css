@@ -1,0 +1,21 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.height-full-vh{
+height: 100vh;
+}
+.icon-container svg {
+    width: 20px;  /* Set desired size */
+    height: 20px;
+    stroke: #000;
+
+  }
+  
+
+  @media (prefers-color-scheme: dark) {
+    .icon-container svg {
+      stroke: #e0e0e0; /* Dark mode: gray-300 */
+    }
+  }
