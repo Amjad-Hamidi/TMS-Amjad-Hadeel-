@@ -1,0 +1,515 @@
+/* Banner Styles */
+.banner {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .bannerTitle {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .bannerCircle {
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .bannerCircle:nth-child(2) {
+    animation-delay: 2s;
+  }
+  
+  .bannerCircle:nth-child(3) {
+    animation-delay: 4s;
+  }
+  
+  .bannerPattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+  
+  .waveDivider {
+    line-height: 0;
+  }
+  
+  .primaryBtn,
+  .secondaryBtn {
+    transition: all 0.3s ease;
+  }
+  
+  .primaryBtn:hover,
+  .secondaryBtn:hover {
+    transform: translateY(-3px);
+  }
+  
+  /* Category Section */
+  .categoriesGrid {
+    transition: all 0.3s ease;
+  }
+  
+  .categoryCard {
+    transition: all 0.3s ease;
+  }
+  
+  .categoryCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .categoryIcon {
+    transition: all 0.3s ease;
+  }
+  
+  .categoryCard:hover .categoryIcon {
+    transform: scale(1.1);
+  }
+  
+  .outlineBtn {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .outlineBtn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .outlineBtn:hover::after {
+    left: 100%;
+  }
+  
+  /* Course Cards */
+  .courseCard {
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .courseCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .viewCourseBtn {
+    transition: all 0.3s ease;
+  }
+  
+  /* Featured Course Card */
+  .featuredCard {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .featuredBadge {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .featuredButton {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .featuredButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .featuredButton:hover::after {
+    left: 100%;
+  }
+  
+  /* Filter Sidebar */
+  .filterSidebar {
+    transition: all 0.3s ease;
+  }
+  
+  .filterOptions {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* Trending Courses */
+  .horizontalScroll {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  .horizontalScroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .scrollButton {
+    transition: all 0.3s ease;
+  }
+  
+  .scrollButton:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Search Bar */
+  .searchBar {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Instructor Card */
+  .instructorCard {
+    transition: all 0.3s ease;
+  }
+  
+  .viewProfileBtn {
+    transition: all 0.3s ease;
+  }
+  
+  /* Testimonials */
+  .testimonialContainer {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .testimonial {
+    transition: all 0.6s ease;
+  }
+  
+  .indicators button {
+    transition: all 0.3s ease;
+  }
+  
+  .enrollButton {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .enrollButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+  }
+  
+  .enrollButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .enrollButton:hover::after {
+    left: 100%;
+  }
+  
+  /* Course Detail Modal */
+  .modalBackdrop {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .modalContent {
+    animation: scaleIn 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .saveButton {
+    transition: all 0.3s ease;
+  }
+  
+  /* Empty State */
+  .emptyState {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Pagination */
+  .pagination button {
+    transition: all 0.3s ease;
+  }
+  
+  /* Animations */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  /* Enhanced Banner Styles */
+.banner {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.gradientAnimation {
+  background-size: 400% 400%;
+  animation: gradientFlow 15s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.particlesContainer {
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatParticle linear infinite;
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-30px) translateX(15px);
+  }
+  50% {
+    transform: translateY(-10px) translateX(30px);
+  }
+  75% {
+    transform: translateY(20px) translateX(15px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+.floatingElements {
+  z-index: 2;
+}
+
+.floatingIcon {
+  transition: all 0.2s ease;
+}
+
+.icon1 {
+  animation: floating 6s ease-in-out infinite;
+}
+
+.icon2 {
+  animation: floating 8s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.icon3 {
+  animation: floating 7s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.icon4 {
+  animation: floating 9s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.icon5 {
+  animation: floating 5s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(5deg);
+  }
+}
+
+.mainHeading {
+  position: relative;
+}
+
+.typingText {
+  position: relative;
+  z-index: 20; /* Ensure it appears above other elements */
+  border-right: 0.15em solid white;
+  white-space: nowrap;
+  animation: blinkCursor 0.75s step-end infinite;
+}
+
+.highlightText {
+  border-right: none;
+  background: linear-gradient(90deg, #6ee7b7, #3b82f6, #9333ea);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: highlightSlide 2s ease;
+}
+
+@keyframes blinkCursor {
+  from, to { border-color: transparent }
+  50% { border-color: white; }
+}
+
+@keyframes highlightSlide {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.primaryBtn,
+.secondaryBtn {
+  transition: all 0.3s ease;
+}
+
+.primaryBtn:hover,
+.secondaryBtn:hover {
+  transform: translateY(-3px);
+}
+
+.primaryBtn:active,
+.secondaryBtn:active {
+  transform: translateY(-1px);
+}
+
+.playIcon {
+  transition: all 0.3s ease;
+}
+
+.statsContainer {
+  animation: fadeUp 1s ease-out;
+  animation-delay: 0.5s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.statItem {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.statItem:hover {
+  transform: translateY(-5px);
+}
+
+.heroImageContainer {
+  position: relative;
+  overflow: visible; /* Ensure the image is not clipped */
+  width: 100%; /* Allow the container to take full width */
+  height: auto; /* Allow the container to adjust to the image's height */
+  display: flex; /* Center the image if needed */
+  justify-content: center;
+  align-items: center;
+  perspective: none; /* Remove perspective to avoid hover dependency */
+  transform-style: flat; /* Ensure no 3D transformations are applied */
+}
+
+.heroImage {
+  position: relative;
+  z-index: 10;
+  max-width: 100%; /* Ensure the image scales properly */
+  height: auto; /* Maintain the aspect ratio */
+  display: block; /* Prevent inline spacing issues */
+  object-fit: contain; /* Ensure the entire image fits within its container */
+  transform: none; /* Remove any default transformations */
+  transition: none; /* Disable hover-dependent transitions */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.heroBgDecoration {
+  transition: all 0.5s ease;
+}
+
+.heroImageContainer:hover .heroBgDecoration {
+  transform: rotate(5deg) scale(1.08);
+}
+
+.floatingCard {
+  transition: all 0.3s ease;
+  animation-fill-mode: both;
+}
+
+.card1 {
+  animation: floatCard 5s ease-in-out infinite;
+}
+
+.card2 {
+  animation: floatCard 7s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.card3 {
+  animation: floatCard 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.waveDivider {
+  line-height: 0;
+  animation: waveAnimation 15s linear infinite;
+}
+
+@keyframes waveAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
