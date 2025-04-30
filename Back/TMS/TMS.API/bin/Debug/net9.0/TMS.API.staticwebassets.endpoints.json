@@ -1,5 +1,88 @@
 {
   "Version": 1,
   "ManifestType": "Build",
-  "Endpoints": []
+  "Endpoints": [
+    {
+      "Route": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "AssetFile": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "80157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 19:07:30 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.yr24kthh0r.jpg",
+      "AssetFile": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "80157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 19:07:30 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yr24kthh0r"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM="
+        },
+        {
+          "Name": "label",
+          "Value": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg"
+        }
+      ]
+    }
+  ]
 }

@@ -2,7 +2,7 @@
 {
     public class FileHelper
     {
-        public static async Task<string> SaveFileAync(IFormFile file, HttpContext httpContext, string folderName = "images")
+        public static async Task<string> SaveFileAync(IFormFile file, HttpContext? httpContext = null, string folderName = "images")
         {
             if (file == null || file.Length == 0) return null;
 
