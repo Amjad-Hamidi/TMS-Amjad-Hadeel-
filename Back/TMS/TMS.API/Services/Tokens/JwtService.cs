@@ -41,9 +41,6 @@ namespace TMS.API.Services.Tokens
             var accessToken = GenerateJwtToken(user, role); // توليد Access Token
             var refreshToken = GenerateRefreshToken(); // توليد Refresh Token
 
-            // لا داعي للتشفير نهائيا
-            // user.RefreshToken = EncryptRefreshToken(refreshToken); //  Refresh Token تشقير ال
-
             // (حدوث سلوك غير متوقع فقط بصير) DB تم توليدها بشكل صحيح قبل تحديث بيانات اليوزر في Refresh Token  و Access Token  فحص اضافي احتياطي للتاكد من ال
             if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
                 return null;
@@ -53,7 +50,7 @@ namespace TMS.API.Services.Tokens
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7); // تحديد فترة صلاحية Refresh Token ل 7 ايام
             await userManager.UpdateAsync(user); // DB لهاد اليوزر في ال Refresh Token تحديث ال
 
-            // ✅ استرجع الـ UserAccountId
+            // ApplicationUserId من خلال UserAccountId استرجاع ال
             var userAccount = dbContext.UserAccounts.FirstOrDefault(u => u.ApplicationUserId == user.Id);
             var userAccountId = userAccount?.Id ?? 0;
 
@@ -61,7 +58,7 @@ namespace TMS.API.Services.Tokens
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
-                UserName = user.UserName,
+                UserName = user.UserName!,
                 Role = role,
                 UserAccountId = userAccountId, // ✅ UserAccountId
                 ExpiresIn = configuration.GetValue<int>("JwtConfig:TokenValidityMins") * 60,

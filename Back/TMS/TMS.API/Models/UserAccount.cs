@@ -6,10 +6,9 @@ namespace TMS.API.Models
 {
     public enum UserRole // اسهل وافضل للقراءة string الى OnModelCreating بتبلش من 0 لاخر عنصر, لكن انا رح احولها في int على شكل DB السلوك الافتراضي الها تتخزن في C# في 
     {
-        Admin, // = 0 (in Tooltip in C#) but in DB it will be "Admin" because i convert the default value (int) of enum to string
-        Company, // = 1 in Tooltip in C#, "Company" in DB
-        Supervisor, // = 2 in Tooltip in C#, "Supervisor" in DB
-        Trainee // = 3 in Tooltip in C#, "Trainee" in DB
+        Company, // = 0 (in Tooltip in C#) but in DB it will be "Company" because i convert the default value (int) of enum to string
+        Supervisor, // = 1 in Tooltip in C#, "Supervisor" in DB
+        Trainee // = 2 in Tooltip in C#, "Trainee" in DB
     }
 
     public class UserAccount

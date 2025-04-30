@@ -1,0 +1,74 @@
+{
+  "firstName": "Ibraheem",
+  "lastName": "Odah",
+  "userName": "ibraheem_odah",
+  "phone": "0599098720",
+  "email": "a38412014@gmail.com",
+  "password": "Ibraheem@123",
+  "confirmPassword": "Ibraheem@123",
+  "gender": 0,
+  "birthDate": "2004-03-10",
+  "role": 2
+}
+
+{
+  "firstName": "Mohamed",
+  "lastName": "Khasati",
+  "userName": "mohamed_khasati",
+  "phone": "0595278709",
+  "email": "muhammadkasati@gmail.com",
+  "password": "Mohamed@123",
+  "confirmPassword": "Mohamed@123",
+  "gender": 0,
+  "birthDate": "2004-06-30",
+  "role": 1
+}
+
+{
+  "firstName": "Kenana",
+  "lastName": "Abu Omar",
+  "userName": "Kenana1234",
+  "phone": "0595278709",
+  "email": "kenanaabuomar@gmail.com",
+  "password": "Kenana@123",
+  "confirmPassword": "Kenana@123",
+  "gender": 1,
+  "birthDate": "2003-05-04",
+  "role": 2
+}
+
+
+{
+  "firstName": "Kenana",
+  "lastName": "Abu Omar",
+  "userName": "Kenana1234",
+  "phone": "0595278709",
+  "email": "kenanaabuomar08@gmail.com",
+  "password": "Kenana@123",
+  "confirmPassword": "Kenana@123",
+  "gender": 1,
+  "birthDate": "2003-05-04",
+  "role": 2
+}
+
+"firstName": Anas
+"lastName": Adwan
+"userName": anas_adwan
+"phone": 0568130065
+"email": anasadwan905@gmail.com
+"password": Anas@123
+"confirmPassword": Anas@123
+"gender": male
+"birthDate": 2003-09-2003
+"role": supervisor
+
+"firstName": Dummy
+"lastName": User
+"userName": dummy_user
+"phone": 0587146387
+"email": dummy@gmail.com
+"password": Dummy@123
+"confirmPassword": Dummy@123
+"gender": female
+"birthDate": 1998-07-14
+"role": trainee
