@@ -163,6 +163,9 @@ namespace TMS.API.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -178,6 +181,9 @@ namespace TMS.API.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -260,7 +266,7 @@ namespace TMS.API.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TMS.API.Models.ProgramTrainee", b =>
@@ -281,7 +287,7 @@ namespace TMS.API.Migrations
 
                     b.HasIndex("TrainingProgramId");
 
-                    b.ToTable("ProgramTrainees", (string)null);
+                    b.ToTable("ProgramTrainees");
                 });
 
             modelBuilder.Entity("TMS.API.Models.TrainingProgram", b =>
@@ -320,6 +326,7 @@ namespace TMS.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Rating")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SeatsAvailable")
@@ -346,7 +353,7 @@ namespace TMS.API.Migrations
 
                     b.HasIndex("SupervisorId");
 
-                    b.ToTable("TrainingPrograms", (string)null);
+                    b.ToTable("TrainingPrograms");
                 });
 
             modelBuilder.Entity("TMS.API.Models.UserAccount", b =>
@@ -370,7 +377,7 @@ namespace TMS.API.Migrations
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.ToTable("UserAccounts", (string)null);
+                    b.ToTable("UserAccounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

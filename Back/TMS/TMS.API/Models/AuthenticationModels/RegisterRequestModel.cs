@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TMS.API.Validations;
 
 namespace TMS.API.Models.AuthenticationModels
 {
@@ -8,6 +9,7 @@ namespace TMS.API.Models.AuthenticationModels
         public string FirstName { get; set; }
         [Required, MaxLength(25)]
         public string LastName { get; set; }
+        public string UserName { get; set; }
         [Required]
         // +? : تعني ان الزائد اختيارية
         // \d{1,4} : يعني ان يكون الرقم مكون من 1-4 ارقام , هاي عبارة عن المقدمة
@@ -21,7 +23,10 @@ namespace TMS.API.Models.AuthenticationModels
         public string Password { get; set; }
         [Required, Compare("Password", ErrorMessage = "Passwords don't match.")]
         public string ConfirmPassword { get; set; }
-
+        public ApplicationUserGender Gender { get; set; }
+        [OverYears(16)]
+        public DateTime BirthDate { get; set; }
+        public IFormFile? ProfileImageUrl { get; set; }
         public UserRole Role { get; set; }
     }
 }

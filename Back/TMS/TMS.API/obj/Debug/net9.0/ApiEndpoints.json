@@ -1,8 +1,24 @@
 [
   {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
+    "ContainingType": "TMS.API.Controllers.AccountController",
+    "Method": "ChangeEmail",
+    "RelativePath": "api/Account/ChangeEmail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "TMS.API.Models.AuthenticationModels.ChangeEmailModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "ChangePassword",
-    "RelativePath": "api/Applications/ChangePassword",
+    "RelativePath": "api/Account/ChangePassword",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -16,9 +32,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
+    "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "Login",
-    "RelativePath": "api/Applications/Login",
+    "RelativePath": "api/Account/Login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -32,9 +48,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
+    "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "GetProtectedData",
-    "RelativePath": "api/Applications/protected-endpoint",
+    "RelativePath": "api/Account/protected-endpoint",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -42,9 +58,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
+    "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "Refresh",
-    "RelativePath": "api/Applications/refresh",
+    "RelativePath": "api/Account/refresh",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -58,17 +74,67 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
+    "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "Register",
-    "RelativePath": "api/Applications/Register",
+    "RelativePath": "api/Account/Register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "TMS.API.Models.AuthenticationModels.RegisterRequestModel",
-        "IsRequired": true
+        "Name": "FirstName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ConfirmPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Gender",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "BirthDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfileImageUrl",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Role",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
