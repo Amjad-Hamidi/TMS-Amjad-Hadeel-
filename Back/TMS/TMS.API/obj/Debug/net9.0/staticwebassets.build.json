@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "13unRFiXZTSsH30Kr/HZ0pYwYJKhbQRtTt1qpDdCn/s=",
+  "Hash": "ty1dskIZ2LVdB5rJHVSTJqt/ZQOWHGFuB9YHqcHncQE=",
   "Source": "TMS.API",
   "BasePath": "_content/TMS.API",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "TMS.API\\wwwroot",
       "Source": "TMS.API",
-      "ContentRoot": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\wwwroot\\",
+      "ContentRoot": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\",
       "BasePath": "_content/TMS.API",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "Identity": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
       "SourceId": "TMS.API",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\wwwroot\\",
+      "ContentRoot": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\",
       "BasePath": "_content/TMS.API",
       "RelativePath": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
@@ -36,12 +36,33 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg"
+    },
+    {
+      "Identity": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\8051ada8-60e4-4973-b6ce-ca9a45d7f10b.jpg",
+      "SourceId": "TMS.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\",
+      "BasePath": "_content/TMS.API",
+      "RelativePath": "images/profiles/8051ada8-60e4-4973-b6ce-ca9a45d7f10b#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "p4ad0oxscn",
+      "Integrity": "ieRQiTGLaTBWo8icRhp8Cu835n5RlMFwG0d82uU+05E=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profiles\\8051ada8-60e4-4973-b6ce-ca9a45d7f10b.jpg"
     }
   ],
   "Endpoints": [
     {
       "Route": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
-      "AssetFile": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "AssetFile": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -78,7 +99,7 @@
     },
     {
       "Route": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.yr24kthh0r.jpg",
-      "AssetFile": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "AssetFile": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -118,6 +139,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/8051ada8-60e4-4973-b6ce-ca9a45d7f10b.jpg",
+      "AssetFile": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\8051ada8-60e4-4973-b6ce-ca9a45d7f10b.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "23149"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ieRQiTGLaTBWo8icRhp8Cu835n5RlMFwG0d82uU+05E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 23:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ieRQiTGLaTBWo8icRhp8Cu835n5RlMFwG0d82uU+05E="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/8051ada8-60e4-4973-b6ce-ca9a45d7f10b.p4ad0oxscn.jpg",
+      "AssetFile": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\8051ada8-60e4-4973-b6ce-ca9a45d7f10b.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "23149"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ieRQiTGLaTBWo8icRhp8Cu835n5RlMFwG0d82uU+05E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 23:30:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "p4ad0oxscn"
+        },
+        {
+          "Name": "label",
+          "Value": "images/profiles/8051ada8-60e4-4973-b6ce-ca9a45d7f10b.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ieRQiTGLaTBWo8icRhp8Cu835n5RlMFwG0d82uU+05E="
         }
       ]
     }

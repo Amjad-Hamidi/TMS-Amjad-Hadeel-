@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TMS.API.Models
 {
@@ -13,8 +14,10 @@ namespace TMS.API.Models
 
     public class UserAccount
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
+        [JsonIgnore]
         public string ApplicationUserId { get; set; } // FK to ApplicationUser table
+        [JsonIgnore]
         public ApplicationUser ApplicationUser { get; set; } // Navigation Property to ApplicationUser table
 
         public UserRole Role { get; set; } // Add, Update in TrainingProgramsController وبتفيدني في IdentityUser مش موجودة في 

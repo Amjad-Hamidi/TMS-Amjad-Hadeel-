@@ -72,3 +72,7 @@
 "gender": female
 "birthDate": 1998-07-14
 "role": trainee
+
+
+"email": ds@gmail.com
+"password" Test@123

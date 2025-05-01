@@ -47,7 +47,7 @@ namespace TMS.API.Services.Registers
             try
             {
                 // 2. حفظ الصورة إذا موجودة
-                IFormFile checkForm = request.ProfileImageUrl!; // ! null-forgiving operator
+                IFormFile checkForm = request.ProfileImageFile!; // ! null-forgiving operator
                 if (checkForm is not null)
                 {
                     var imageUrl = await FileHelper.SaveFileAync(checkForm, httpContextAccessor.HttpContext, "images/profiles");

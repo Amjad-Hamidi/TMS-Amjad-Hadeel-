@@ -26,7 +26,7 @@ namespace TMS.API.Models.AuthenticationModels
         public ApplicationUserGender Gender { get; set; }
         [OverYears(16)]
         public DateTime BirthDate { get; set; }
-        public IFormFile? ProfileImageUrl { get; set; }
+        public IFormFile? ProfileImageFile { get; set; }
         public UserRole Role { get; set; }
     }
 }
