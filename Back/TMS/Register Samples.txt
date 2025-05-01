@@ -8,7 +8,7 @@
   "confirmPassword": "Ibraheem@123",
   "gender": 0,
   "birthDate": "2004-03-10",
-  "role": 2
+  "role": 1
 }
 
 {
@@ -75,4 +75,13 @@
 
 
 "email": ds@gmail.com
-"password" Test@123
+"password": Test@123
+
+"email": ashrafhmaidi@gmail.com
+"password": Ashraf@123
+
+"email": ayman@gmail.com
+"password": Ayman@123
+
+"email": faris@gmail.com
+"password": Faris@123

@@ -13,6 +13,7 @@ using System.Net;
 using System.Threading.Tasks;
 using TMS.API.Services.Registers;
 using Mapster;
+using TMS.API.DTOs.Users;
 
 namespace TMS.API.Controllers
 {
@@ -41,6 +42,7 @@ namespace TMS.API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm] RegisterRequestModel request)
         {
+
             if (!ModelState.IsValid)
             {
                 var modelErrors = ModelState
@@ -58,7 +60,17 @@ namespace TMS.API.Controllers
                 });
             }
 
-            var existingUser = await userManager.FindByEmailAsync(request.Email);
+            if (request.Role != UserRole.Company &&
+                request.Role != UserRole.Supervisor &&
+                request.Role != UserRole.Trainee)
+            {
+                return BadRequest(new        // او دخل رقم غريب مثل 8 Admin بمنعه من تغيير دور غير مسموح فيه بما في ذلك 
+                {
+                    Message = "Invalid role. Choose {Company, Supervisor, Trainee} role."
+                });
+            }
+
+                var existingUser = await userManager.FindByEmailAsync(request.Email);
             if (existingUser is not null)
                 return BadRequest(new
                 {

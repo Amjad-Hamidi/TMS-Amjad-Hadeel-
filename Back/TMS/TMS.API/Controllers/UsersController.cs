@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Net.Http;
 using TMS.API.DTOs.Users;
 using TMS.API.Helpers;
 using TMS.API.Models;
+using TMS.API.Models.AuthenticationModels;
+using TMS.API.Services.Registers;
 using TMS.API.Services.Users;
 
 namespace TMS.API.Controllers
@@ -21,14 +24,17 @@ namespace TMS.API.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IUserService userService;
+        private readonly IUserRegistrationService userRegistrationService;
 
         public UsersController(UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IUserService userService)
+            IUserService userService,
+            IUserRegistrationService userRegistrationService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.userService = userService;
+            this.userRegistrationService = userRegistrationService;
         }
 
         // عرض جميع اليوزرز
@@ -109,18 +115,62 @@ namespace TMS.API.Controllers
         }
 
 
-        /*
-        [HttpPost("")]
-        public async Task<IActionResult> Add([FromForm] )
-        */
+        [HttpPost("Add-User")]
+        public async Task<IActionResult> Add([FromForm] RegisterRequestModel registerRequestModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var modelErrors = ModelState
+                    .Where(ms => ms.Value.Errors.Count > 0)
+                    .Select(ms => new
+                    {
+                        Field = ms.Key,
+                        Errors = ms.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                    });
 
-        
+                return BadRequest(new
+                {
+                    Message = "Validation failed",
+                    Errors = modelErrors
+                });
+            }
+
+            if (registerRequestModel.Role == UserRole.Admin)
+                return BadRequest(new
+                {
+                    Message = "You are not allowed to register as an Admin. Choose {Company, Supervisor, Trainee} role."
+                }); // Admin لا يمكن تغيير دور المستخدم إلى 
+
+            var result = await userService.Add(registerRequestModel);
+
+            if (!result.Succeeded)
+            {
+                var identityErrors = result.Errors.Select(e => e.Description);
+                return BadRequest(new
+                {
+                    Message = "Registration failed",
+                    Errors = identityErrors
+                });
+            }
+
+            return Ok(new
+            {
+                Message = "User registered successfully. Please login."
+            });
+
+        }
+
+
+
         // Email & Password & Role امكانية تحديث جميع الداتا باستثناء ال
         [HttpPatch("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult> Update([FromRoute] int id, [FromForm] UpdateUserDto updateUserDto)
         {
-            var user = await userService.Edit(id, updateUserDto.Adapt<ApplicationUser>(), updateUserDto.ProfileImageFile, HttpContext);
+            var user = await userService.Edit(id,
+                updateUserDto.Adapt<ApplicationUser>(),
+                updateUserDto.ProfileImageFile,
+                HttpContext);
            
             if (!user)
                 return NotFound();
@@ -160,7 +210,7 @@ namespace TMS.API.Controllers
             // معالجة الصورة الجديدة
             if (updateUserDto.ProfileImageFile != null)  // التأكد من أن الملف موجود
             {
-                user.ProfileImageUrl = await FileHelper.SaveFileAync(updateUserDto.ProfileImageFile, this.HttpContext, "images");
+                user.ProfileImageUrl = await FileHelper.SaveFileAync(updateUserDto.ProfileImageFile, this.HttpContext, "images/profiles");
             }
             var result = await userManager.UpdateAsync(user);
             if (!result.Succeeded)
@@ -201,10 +251,29 @@ namespace TMS.API.Controllers
             */
         }
 
+        [HttpDelete("Delete-All")]
+        public async Task<ActionResult> DeleteAllUsersExceptAdmin()
+        {
+            var result = await userService.RemoveAllExceptAdmin(CancellationToken.None);
+            if (!result)
+                return NotFound("No users found to delete");
+            return NoContent();
+        }
+
 
         [HttpPatch("ChangeRole/{userId}")]
         public async Task<ActionResult> ChangeRole([FromRoute] int userId, [FromBody] ChangeRoleDto changeRoleDto)
         {
+            if(changeRoleDto.RoleName != UserRole.Company &&
+                changeRoleDto.RoleName != UserRole.Supervisor &&
+                changeRoleDto.RoleName != UserRole.Trainee)
+            {
+                return BadRequest(new        // او دخل رقم غريب مثل 8 Admin بمنعه من تغيير دور غير مسموح فيه بما في ذلك 
+                {
+                    Message = "Invalid role. Choose {Company, Supervisor, Trainee} role."
+                });
+            }
+
             var result = await userService.ChangeRole(userId, changeRoleDto.RoleName);
             if (!result)
                 return NotFound($"User with ID {userId} not found");

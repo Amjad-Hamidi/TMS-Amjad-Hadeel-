@@ -10,7 +10,7 @@
             var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
 
             // تحديد مسار المجلد الذي سيتم تخزين الملف فيه
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", folderName);
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folderName);
             // تحديد المسار الفعلي للتخزين
             var filePath = Path.Combine(folderPath, fileName);
 

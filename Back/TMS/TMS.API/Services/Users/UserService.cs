@@ -8,7 +8,9 @@ using TMS.API.Data;
 using TMS.API.DTOs.Users;
 using TMS.API.Helpers;
 using TMS.API.Models;
+using TMS.API.Models.AuthenticationModels;
 using TMS.API.Services.IService;
+using TMS.API.Services.Registers;
 
 namespace TMS.API.Services.Users
 {
@@ -16,17 +18,21 @@ namespace TMS.API.Services.Users
     {
         private readonly TMSDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserRegistrationService userRegistrationService;
 
-        public UserService(TMSDbContext context, UserManager<ApplicationUser> userManager) : base(context)
+        public UserService(TMSDbContext context,
+            UserManager<ApplicationUser> userManager,
+            IUserRegistrationService userRegistrationService) : base(context)
         {
             this._context = context;
             _userManager = userManager;
+            this.userRegistrationService = userRegistrationService;
         }
 
         public async Task<IEnumerable<GetUsersDto>> GetAll()
         {
             var users = await GetAsync(
-                expression: u => u.Email != null, // Example filter to fetch all users with a Email
+                expression: u => u.UserAccount != null, // Example filter to fetch all users who have a UserAccount
                 includes: new Expression<Func<ApplicationUser, object>>[] { u => u.UserAccount }, // Example include for related UserAccount
                 isTracked: false
             );
@@ -85,8 +91,16 @@ namespace TMS.API.Services.Users
         }
 
 
+        public async Task<IdentityResult> Add(RegisterRequestModel registerRequestModel)
+        {
+            return await userRegistrationService.RegisterUserAsync(registerRequestModel);
+        }
 
-        public async Task<bool> Edit(int id, ApplicationUser updatedUser, IFormFile? mainFile, HttpContext httpContext)
+
+        public async Task<bool> Edit(int id,
+            ApplicationUser updatedUser,
+            IFormFile? mainFile,
+            HttpContext httpContext)
         {
             var applicationUserInDb = await _userManager.Users
                .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);  // Fixing the query by using Where instead of Include
@@ -99,7 +113,7 @@ namespace TMS.API.Services.Users
             applicationUserInDb.LastName = updatedUser.LastName ?? applicationUserInDb.LastName;
             applicationUserInDb.PhoneNumber = updatedUser.PhoneNumber ?? applicationUserInDb.PhoneNumber;
             applicationUserInDb.Gender = updatedUser.Gender != default ? updatedUser.Gender : applicationUserInDb.Gender;
-            applicationUserInDb.BirthDate = updatedUser.BirthDate; // 16 مسبقاانو لازم يكون اكبر من check معمولو
+            applicationUserInDb.BirthDate = updatedUser.BirthDate != default ? updatedUser.BirthDate : applicationUserInDb.BirthDate; // 16 مسبقاانو لازم يكون اكبر من check معمولو
 
 
             // Check if there's a new profile image
@@ -109,8 +123,10 @@ namespace TMS.API.Services.Users
                 if (!string.IsNullOrEmpty(applicationUserInDb.ProfileImageUrl))
                 {
                     Console.WriteLine($"Directory.GetCurrentDirectory() = {Directory.GetCurrentDirectory()}");
-                    Console.WriteLine($"applicationUserInDb.ProfileImageUrl = {applicationUserInDb.ProfileImageUrl}");          // بنص فاضي 7035 استبدال ال
-                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", applicationUserInDb.ProfileImageUrl.Replace("https://localhost:7035/", "").Replace("http://localhost:5000/", "")); // 5000 عشان يتاكد يشيل ال http اذا موجود
+                    Console.WriteLine($"applicationUserInDb.ProfileImageUrl = {applicationUserInDb.ProfileImageUrl}");  // بنص فاضي 7035 استبدال ال
+                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        applicationUserInDb.ProfileImageUrl.Replace("https://localhost:7035/", "").Replace("http://localhost:5000/", "")); // 5000 عشان يتاكد يشيل ال http اذا موجود
 
                     try
                     {
@@ -147,6 +163,35 @@ namespace TMS.API.Services.Users
 
         }
 
+        public async Task<bool> RemoveUserAsync(int id, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);
+
+            if (user == null)
+                return false;
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> RemoveAllExceptAdmin(CancellationToken cancellationToken)
+        {
+            var users = await _userManager.Users
+                .Where(user => user.UserAccount.Role != UserRole.Admin) // SQL وليس C# لانه هون SQL الى Enum رح يضرب سيرفر ايرور, ما بعرف يحول ال Enum.GetName(user.UserAccount.Role) != "Admin" لو احط
+                .ToListAsync(cancellationToken);
+            foreach (var user in users)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                    return false;
+            }
+            // reset identity to start from 2 (because Admin is already 1)
+            await _context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT('UserAccounts', RESEED, 1);");
+
+            return true;
+        }
+
         [Authorize(Roles = $"{StaticData.Admin}")]
         public async Task<bool> ChangeRole(int userId, UserRole role)
         {
@@ -178,16 +223,5 @@ namespace TMS.API.Services.Users
             return false;
         }
 
-        public async Task<bool> RemoveUserAsync(int id, CancellationToken cancellationToken)
-        {
-            var user = await _userManager.Users
-                .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);
-
-            if (user == null)
-                return false;
-
-            var result = await _userManager.DeleteAsync(user);
-            return result.Succeeded;
-        }
     }
 }
