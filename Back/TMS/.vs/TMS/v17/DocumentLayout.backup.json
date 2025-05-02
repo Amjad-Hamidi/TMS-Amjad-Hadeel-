@@ -11,12 +11,40 @@
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\dtos\\users\\updateuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\dtos\\users\\updateuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\users\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\users\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\tokens\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\tokens\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\models\\authenticationmodels\\loginrequestmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\authenticationmodels\\loginrequestmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\services\\registers\\userregistrationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\registers\\userregistrationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\helpers\\filehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\helpers\\filehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\helpers\\dbinitializer\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\helpers\\dbinitializer\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms asp.net\\tms\\tms.api\\dtos\\users\\updateuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\dtos\\users\\updateuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,8 +53,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 252,
-          "SelectedChildIndex": 3,
+          "DockedHeight": 271,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,15 +62,80 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UpdateUserDto.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
-              "RelativeDocumentMoniker": "TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
-              "RelativeToolTip": "TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAQwA4AAAAvAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Users\\UserService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Users\\UserService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Users\\UserService.cs*",
+              "RelativeToolTip": "TMS.API\\Services\\Users\\UserService.cs*",
+              "ViewState": "AgIAALYAAAAAAAAAAAAlwKwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-01T16:52:44.095Z",
+              "WhenOpened": "2025-04-30T17:54:12.33Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Program.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Program.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Program.cs",
+              "RelativeToolTip": "TMS.API\\Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAiwC8AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T23:06:13.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\UsersController.cs*",
+              "RelativeToolTip": "TMS.API\\Controllers\\UsersController.cs*",
+              "ViewState": "AgIAANsAAAAAAAAAAAAEwOcAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-30T09:36:54.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UserRegistrationService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Registers\\UserRegistrationService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAhwBkAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T23:12:34.977Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "JwtService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Tokens\\JwtService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Tokens\\JwtService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Tokens\\JwtService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Tokens\\JwtService.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAgwFoAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T23:29:15.63Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Users\\IUserService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Users\\IUserService.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Users\\IUserService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Users\\IUserService.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAgwA8AAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T23:47:51.864Z",
               "EditorCaption": ""
             },
             {
@@ -53,36 +146,61 @@
               "RelativeDocumentMoniker": "TMS.API\\Controllers\\AccountController.cs",
               "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\AccountController.cs",
               "RelativeToolTip": "TMS.API\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAAAD8AAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAgwJkAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-01T16:42:34.359Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Users\\UserService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\Users\\UserService.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Services\\Users\\UserService.cs*",
-              "RelativeToolTip": "TMS.API\\Services\\Users\\UserService.cs*",
-              "ViewState": "AgIAAKoAAAAAAAAAAIAwwL4AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "LoginRequestModel.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\AuthenticationModels\\LoginRequestModel.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Models\\AuthenticationModels\\LoginRequestModel.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Models\\AuthenticationModels\\LoginRequestModel.cs",
+              "RelativeToolTip": "TMS.API\\Models\\AuthenticationModels\\LoginRequestModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T17:54:12.33Z",
+              "WhenOpened": "2025-05-01T23:38:18.43Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\UsersController.cs",
-              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAPYAAAAAAAAAAAAwwAABAAA/AAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "FileHelper.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\FileHelper.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Helpers\\FileHelper.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\FileHelper.cs",
+              "RelativeToolTip": "TMS.API\\Helpers\\FileHelper.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAgwB0AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T09:36:54.51Z",
+              "WhenOpened": "2025-05-02T00:08:59.826Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DBInitializer.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\DBInitializer\\DBInitializer.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Helpers\\DBInitializer\\DBInitializer.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\Helpers\\DBInitializer\\DBInitializer.cs",
+              "RelativeToolTip": "TMS.API\\Helpers\\DBInitializer\\DBInitializer.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAQwF8AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-02T00:08:59.977Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UpdateUserDto.cs",
+              "DocumentMoniker": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
+              "RelativeDocumentMoniker": "TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
+              "ToolTip": "D:\\TMS Asp.net\\TMS\\TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
+              "RelativeToolTip": "TMS.API\\DTOs\\Users\\UpdateUserDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwA4AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T16:52:44.095Z"
             }
           ]
         }

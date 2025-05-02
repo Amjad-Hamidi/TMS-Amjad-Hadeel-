@@ -59,29 +59,16 @@
 "password": Anas@123
 "confirmPassword": Anas@123
 "gender": male
-"birthDate": 2003-09-2003
+"birthDate": 2003-09-05
 "role": supervisor
 
-"firstName": Dummy
-"lastName": User
-"userName": dummy_user
-"phone": 0587146387
-"email": dummy@gmail.com
-"password": Dummy@123
-"confirmPassword": Dummy@123
-"gender": female
-"birthDate": 1998-07-14
-"role": trainee
-
-
-"email": ds@gmail.com
-"password": Test@123
-
-"email": ashrafhmaidi@gmail.com
-"password": Ashraf@123
-
-"email": ayman@gmail.com
-"password": Ayman@123
-
-"email": faris@gmail.com
-"password": Faris@123
+"firstName": Abd
+"lastName": Fayeq
+"userName": abd_fayeq
+"phone": 0592786564
+"email": abualfayek4444@gmail.com
+"password": Abd@123
+"confirmPassword": Abd@123
+"gender": male
+"birthDate": 2003-06-13
+"role": supervisor

@@ -68,8 +68,19 @@ namespace TMS.API.Services.Registers
                 Role = request.Role // UserRole.Company, UserRole.Supervisor, UserRole.Trainee, UserRole.Admin
             };
 
-            await emailSender.SendEmailAsync(identityUser.Email, "Welcome", // OR => _ = emailSender.SendEmailAsync
-                   $"<h1>Hello ... {identityUser.UserName} </h1> <p> Thank you for registeration in our TMS platform. </p>");
+            // توليد token لتأكيد الإيميل
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+
+            // إنشاء رابط التأكيد
+            var httpContext = httpContextAccessor.HttpContext!;
+            var confirmUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/api/Account/ConfirmEmail?token={Uri.EscapeDataString(token)}&userId={identityUser.Id}";
+
+            // إرسال الإيميل
+            await emailSender.SendEmailAsync(identityUser.Email, "Confirm Email",
+                $"<h1>Hello, {identityUser.UserName}</h1>" +
+                $"<p>Thank you for registering. Please confirm your email by clicking the link below:</p>" +
+                $"<a href='{confirmUrl}'>Click here to confirm your email</a>");
+
 
             await dbContext.UserAccounts.AddAsync(userAccount);
             await dbContext.SaveChangesAsync();

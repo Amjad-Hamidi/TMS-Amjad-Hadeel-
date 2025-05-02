@@ -16,6 +16,7 @@ namespace TMS.API.Services.Users
         Task<bool> RemoveUserAsync(int id, CancellationToken cancellationToken);
         Task<bool> RemoveAllExceptAdmin(CancellationToken cancellationToken);
         Task<bool> ChangeRole(int userId, UserRole userRole);
-
+        Task<string> LockUnLock(int id);
+    
     }
 }

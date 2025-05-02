@@ -33,6 +33,27 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.AccountController",
+    "Method": "ConfirmEmail",
+    "RelativePath": "api/Account/ConfirmEmail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "Login",
     "RelativePath": "api/Account/Login",
     "HttpMethod": "POST",
@@ -628,6 +649,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "LockUnLock",
+    "RelativePath": "api/Users/LockUnLock/{userId}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

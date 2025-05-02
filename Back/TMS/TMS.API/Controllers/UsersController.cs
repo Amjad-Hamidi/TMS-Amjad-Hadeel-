@@ -228,6 +228,8 @@ namespace TMS.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
+            if(id == 1)
+                return BadRequest(new { Message = "❌ You cannot delete the Admin user." });
             var result = await userService.RemoveUserAsync(id, CancellationToken.None);
             if (!result)
                 return NotFound($"User not found");
@@ -292,6 +294,22 @@ namespace TMS.API.Controllers
             await userManager.AddToRoleAsync(user, roleName);
             return NoContent();
             */
+        }
+
+        [HttpPatch("LockUnLock/{userId}")]
+        public async Task<IActionResult> LockUnLock([FromRoute] int userId)
+        {
+            var result = await userService.LockUnLock(userId);
+            if (result == null)
+                return NotFound(new { Message = "❌ User not found." });
+
+            if (result == "Locked")
+                return Ok(new { Message = "🔒 User has been locked for 5 minutes." });
+
+            if (result == "Unlocked")
+                return Ok(new { Message = "🔓 User has been unlocked." });
+
+            return BadRequest(new { Message = "❌ Error occurred while locking/unlocking the user." });
         }
 
 

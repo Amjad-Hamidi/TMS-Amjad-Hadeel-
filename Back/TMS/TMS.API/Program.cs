@@ -49,10 +49,21 @@ namespace TMS.API
 
 
 
+            /* // لازم يكون هيك , عشان ما يتعارض مع الي تحتها
             // Identity تسجيل ال
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TMSDbContext>() // Identity كمخزن لل EF لاستخدام
                 .AddDefaultTokenProviders(); // لدعم التحقق من الايميل واعادة تعيين الباسورد
+            */
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true; // تأكيد انو الايميل فريد
+                options.SignIn.RequireConfirmedAccount = true; // ConfirmEmail بدون Login تأكيد انو الايميل مفعل , ما بقدر يعمل
+            })
+            .AddEntityFrameworkStores<TMSDbContext>()
+            .AddDefaultTokenProviders();
+
 
             // throw an exception at runtime اذا ما بحطها رح يضرب , JwtConfig اضافة ال
             builder.Services.AddScoped<JwtService>();

@@ -165,7 +165,7 @@ namespace TMS.API.Services.Users
 
         public async Task<bool> RemoveUserAsync(int id, CancellationToken cancellationToken)
         {
-            var user = await _userManager.Users
+            var user = await _userManager.Users // DeleteAsync(user); لانو فعليا رح احذفه في AsNoTracking() غلط اعمل هون 
                 .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);
 
             if (user == null)
@@ -221,6 +221,34 @@ namespace TMS.API.Services.Users
             }
 
             return false;
+        }
+
+
+
+        public async Task<string> LockUnLock(int id)
+        {
+            var user = await _userManager.Users
+                .Include(appUser => appUser.UserAccount) // Include the UserAccount navigation property
+                .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);
+            if (user is not null)
+            {
+                user.LockoutEnabled = true; // Enable lockout
+
+                if (user.LockoutEnd != null && user.LockoutEnd > DateTimeOffset.UtcNow) // انتهاء مدة الحظر , الان بدي الغي الحظر
+                {
+                    user.LockoutEnd = null; // الغاء الحظر
+                    await _userManager.UpdateAsync(user);
+                    return "Unlocked";
+                }
+                else
+                {
+                    user.LockoutEnd = DateTimeOffset.UtcNow.AddMinutes(5); // قفل الحساب
+                    await _userManager.UpdateAsync(user);
+                    return "Locked";
+                }
+            }
+
+            return null; // User not found
         }
 
     }

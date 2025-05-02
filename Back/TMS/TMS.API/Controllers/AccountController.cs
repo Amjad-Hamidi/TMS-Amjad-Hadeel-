@@ -89,10 +89,30 @@ namespace TMS.API.Controllers
                 });
             }
 
-            return Ok(new
+                return Ok(new
+                {
+                    Message = "User registered successfully. Please login."
+                });
+        }
+
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user is not null)
             {
-                Message = "User registered successfully. Please login."
-            });
+                var result = await userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                {
+                    return Ok(new { Message = "Email confirmed successfully" });
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
+
+            return NotFound();
         }
 
 
@@ -116,15 +136,23 @@ namespace TMS.API.Controllers
                 });
             }
 
-            var loginResponse = await jwtService.Authenticate(request);
-            if (loginResponse is null)
-                return Unauthorized(new
-                {
-                    Message = "Invalid email or password."
-                });
+            try
+            {
+                var loginResponse = await jwtService.Authenticate(request);
+                if (loginResponse is null)
+                    return Unauthorized(new
+                    {
+                        Message = "Invalid email or password."
+                    });
 
-            return Ok(loginResponse);
+                return Ok(loginResponse);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Message = ex.Message }); // "Locked Out. Email not confirmed. Two-factor authentication not done"
+            }
         }
+
 
         [Authorize]
         [HttpPost("ChangeEmail")]
