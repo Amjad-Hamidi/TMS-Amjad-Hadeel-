@@ -1,12 +1,8 @@
 {
   "Files": [
     {
-      "Id": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\8518d8c5-2248-4dbe-94ab-ac5b9290a073.jfif",
-      "PackagePath": "staticwebassets\\images\\profiles\\8518d8c5-2248-4dbe-94ab-ac5b9290a073.jfif"
-    },
-    {
-      "Id": "D:\\TMS Asp.net\\TMS\\TMS.API\\wwwroot\\images\\profiles\\ccfeb503-a6fe-4578-a81d-86a4527d8b19.jpg",
-      "PackagePath": "staticwebassets\\images\\profiles\\ccfeb503-a6fe-4578-a81d-86a4527d8b19.jpg"
+      "Id": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg"
     },
     {
       "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.TMS.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
