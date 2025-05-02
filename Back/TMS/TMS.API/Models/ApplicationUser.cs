@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace TMS.API.Models
 {
@@ -15,7 +14,9 @@ namespace TMS.API.Models
 
 
         // IdentityUser بحط خصائص اضافية غير الي موجودة في
+        [Required, MaxLength(15)]
         public string FirstName { get; set; }
+        [Required, MaxLength(25)]
         public string LastName { get; set; }
         public ApplicationUserGender Gender { get; set; }
         public DateTime BirthDate { get; set; } 

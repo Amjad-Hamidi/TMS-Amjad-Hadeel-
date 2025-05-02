@@ -8,7 +8,7 @@
   "confirmPassword": "Ibraheem@123",
   "gender": 0,
   "birthDate": "2004-03-10",
-  "role": 1
+  "role": 2
 }
 
 {
@@ -59,16 +59,16 @@
 "password": Anas@123
 "confirmPassword": Anas@123
 "gender": male
-"birthDate": 2003-09-05
+"birthDate": 2003-09-2003
 "role": supervisor
 
-"firstName": Abd
-"lastName": Fayeq
-"userName": abd_fayeq
-"phone": 0592786564
-"email": abualfayek4444@gmail.com
-"password": Abd@123
-"confirmPassword": Abd@123
-"gender": male
-"birthDate": 2003-06-13
-"role": supervisor
+"firstName": Dummy
+"lastName": User
+"userName": dummy_user
+"phone": 0587146387
+"email": dummy@gmail.com
+"password": Dummy@123
+"confirmPassword": Dummy@123
+"gender": female
+"birthDate": 1998-07-14
+"role": trainee

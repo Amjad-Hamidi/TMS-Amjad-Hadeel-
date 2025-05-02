@@ -85,7 +85,6 @@ namespace TMS.API.Helpers.DBInitializer
                     context.UserAccounts.Add(new UserAccount
                     {
                         ApplicationUserId = user.Id,
-                        Role = Enum.Parse<UserRole>(StaticData.Admin),
                     });
 
                     await context.SaveChangesAsync();

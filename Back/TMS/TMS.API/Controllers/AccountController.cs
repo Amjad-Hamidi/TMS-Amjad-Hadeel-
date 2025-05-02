@@ -13,7 +13,6 @@ using System.Net;
 using System.Threading.Tasks;
 using TMS.API.Services.Registers;
 using Mapster;
-using TMS.API.DTOs.Users;
 
 namespace TMS.API.Controllers
 {
@@ -42,7 +41,6 @@ namespace TMS.API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm] RegisterRequestModel request)
         {
-
             if (!ModelState.IsValid)
             {
                 var modelErrors = ModelState
@@ -60,17 +58,7 @@ namespace TMS.API.Controllers
                 });
             }
 
-            if (request.Role != UserRole.Company &&
-                request.Role != UserRole.Supervisor &&
-                request.Role != UserRole.Trainee)
-            {
-                return BadRequest(new        // او دخل رقم غريب مثل 8 Admin بمنعه من تغيير دور غير مسموح فيه بما في ذلك 
-                {
-                    Message = "Invalid role. Choose {Company, Supervisor, Trainee} role."
-                });
-            }
-
-                var existingUser = await userManager.FindByEmailAsync(request.Email);
+            var existingUser = await userManager.FindByEmailAsync(request.Email);
             if (existingUser is not null)
                 return BadRequest(new
                 {
@@ -89,30 +77,10 @@ namespace TMS.API.Controllers
                 });
             }
 
-                return Ok(new
-                {
-                    Message = "User registered successfully. Please login."
-                });
-        }
-
-        [HttpGet("ConfirmEmail")]
-        public async Task<IActionResult> ConfirmEmail(string userId, string token)
-        {
-            var user = await userManager.FindByIdAsync(userId);
-            if (user is not null)
+            return Ok(new
             {
-                var result = await userManager.ConfirmEmailAsync(user, token);
-                if (result.Succeeded)
-                {
-                    return Ok(new { Message = "Email confirmed successfully" });
-                }
-                else
-                {
-                    return BadRequest(result.Errors);
-                }
-            }
-
-            return NotFound();
+                Message = "User registered successfully. Please login."
+            });
         }
 
 
@@ -136,23 +104,15 @@ namespace TMS.API.Controllers
                 });
             }
 
-            try
-            {
-                var loginResponse = await jwtService.Authenticate(request);
-                if (loginResponse is null)
-                    return Unauthorized(new
-                    {
-                        Message = "Invalid email or password."
-                    });
+            var loginResponse = await jwtService.Authenticate(request);
+            if (loginResponse is null)
+                return Unauthorized(new
+                {
+                    Message = "Invalid email or password."
+                });
 
-                return Ok(loginResponse);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { Message = ex.Message }); // "Locked Out. Email not confirmed. Two-factor authentication not done"
-            }
+            return Ok(loginResponse);
         }
-
 
         [Authorize]
         [HttpPost("ChangeEmail")]
