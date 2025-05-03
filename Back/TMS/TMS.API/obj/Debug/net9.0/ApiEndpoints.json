@@ -161,96 +161,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
-    "Method": "ChangeEmail",
-    "RelativePath": "api/Applications/ChangeEmail",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "TMS.API.Models.AuthenticationModels.ChangeEmailModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
-    "Method": "ChangePassword",
-    "RelativePath": "api/Applications/ChangePassword",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "model",
-        "Type": "TMS.API.Models.AuthenticationModels.ChangePasswordModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
-    "Method": "Login",
-    "RelativePath": "api/Applications/Login",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "TMS.API.Models.AuthenticationModels.LoginRequestModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
-    "Method": "GetProtectedData",
-    "RelativePath": "api/Applications/protected-endpoint",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
-    "Method": "Refresh",
-    "RelativePath": "api/Applications/refresh",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "TMS.API.Models.AuthenticationModels.RefreshTokenRequestModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.ApplicationsController",
-    "Method": "Register",
-    "RelativePath": "api/Applications/Register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "TMS.API.Models.AuthenticationModels.RegisterRequestModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "TMS.API.Controllers.CategoriesController",
     "Method": "GetAll",
     "RelativePath": "api/Categories",
@@ -269,9 +179,19 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "categoryRequest",
-        "Type": "TMS.API.DTOs.Categories.Requests.CategoryRequest",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryImageFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -306,9 +226,19 @@
         "IsRequired": true
       },
       {
-        "Name": "categoryRequest",
-        "Type": "TMS.API.DTOs.Categories.Requests.CategoryRequest",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryImageFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -332,7 +262,7 @@
   {
     "ContainingType": "TMS.API.Controllers.CategoriesController",
     "Method": "DeleteAll",
-    "RelativePath": "api/Categories/Delete All",
+    "RelativePath": "api/Categories/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -644,7 +574,7 @@
   {
     "ContainingType": "TMS.API.Controllers.UsersController",
     "Method": "DeleteAllUsersExceptAdmin",
-    "RelativePath": "api/Users/Delete-All",
+    "RelativePath": "api/Users/delete-all",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,

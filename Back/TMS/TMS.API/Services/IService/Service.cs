@@ -49,7 +49,7 @@ namespace TMS.API.Services.IService
             Expression<Func<T, object>>?[] includes = null,
             bool isTracked = true)
         {
-            var all = await GetAsync(predicate, includes, isTracked); // بجيبلي كل الداتا بناء على الشرط الي بعثته
+            var all = await GetAsync(predicate, includes, isTracked = false); // بجيبلي كل الداتا بناء على الشرط الي بعثته
 
             return all.FirstOrDefault(); // List بجيبلي اول عنصر من ال 
 

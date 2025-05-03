@@ -12,7 +12,7 @@ namespace TMS.API.Services.Users
         Task<IEnumerable<GetUsersDto>> GetAll();
         Task<GetUsersDto> GetById(int id);
         Task<IdentityResult> Add(RegisterRequestModel request);
-        Task<bool> Edit(int id, ApplicationUser applicationUser, IFormFile? formFile, HttpContext httpContext);
+        Task<IdentityResult?> Edit(int id, UpdateUserDto updateUserDto, HttpContext httpContext);
         Task<bool> RemoveUserAsync(int id, CancellationToken cancellationToken);
         Task<bool> RemoveAllExceptAdmin(CancellationToken cancellationToken);
         Task<bool> ChangeRole(int userId, UserRole userRole);

@@ -46,7 +46,7 @@ namespace TMS.API.Services.Tokens
                 request.RememberMe,
                 lockoutOnFailure: false);
 
-            if (signInResult.IsLockedOut)
+            if (signInResult.IsLockedOut) // true بتكون IsNotAllowed وبنفذ false رح تكون ConfirmEmail لو عملناله بلوك وهو بالاصل مش عامل
                 throw new InvalidOperationException("Your account is locked out, please try again later.");
 
             else if (signInResult.IsNotAllowed)
