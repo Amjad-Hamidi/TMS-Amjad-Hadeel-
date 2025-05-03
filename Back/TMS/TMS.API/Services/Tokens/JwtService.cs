@@ -16,14 +16,19 @@ namespace TMS.API.Services.Tokens
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public TMSDbContext dbContext { get; }
 
-        public JwtService(UserManager<ApplicationUser> userManager, IConfiguration configuration, TMSDbContext dbContext)
+        public JwtService(UserManager<ApplicationUser> userManager,
+            IConfiguration configuration,
+            TMSDbContext dbContext,
+            SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.dbContext = dbContext;
+            this.signInManager = signInManager;
         }
 
         public async Task<LoginResponseModel?> Authenticate(LoginRequestModel request)
@@ -33,6 +38,24 @@ namespace TMS.API.Services.Tokens
 
             var user = await userManager.FindByEmailAsync(request.Email);
             if (user == null || !await userManager.CheckPasswordAsync(user, request.Password))
+                return null;
+
+            // استخدم SignInManager
+            var signInResult = await signInManager.PasswordSignInAsync(user.UserName,
+                request.Password,
+                request.RememberMe,
+                lockoutOnFailure: false);
+
+            if (signInResult.IsLockedOut) // true بتكون IsNotAllowed وبنفذ false رح تكون ConfirmEmail لو عملناله بلوك وهو بالاصل مش عامل
+                throw new InvalidOperationException("Your account is locked out, please try again later.");
+
+            else if (signInResult.IsNotAllowed)
+                throw new InvalidOperationException("Email not confirmed, please confirm your email before logging in.");
+
+            else if (signInResult.RequiresTwoFactor)
+                throw new InvalidOperationException("Two-factor authentication is required.");
+
+            else if (!signInResult.Succeeded)
                 return null;
 
             var roles = await userManager.GetRolesAsync(user); // GetRolesAsync() : IList<string> دايما بترجع 
@@ -51,7 +74,9 @@ namespace TMS.API.Services.Tokens
             await userManager.UpdateAsync(user); // DB لهاد اليوزر في ال Refresh Token تحديث ال
 
             // ApplicationUserId من خلال UserAccountId استرجاع ال
-            var userAccount = dbContext.UserAccounts.FirstOrDefault(u => u.ApplicationUserId == user.Id);
+            var userAccount = dbContext.UserAccounts
+                .AsNoTracking()
+                .FirstOrDefault(u => u.ApplicationUserId == user.Id);
             var userAccountId = userAccount?.Id ?? 0;
 
             return new LoginResponseModel

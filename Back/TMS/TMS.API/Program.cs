@@ -15,6 +15,7 @@ using TMS.API.Services.Programs;
 using TMS.API.Services.Registers;
 using TMS.API.Services.Tokens;
 using TMS.API.Services.TrainingPrograms;
+using TMS.API.Services.Users;
 
 namespace TMS.API
 {
@@ -32,6 +33,9 @@ namespace TMS.API
 
         public static void Main(string[] args)
         {
+            // Register the mappings for Mapster
+            MapsterConfig.RegisterMappings();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -48,10 +52,21 @@ namespace TMS.API
 
 
 
+            /* // لازم يكون هيك , عشان ما يتعارض مع الي تحتها
             // Identity تسجيل ال
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TMSDbContext>() // Identity كمخزن لل EF لاستخدام
                 .AddDefaultTokenProviders(); // لدعم التحقق من الايميل واعادة تعيين الباسورد
+            */
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true; // تأكيد انو الايميل فريد
+                options.SignIn.RequireConfirmedAccount = true; // ConfirmEmail بدون Login تأكيد انو الايميل مفعل , ما بقدر يعمل
+            })
+            .AddEntityFrameworkStores<TMSDbContext>()
+            .AddDefaultTokenProviders();
+
 
             // throw an exception at runtime اذا ما بحطها رح يضرب , JwtConfig اضافة ال
             builder.Services.AddScoped<JwtService>();
@@ -71,9 +86,22 @@ namespace TMS.API
             // IEmailSender عملنا حقن فيه لل UserRegestrationService في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+            // IUserService عملنا حقن فيه لل UsersController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IUserService, UserService>();
+
+
             // ASP.NET Core. داخل  Dependency Injection container في الـ IHttpContextAccessor بتسجل خدمة 
             builder.Services.AddHttpContextAccessor(); // عشان موضوع توليد الملف وحفظه مع الامتداد كامل TrainingProgramService.cs مربوطة مع 
 
+            /*
+             // "$id" بانو برجعلها دايما endpoint باثر عاي
+            // Include() بس استعمل UsersContoller الذي سيسمح بتسلسل الكائنات التي تحتوي على مراجع دائرية عن طريق استخدام المراجع بدلاً من التكرار في ReferenceHandler.Preserve لإضافة JsonSerializerOptions تعديل اعدادات ال 
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                });
+            */
 
 
 

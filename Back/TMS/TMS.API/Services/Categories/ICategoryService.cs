@@ -1,15 +1,14 @@
 ﻿using System.Linq.Expressions;
+using TMS.API.DTOs.Categories.Requests;
 using TMS.API.Models;
+using TMS.API.Services.IService;
 
 namespace TMS.API.Services.Categories
 {
-    public interface ICategoryService
+    public interface ICategoryService : IService<Category>
     {
-        IEnumerable<Category> GetCategories();
-        Category? Get(Expression<Func<Category, bool>> expression);
-        Category Add(Category category);
-        bool Edit(int id, Category category);
-        bool Remove(int id);
-        int RemoveAll();
+        Task<Category> AddAsync(CategoryRequestDto categoryRequest, HttpContext httpContext);
+        Task<bool> EditAsync(int id, UpdateCategoryDto updateCategoryDto, HttpContext httpContext);
+        Task<bool> RemoveAllAsync(CancellationToken cancellationToken);
     }
 }
