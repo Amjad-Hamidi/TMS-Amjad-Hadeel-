@@ -2,7 +2,7 @@
 
 namespace TMS.API.DTOs.Categories.Requests
 {
-    public class CategoryRequest
+    public class CategoryRequestDto
     {
         [Required(ErrorMessage = "Category name is required.")]
         [MinLength(2, ErrorMessage = "Category name must be at least 2 characters long.")]

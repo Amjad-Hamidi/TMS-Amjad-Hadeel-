@@ -33,6 +33,9 @@ namespace TMS.API
 
         public static void Main(string[] args)
         {
+            // Register the mappings for Mapster
+            MapsterConfig.RegisterMappings();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

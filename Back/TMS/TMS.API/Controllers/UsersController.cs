@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ using TMS.API.Services.Users;
 namespace TMS.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] // من حالها !ModelState.IsValid  بتعمل ال [ApiController] : ملاحظة
     //[Authorize] // تأكد أن جميع العمليات تتطلب تسجيل الدخول
     [Authorize(Roles = $"{StaticData.Admin}")]
     public class UsersController : ControllerBase
@@ -162,18 +163,24 @@ namespace TMS.API.Controllers
 
 
 
-        // Email & Password & Role امكانية تحديث جميع الداتا باستثناء ال
+        // Login عادي المهم يكون عامل User من قبل اي Email & Password & Role امكانية تحديث جميع الداتا باستثناء ال
         [HttpPatch("{id}")]
-        [AllowAnonymous]
+        [Authorize] 
         public async Task<ActionResult> Update([FromRoute] int id, [FromForm] UpdateUserDto updateUserDto)
         {
-            var user = await userService.Edit(id,
-                updateUserDto.Adapt<ApplicationUser>(),
-                updateUserDto.ProfileImageFile,
-                HttpContext);
+            var identityResult = await userService.Edit(id, updateUserDto, HttpContext);
            
-            if (!user)
-                return NotFound();
+            if (identityResult == null)
+                return NotFound(new { Message = "User not found" });
+
+            if (!identityResult.Succeeded) // Identity وهذا هو التصرف الافتراضي ل unique انو يكون UserName بتتضمن 
+            {
+                var errors = identityResult.Errors.Select(e => e.Description); // ?! يحتوي على UserName وكذلك ممكن يكون
+                return BadRequest(new { // UpdateUserDto الموجودة في Data Annotation وكذلك بتنطبق على ال
+                    Message = "Update failed",
+                    Errors = errors
+                }); 
+            }
 
             return NoContent();
 
@@ -253,7 +260,7 @@ namespace TMS.API.Controllers
             */
         }
 
-        [HttpDelete("Delete-All")]
+        [HttpDelete("delete-all")]
         public async Task<ActionResult> DeleteAllUsersExceptAdmin()
         {
             var result = await userService.RemoveAllExceptAdmin(CancellationToken.None);

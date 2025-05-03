@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -97,69 +98,43 @@ namespace TMS.API.Services.Users
         }
 
 
-        public async Task<bool> Edit(int id,
-            ApplicationUser updatedUser,
-            IFormFile? mainFile,
+        public async Task<IdentityResult?> Edit(int id,
+            UpdateUserDto updateUserDto,
             HttpContext httpContext)
         {
             var applicationUserInDb = await _userManager.Users
+               //.Include(applicationUserInDb => applicationUserInDb.UserAccount) // لا داعي لعمل تضمين , لانا ما بدنا نعدل اشي من الداتا فيها
                .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);  // Fixing the query by using Where instead of Include
 
-            if (applicationUserInDb == null) return false;
-
-            // Update the user details with the new values, if any
-            applicationUserInDb.UserName = updatedUser.UserName ?? applicationUserInDb.UserName;
-            applicationUserInDb.FirstName = updatedUser.FirstName ?? applicationUserInDb.FirstName;
-            applicationUserInDb.LastName = updatedUser.LastName ?? applicationUserInDb.LastName;
-            applicationUserInDb.PhoneNumber = updatedUser.PhoneNumber ?? applicationUserInDb.PhoneNumber;
-            applicationUserInDb.Gender = updatedUser.Gender != default ? updatedUser.Gender : applicationUserInDb.Gender;
-            applicationUserInDb.BirthDate = updatedUser.BirthDate != default ? updatedUser.BirthDate : applicationUserInDb.BirthDate; // 16 مسبقاانو لازم يكون اكبر من check معمولو
+            if (applicationUserInDb == null) return null;
 
 
+           
             // Check if there's a new profile image
-            if (mainFile != null && mainFile.Length > 0) // إذا تم تحميل صورة جديدة
+            if (updateUserDto.ProfileImageFile != null && updateUserDto.ProfileImageFile.Length > 0) // إذا تم تحميل صورة جديدة
             {
-                // Check if the old profile image exists to delete
-                if (!string.IsNullOrEmpty(applicationUserInDb.ProfileImageUrl))
-                {
-                    Console.WriteLine($"Directory.GetCurrentDirectory() = {Directory.GetCurrentDirectory()}");
-                    Console.WriteLine($"applicationUserInDb.ProfileImageUrl = {applicationUserInDb.ProfileImageUrl}");  // بنص فاضي 7035 استبدال ال
-                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(),
-                        "wwwroot",
-                        applicationUserInDb.ProfileImageUrl.Replace("https://localhost:7035/", "").Replace("http://localhost:5000/", "")); // 5000 عشان يتاكد يشيل ال http اذا موجود
-
-                    try
-                    {
-                        // Attempt to delete the old image, but handle the possibility of it being in use.
-                        if (File.Exists(oldImagePath))
-                        {
-                            File.Delete(oldImagePath); // حذف الصورة القديمة
-                        }
-                    }
-                    catch(IOException ex)
-                    {
-                        Console.WriteLine($"File doesn't exists, error message => {ex.Message}");
-                    }
-   
-                }
+                // Delete the old profile image from the server
+                FileHelper.DeleteFileFromUrl(applicationUserInDb.ProfileImageUrl);
 
                 // Save new profile image using FileHelper class
-                applicationUserInDb.ProfileImageUrl = await FileHelper.SaveFileAync(mainFile, httpContext, "images/profiles");
+                applicationUserInDb.ProfileImageUrl = await FileHelper.SaveFileAync(updateUserDto.ProfileImageFile, httpContext, "images/profiles");
             }
 
-            /* // No need to save the old image, it exists by default because we don't delete it here
-            else
-            {
-                // If no new image is uploaded, retain the old one
-                applicationUserInDb.ProfileImageUrl = applicationUserInDb.ProfileImageUrl;
-            }
-            */
+            /*  // OR :
+           // Update the user details with the new values, if any
+           applicationUserInDb.UserName = updatedUser.UserName ?? applicationUserInDb.UserName;
+           applicationUserInDb.FirstName = updatedUser.FirstName ?? applicationUserInDb.FirstName;
+           applicationUserInDb.LastName = updatedUser.LastName ?? applicationUserInDb.LastName;
+           applicationUserInDb.PhoneNumber = updatedUser.PhoneNumber ?? applicationUserInDb.PhoneNumber;
+           applicationUserInDb.Gender = updatedUser.Gender != default ? updatedUser.Gender : applicationUserInDb.Gender;
+           applicationUserInDb.BirthDate = updatedUser.BirthDate != default ? updatedUser.BirthDate : applicationUserInDb.BirthDate; // 16 مسبقاانو لازم يكون اكبر من check معمولو
+           */
 
-
-            //await _context.SaveChangesAsync(); // No need to apply it in the DB, cuz UpdateAsync() do that
+            // Update only for the non-null properties
+            updateUserDto.Adapt(applicationUserInDb);
 
             var result = await _userManager.UpdateAsync(applicationUserInDb);
-            return result.Succeeded; // return 0 or 1, based on the Succeeded status
+            return result; // return IdentityResult
 
         }
 
@@ -170,6 +145,9 @@ namespace TMS.API.Services.Users
 
             if (user == null)
                 return false;
+
+            // 🧹 حذف الصورة من السيرفر 
+            FileHelper.DeleteFileFromUrl(user.ProfileImageUrl);
 
             var result = await _userManager.DeleteAsync(user);
             return result.Succeeded;
@@ -182,6 +160,8 @@ namespace TMS.API.Services.Users
                 .ToListAsync(cancellationToken);
             foreach (var user in users)
             {
+                FileHelper.DeleteFileFromUrl(user.ProfileImageUrl);
+
                 var result = await _userManager.DeleteAsync(user);
                 if (!result.Succeeded)
                     return false;
@@ -242,7 +222,7 @@ namespace TMS.API.Services.Users
                 }
                 else
                 {
-                    user.LockoutEnd = DateTimeOffset.UtcNow.AddMinutes(5); // قفل الحساب
+                    user.LockoutEnd = DateTime.Now.AddMinutes(5); // قفل الحساب
                     await _userManager.UpdateAsync(user);
                     return "Locked";
                 }
