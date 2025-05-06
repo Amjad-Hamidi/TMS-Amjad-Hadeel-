@@ -1,2 +1,8 @@
-wwwroot\images\categories\4b4cac18-a7fc-4a9e-bcfe-9fa0093a5529.jpg
-wwwroot\images\categories\acab8357-6d27-4c02-becd-2216fcec25c9.jpeg
+wwwroot\images\categories\193a1ea1-8e3e-4ed2-8a34-a6473a00d5c8.jpeg
+wwwroot\images\profiles\3fcd43ad-6589-4030-a858-afdb2d770231.png
+wwwroot\images\profiles\59f4228f-8de8-4f34-b4d9-9921be2487c9.jpeg
+wwwroot\images\profiles\6d34a6cc-f9a0-4a17-9df0-1725d38982b8.png
+wwwroot\images\profiles\8715e25b-d354-4e50-b30e-41e942ef8b38.png
+wwwroot\images\programs\9cb86beb-bde2-4895-8819-280f28d131b3.png
+wwwroot\images\programs\bd1c12bd-63c5-4e4f-9ebc-f5debfa8577b.png
+wwwroot\images\programs\c4942130-b495-41e2-875f-dbe5daf9037b.jpeg

@@ -107,8 +107,6 @@ namespace TMS.API.Services.Users
                .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);  // Fixing the query by using Where instead of Include
 
             if (applicationUserInDb == null) return null;
-
-
            
             // Check if there's a new profile image
             if (updateUserDto.ProfileImageFile != null && updateUserDto.ProfileImageFile.Length > 0) // إذا تم تحميل صورة جديدة
@@ -119,16 +117,6 @@ namespace TMS.API.Services.Users
                 // Save new profile image using FileHelper class
                 applicationUserInDb.ProfileImageUrl = await FileHelper.SaveFileAync(updateUserDto.ProfileImageFile, httpContext, "images/profiles");
             }
-
-            /*  // OR :
-           // Update the user details with the new values, if any
-           applicationUserInDb.UserName = updatedUser.UserName ?? applicationUserInDb.UserName;
-           applicationUserInDb.FirstName = updatedUser.FirstName ?? applicationUserInDb.FirstName;
-           applicationUserInDb.LastName = updatedUser.LastName ?? applicationUserInDb.LastName;
-           applicationUserInDb.PhoneNumber = updatedUser.PhoneNumber ?? applicationUserInDb.PhoneNumber;
-           applicationUserInDb.Gender = updatedUser.Gender != default ? updatedUser.Gender : applicationUserInDb.Gender;
-           applicationUserInDb.BirthDate = updatedUser.BirthDate != default ? updatedUser.BirthDate : applicationUserInDb.BirthDate; // 16 مسبقاانو لازم يكون اكبر من check معمولو
-           */
 
             // Update only for the non-null properties
             updateUserDto.Adapt(applicationUserInDb);
@@ -141,10 +129,23 @@ namespace TMS.API.Services.Users
         public async Task<bool> RemoveUserAsync(int id, CancellationToken cancellationToken)
         {
             var user = await _userManager.Users // DeleteAsync(user); لانو فعليا رح احذفه في AsNoTracking() غلط اعمل هون 
+                .Include(appUser => appUser.UserAccount)
                 .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == id);
 
             if (user == null)
                 return false;
+
+            if (user.UserAccount.Role == UserRole.Company)
+            {
+                var hasPrograms = await _context.TrainingPrograms
+                    .AnyAsync(tp => tp.CompanyId == user.UserAccount.Id, cancellationToken);
+
+                if (hasPrograms)
+                {
+                    // ⛔ ممنوع الحذف، لازم يحذف البرامج أولاً
+                    throw new InvalidOperationException("Cannot delete this company. Please delete its training programs first.");
+                }
+            }
 
             // 🧹 حذف الصورة من السيرفر 
             FileHelper.DeleteFileFromUrl(user.ProfileImageUrl);
@@ -156,10 +157,23 @@ namespace TMS.API.Services.Users
         public async Task<bool> RemoveAllExceptAdmin(CancellationToken cancellationToken)
         {
             var users = await _userManager.Users
+                .Include(appUser => appUser.UserAccount)
                 .Where(user => user.UserAccount.Role != UserRole.Admin) // SQL وليس C# لانه هون SQL الى Enum رح يضرب سيرفر ايرور, ما بعرف يحول ال Enum.GetName(user.UserAccount.Role) != "Admin" لو احط
                 .ToListAsync(cancellationToken);
+
             foreach (var user in users)
             {
+                if (user.UserAccount.Role == UserRole.Company)
+                {
+                    var hasPrograms = await _context.TrainingPrograms
+                        .AnyAsync(tp => tp.CompanyId == user.UserAccount.Id, cancellationToken);
+
+                    if (hasPrograms)
+                    {
+                        throw new InvalidOperationException($"Cannot delete company '{user.UserName}' (ID: {user.UserAccount.Id}) because it still has training programs.");
+                    }
+                }
+
                 FileHelper.DeleteFileFromUrl(user.ProfileImageUrl);
 
                 var result = await _userManager.DeleteAsync(user);
@@ -179,28 +193,47 @@ namespace TMS.API.Services.Users
                 .Include(appUser => appUser.UserAccount) // Include the UserAccount navigation property
                 .FirstOrDefaultAsync(appUser => appUser.UserAccount.Id == userId);
 
-            if (user is not null)
+            if (user is null)
+                return false;
+
+            var currentRole = user.UserAccount.Role;
+
+            // منع تغيير دور الشركة إذا عندها برامج تدريبية
+            if (currentRole == UserRole.Company)
             {
-                // remove the old role
-                var oldRoles = await _userManager.GetRolesAsync(user);
-                var removeResult = await _userManager.RemoveFromRolesAsync(user, oldRoles);
-                if (!removeResult.Succeeded)
-                    return false;
-
-                string roleName = Enum.GetName(typeof(UserRole), role); // OR : string roleName = role.ToString();
-                // add the new role
-                var result = await _userManager.AddToRoleAsync(user, roleName);
-
-                var userAccount = user.UserAccount;
-                userAccount.Role = role; // Update the role in the UserAccount entity
-
-                _context.UserAccounts.Update(userAccount); // Update the UserAccount entity in the context
-                await _context.SaveChangesAsync(); // Save the changes to the database
-
-                return result.Succeeded; // return 0 or 1 (if succeeded 1 if no 0)
+                var hasPrograms = await _context.TrainingPrograms
+                    .AnyAsync(tp => tp.CompanyId == user.UserAccount.Id);
+                if (hasPrograms)
+                    throw new InvalidOperationException("❌ Cannot change role: this company still has training programs. Please delete them first.");
             }
 
-            return false;
+            // منع تغيير المشرف اذا كان يشرف على برامج تدريبية
+            if (currentRole == UserRole.Supervisor)
+            {
+                var isSupervising = await _context.TrainingPrograms
+                    .AnyAsync(tp => tp.SupervisorId == user.UserAccount.Id);
+                if (isSupervising)
+                    throw new InvalidOperationException("❌ Cannot change role: this supervisor is assigned to training programs.");
+            }
+
+            // remove the old role
+            var oldRoles = await _userManager.GetRolesAsync(user);
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, oldRoles);
+            if (!removeResult.Succeeded)
+                return false;
+
+            string roleName = Enum.GetName(typeof(UserRole), role); // OR : string roleName = role.ToString();
+                                                                    // add the new role
+            var addResult = await _userManager.AddToRoleAsync(user, roleName);
+
+            var userAccount = user.UserAccount;
+            userAccount.Role = role; // Update the role in the UserAccount entity
+
+            _context.UserAccounts.Update(userAccount); // Update the UserAccount entity in the context
+            await _context.SaveChangesAsync(); // Save the changes to the database
+
+            return addResult.Succeeded; // return 0 or 1 (if succeeded 1 if no 0)
+
         }
 
 

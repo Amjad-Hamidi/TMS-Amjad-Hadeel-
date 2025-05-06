@@ -9,7 +9,7 @@
             if (file == null || file.Length == 0) return null;
 
             // توليد اسم ملف فريد
-            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName); // OR:  Guid.NewGuid().ToString() + Path.GetFileName(file.FileName);
 
             // تحديد مسار المجلد الذي سيتم تخزين الملف فيه
             var folderPath = Path.Combine(WebRootPath, folderName);
@@ -21,14 +21,14 @@
                                                                          // فقط عشان نتجنب رسالة الكومبايلر التحذيرية not null تاكيد للكومبايلر انو القيمة : !
 
             // نسخ الملف فعليًا للسيرفر
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            using (var stream = new FileStream(filePath, FileMode.Create)) // OR: using (var stream = System.IO.File.Create(filePath))
             {
                 await file.CopyToAsync(stream);
             }
 
             // بناء الرابط الكامل
             string baseUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}";
-            return $"{baseUrl}/{folderName}/{fileName}";
+            return $"{baseUrl}/{folderName}/{fileName}"; 
         }
 
 

@@ -7,7 +7,7 @@ namespace TMS.API.Services.Categories
 {
     public interface ICategoryService : IService<Category>
     {
-        Task<Category> AddAsync(CategoryRequestDto categoryRequest, HttpContext httpContext);
+        Task<Category> AddAsync(AddCategoryDto categoryRequest, HttpContext httpContext);
         Task<bool> EditAsync(int id, UpdateCategoryDto updateCategoryDto, HttpContext httpContext);
         Task<bool> RemoveAllAsync(CancellationToken cancellationToken);
     }

@@ -1,0 +1,38 @@
+Title: Advanced Web Development
+Description: Learn full-stack development with real projects.
+StartDate: 2025-06-01
+EndDate: 2025-07-15
+Location: Amman, Jordan
+SeatsAvailable: 25
+Rating: 0
+CategoryId: 1
+CompanyId: 3
+SupervisorId: 8
+Status: true
+ImageFile:.................
+----------------------------------------------------------
+Title: HTML Basics for Beginners
+Description: Learn how to structure web pages using HTML elements.
+StartDate: 2025-06-01
+EndDate: 2025-08-1
+Location: Online
+SeatsAvailable: 30
+Rating: 4.5
+CategoryId: 4
+CompanyId: 2
+SupervisorId: 3
+Status: true
+ImageFile:.................
+-------------------------------------------------------------
+Title: CSS for Web Design
+Description: Master the art of styling websites using modern CSS techniques including Flexbox, Grid, and responsive design.
+StartDate: 2026-01-14
+EndDate: 2026-03-19
+Location: Online
+SeatsAvailable: 50
+Rating: 3.5
+CategoryId: 4
+CompanyId: 2
+SupervisorId: 3
+Status: true
+ImageFile:.................

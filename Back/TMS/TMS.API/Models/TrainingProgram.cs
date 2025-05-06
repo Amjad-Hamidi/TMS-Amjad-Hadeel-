@@ -3,12 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TMS.API.Models
 {
+    public enum TrainingProgramStatus
+    {
+        Pending = 0,
+        Approved = 1,
+        Rejected = 2
+    }
     public class TrainingProgram
     {
         public int TrainingProgramId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public TimeSpan Duration { get; set; } // تم تغييره إلى TimeSpan
+        public double DurationInDays { get; set; } // اكثر اشي مسموح 24 ساعة SQL لانو في TimeSpan ضروري عشان هي لازم تكون ايام/ساعات... وليس double تم تغييره إلى 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Location { get; set; }
@@ -18,6 +24,11 @@ namespace TMS.API.Models
         public int SeatsAvailable { get; set; }
         public decimal Rating { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now; // تاريخ الانشاء
+
+        public TrainingProgramStatus ApprovalStatus { get; set; } = TrainingProgramStatus.Pending;
+
+        public string? RejectionReason { get; set; }
+        public DateTime? RejectionDate { get; set; }
 
 
         // Navigation Properties

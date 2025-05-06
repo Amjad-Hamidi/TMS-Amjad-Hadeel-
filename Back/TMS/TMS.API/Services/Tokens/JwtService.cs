@@ -40,7 +40,7 @@ namespace TMS.API.Services.Tokens
             if (user == null || !await userManager.CheckPasswordAsync(user, request.Password))
                 return null;
 
-            // استخدم SignInManager
+            // SignInManager استخدام 
             var signInResult = await signInManager.PasswordSignInAsync(user.UserName,
                 request.Password,
                 request.RememberMe,
@@ -61,8 +61,8 @@ namespace TMS.API.Services.Tokens
             var roles = await userManager.GetRolesAsync(user); // GetRolesAsync() : IList<string> دايما بترجع 
             var role = roles.FirstOrDefault();
 
-            var accessToken = GenerateJwtToken(user, role); // توليد Access Token
-            var refreshToken = GenerateRefreshToken(); // توليد Refresh Token
+            var accessToken = GenerateJwtToken(user, role); // Access Token توليد 
+            var refreshToken = GenerateRefreshToken(); // Refresh Token توليد 
 
             // (حدوث سلوك غير متوقع فقط بصير) DB تم توليدها بشكل صحيح قبل تحديث بيانات اليوزر في Refresh Token  و Access Token  فحص اضافي احتياطي للتاكد من ال
             if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
@@ -112,7 +112,7 @@ namespace TMS.API.Services.Tokens
                 new Claim("fullName", $"{user.FirstName} {user.LastName}"),
 
                 // ✅ Role Name (مرجع إضافي، لو بدك تستخدمه باسم مختلف)
-                new Claim("roleName", role)
+                new Claim("role", role)
             };
             /*
             // ✅ إضافة الأدوار كـ Claims
@@ -121,7 +121,7 @@ namespace TMS.API.Services.Tokens
 
             // 🟢 أضف الـ userAccountId إذا لقيته
             if (userAccount != null)
-                claims.Add(new Claim("userAccountId", userAccount.Id.ToString()));
+                claims.Add(new Claim("UserAccountId", userAccount.Id.ToString()));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -146,87 +146,6 @@ namespace TMS.API.Services.Tokens
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
-
-
-        public string EncryptRefreshToken(string plainText)
-        {
-            var key = Encoding.UTF8.GetBytes(configuration["JwtConfig:EncryptionKey"]);
-
-            if (key.Length != 32)
-                throw new Exception("Encryption key must be 32 bytes long.");
-
-            using var aes = Aes.Create();
-            aes.KeySize = 256;
-            aes.BlockSize = 128;
-            aes.Mode = CipherMode.CBC;
-            aes.Padding = PaddingMode.PKCS7;
-            aes.Key = key;
-            aes.GenerateIV();
-
-            using var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-            var plainBytes = Encoding.UTF8.GetBytes(plainText);
-            var encryptedBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
-
-            // دمج IV مع البيانات المشفرة
-            var result = new byte[aes.IV.Length + encryptedBytes.Length];
-            Buffer.BlockCopy(aes.IV, 0, result, 0, aes.IV.Length);
-            Buffer.BlockCopy(encryptedBytes, 0, result, aes.IV.Length, encryptedBytes.Length);
-
-            return Convert.ToBase64String(result);
-        }
-
-        public string DecryptRefreshToken(string encryptedToken)
-        {
-            var key = Encoding.UTF8.GetBytes(configuration["JwtConfig:EncryptionKey"]);
-
-            if (key.Length != 32)
-                throw new Exception("Encryption key must be 32 bytes long.");
-
-            var fullCipher = Convert.FromBase64String(encryptedToken);
-
-            using var aes = Aes.Create();
-            aes.KeySize = 256;
-            aes.BlockSize = 128;
-            aes.Mode = CipherMode.CBC;
-            aes.Padding = PaddingMode.PKCS7;
-            aes.Key = key;
-
-            var ivSize = aes.BlockSize / 8;
-
-            if (fullCipher.Length < ivSize)
-                throw new ArgumentException("Invalid encrypted token.");
-
-            var iv = new byte[ivSize];
-            var cipherText = new byte[fullCipher.Length - ivSize];
-
-            Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
-            Buffer.BlockCopy(fullCipher, ivSize, cipherText, 0, cipherText.Length);
-
-            aes.IV = iv;
-
-            using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-
-            try
-            {
-                var decryptedBytes = decryptor.TransformFinalBlock(cipherText, 0, cipherText.Length);
-                return Encoding.UTF8.GetString(decryptedBytes);
-            }
-            catch (CryptographicException ex)
-            {
-                // طباعة الخطأ لمزيد من الفحص
-                Console.WriteLine($"Decryption error: {ex.Message}");
-                return null;
-            }
-        }
-
-
-
-
-
-
-
-
-
 
         public string ExtractUserIdFromExpiredToken(string token)
         {
@@ -263,7 +182,6 @@ namespace TMS.API.Services.Tokens
                 return false;
             }
         }
-
 
         public TimeSpan GetAccessTokenRemainingTime(string token)
         {

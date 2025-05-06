@@ -33,7 +33,7 @@ namespace TMS.API.Models
         public ICollection<ProgramTrainee> EnrolledPrograms { get; set; } = new List<ProgramTrainee>();
 
 
-        // اله هي الايميل value فقط , الي ال UserName هو ان ترجع IdentityUser في ToString السلوك الافتراضي ل
+        // UserName هو ان ترجع IdentityUser في ToString السلوك الافتراضي ل
         /*
         public override string ToString()
         {

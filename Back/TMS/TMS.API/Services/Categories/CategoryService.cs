@@ -21,7 +21,7 @@ namespace TMS.API.Services.Categories
         }
 
         
-        public async Task<Category> AddAsync(CategoryRequestDto categoryRequest, HttpContext httpContext)
+        public async Task<Category> AddAsync(AddCategoryDto categoryRequest, HttpContext httpContext)
         {
             string? imageUrl = null;
 
@@ -47,24 +47,23 @@ namespace TMS.API.Services.Categories
                 .FirstOrDefaultAsync(c => c.Id == id);
             if (categoryInDb == null) return false;
 
-            string? imageUrl = categoryInDb.CategoryImageUrl;
+            // MapsterConfig.cs موجود توزيعها وشكلها في != null تنسخ القيم فقط الي 
+            updateCategoryDto.Adapt(categoryInDb); // ثم تحت بغير الصورة لو هو بعث domain model لازم انسخ كل القيم بالاول على ال
 
             if(updateCategoryDto.CategoryImageFile != null && updateCategoryDto.CategoryImageFile.Length > 0)
             {
-                FileHelper.DeleteFileFromUrl(imageUrl); 
+                FileHelper.DeleteFileFromUrl(categoryInDb.CategoryImageUrl); 
                 // Save the new image
-                imageUrl = await FileHelper.SaveFileAync(updateCategoryDto.CategoryImageFile, httpContext, "images/categories");
+                categoryInDb.CategoryImageUrl = await FileHelper.SaveFileAync(updateCategoryDto.CategoryImageFile, httpContext, "images/categories");
             }
 
-            // MapsterConfig.cs موجود توزيعها وشكلها في != null تنسخ القيم فقط الي 
-            updateCategoryDto.Adapt(categoryInDb);
-            categoryInDb.CategoryImageUrl = imageUrl; // imageUrl بدل ال if(updateCategoryDto.CategoryImageFile != null && updateCategoryDto.CategoryImageFile.Length > 0)  ال body ما بنحفظ بدونها , او بحطها مباشرة في DB يعني الرابط في Category ضرورية , بدونها ما بحفظ الصورة في
 
             tMSDbContext.Categories.Update(categoryInDb);
             await tMSDbContext.SaveChangesAsync();
             return true;
         }
 
+        // Service<Category> هون من ال override معموله 
         public async Task<bool> RemoveAsync(int id, CancellationToken cancellationToken)
         {
             var categoryInDb = await tMSDbContext.Categories.FindAsync(id);

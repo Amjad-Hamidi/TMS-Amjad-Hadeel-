@@ -1,14 +1,27 @@
 ﻿using System.Linq.Expressions;
+using TMS.API.DTOs.TrainingPrograms.Requests;
 using TMS.API.Models;
+using TMS.API.Services.IService;
+using TMS.API.Services.Programs;
 
 namespace TMS.API.Services.TrainingPrograms
 {
-    public interface ITrainingProgramService
+    public interface ITrainingProgramService : IService<TrainingProgram>
     {
-        IEnumerable<TrainingProgram> GetTrainingPrograms();
-        TrainingProgram? Get(Expression<Func<TrainingProgram, bool>> expression);
-        Task<TrainingProgram> AddAsync(TrainingProgram trainingProgram, IFormFile file); // IFormFile is used to get the file from the form
-        Task<bool> EditAsync(int id, TrainingProgram trainingProgram, IFormFile file); // IFormFile is used to get the file from the form
-        Task<bool> RemoveAsync(int id);
+        Task<IEnumerable<TrainingProgram>> GetAsyncWithCondWithoutDetails(string? query, int page, int pageSize);
+        Task<TrainingProgram?> GetOneAsyncWithoutDetails(int id);
+        Task<TrainingProgram> AddAsync(AddTrainingProgramDto trainingProgramRequestDto, HttpContext httpContext);
+        Task<bool> EditAsync(int id, UpdateTrainingProgramDto updateTrainingProgramDto, HttpContext httpContext);
+        Task<bool> RemoveAsync(int id, CancellationToken cancellationToken);
+        Task<bool> RemoveAllAsync(CancellationToken cancellationToken);
+
+        Task<ProgramActionResult> ApproveAsync(int id);
+        Task<IEnumerable<TrainingProgram>> GetPendingAsync();
+        Task<IEnumerable<TrainingProgram>> GetPendingByCompanyAsync(int companyId);
+        Task<ProgramActionResult> RejectAsync(int id, string reason);
+        Task<IEnumerable<TrainingProgram>> GetRejectedAsync();
+        Task<IEnumerable<TrainingProgram>> GetRejectedByCompanyAsync(int companyId);
+        Task<IEnumerable<TrainingProgram>> GetApprovedByCompanyAsync(int companyId);
+        Task<IEnumerable<TrainingProgram>> GetBySupervisorAsync(int supervisorId);
     }
 }

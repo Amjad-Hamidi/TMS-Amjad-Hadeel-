@@ -47,7 +47,7 @@ namespace TMS.API.Controllers
 
         [HttpPost("")]
         [Authorize(Roles = $"{StaticData.Admin}")] 
-        public async Task<IActionResult> Create([FromForm] CategoryRequestDto categoryRequest)
+        public async Task<IActionResult> Create([FromForm] AddCategoryDto categoryRequest)
         {
             // Backend validation
             if (!ModelState.IsValid)
@@ -84,7 +84,7 @@ namespace TMS.API.Controllers
 
             var updated = await _categoryService.EditAsync(id, updateCategoryDto, HttpContext);
             if(!updated)
-                return NotFound();
+                return NotFound($"This category with Id {id} not found to update.");
             return NoContent();
         }
 
@@ -94,7 +94,7 @@ namespace TMS.API.Controllers
         {
             var deleted = await _categoryService.RemoveAsync(id, CancellationToken.None);
             if (!deleted)
-                return NotFound("This category not found to delete.");
+                return NotFound($"This category with Id {id} not found to delete.");
             return NoContent();
         }
 

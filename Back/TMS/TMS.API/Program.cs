@@ -9,6 +9,7 @@ using System.Text;
 using TMS.API.Data;
 using TMS.API.Helpers;
 using TMS.API.Helpers.DBInitializer;
+using TMS.API.Middlewares;
 using TMS.API.Models;
 using TMS.API.Services.Categories;
 using TMS.API.Services.Programs;
@@ -129,8 +130,12 @@ namespace TMS.API
             });
                    
 
+            builder.Services.AddAuthorization(); // Authorization Service (انا ضفتها)
 
             var app = builder.Build();
+
+            // وغيرها AddAsync, EditAsync في ال TrainingProgramService مثل الي موجودة في exceptions بعالج شكل ال 
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // CORS لامكانية الربط مع الفرونت
             app.UseCors(policy =>
@@ -139,9 +144,6 @@ namespace TMS.API
                       .AllowAnyHeader());
 
 
-
-            builder.Services.AddAuthorization(); // Autherization Service (انا ضفتها)
-            //builder.Services.AddScoped<JwtService>(); // dependecy injection for Jwt
 
 
             // Configure the HTTP request pipeline.

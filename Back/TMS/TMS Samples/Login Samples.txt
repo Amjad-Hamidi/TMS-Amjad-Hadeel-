@@ -1,0 +1,11 @@
+Admin only:
+{
+  "email": "admin@tms.com",
+  "password": "Admin@123"
+}
+-----------------------------------------------
+
+{
+  "email": "a38412014@gmail.com",
+  "password": "Ibraheem@123"
+}
