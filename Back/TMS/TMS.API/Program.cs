@@ -16,6 +16,7 @@ using TMS.API.Services.Programs;
 using TMS.API.Services.Registers;
 using TMS.API.Services.Tokens;
 using TMS.API.Services.TrainingPrograms;
+using TMS.API.Services.TrainingPrograms.Trainee;
 using TMS.API.Services.Users;
 
 namespace TMS.API
@@ -89,6 +90,9 @@ namespace TMS.API
 
             // IUserService عملنا حقن فيه لل UsersController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
             builder.Services.AddScoped<IUserService, UserService>();
+
+
+            builder.Services.AddScoped<IProgramEnrollmentService, ProgramEnrollmentService>();
 
 
             // ASP.NET Core. داخل  Dependency Injection container في الـ IHttpContextAccessor بتسجل خدمة 

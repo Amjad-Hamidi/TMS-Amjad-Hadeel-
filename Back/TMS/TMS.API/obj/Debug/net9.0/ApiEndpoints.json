@@ -270,6 +270,79 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "TMS.API.Controllers.ProgramEnrollmentsController",
+    "Method": "GetApplicants",
+    "RelativePath": "api/ProgramEnrollments/applicants/{programId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "programId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProgramEnrollmentsController",
+    "Method": "Enroll",
+    "RelativePath": "api/ProgramEnrollments/enroll",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TrainingProgramId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CV",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProgramEnrollmentsController",
+    "Method": "GetMyEnrollments",
+    "RelativePath": "api/ProgramEnrollments/my-enrollments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProgramEnrollmentsController",
+    "Method": "ReviewApplication",
+    "RelativePath": "api/ProgramEnrollments/review",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "traineeId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "programId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "accept",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
     "Method": "GetAll",
     "RelativePath": "api/TrainingPrograms",

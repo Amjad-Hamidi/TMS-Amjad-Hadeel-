@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TMS.API.ConstantClaims;
 using TMS.API.Data;
 using TMS.API.DTOs.Categories.Requests;
@@ -220,6 +221,8 @@ namespace TMS.API.Controllers
             var programs = await trainingProgramService.GetBySupervisorAsync(supervisorId);
             return Ok(programs.Adapt<IEnumerable<SupervisedProgramDto>>());
         }
+
+
 
 
     }
