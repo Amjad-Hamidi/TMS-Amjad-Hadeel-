@@ -2,18 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using TMS.API.Models;
 using TMS.API.Models.AuthenticationModels;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using TMS.API.Services.Tokens;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
-using System.Threading.Tasks;
 using TMS.API.Services.Registers;
-using Mapster;
-using TMS.API.DTOs.Users;
 
 namespace TMS.API.Controllers
 {

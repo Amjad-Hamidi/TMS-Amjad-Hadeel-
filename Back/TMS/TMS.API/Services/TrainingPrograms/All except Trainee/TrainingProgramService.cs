@@ -12,7 +12,7 @@ using TMS.API.Models;
 using TMS.API.Services.IService;
 using TMS.API.Services.TrainingPrograms;
 
-namespace TMS.API.Services.Programs
+namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
 {
     public enum ProgramActionResult
     {

@@ -1,10 +1,6 @@
-﻿using Azure.Core;
-using Mapster;
+﻿using Mapster;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using TMS.API.Data;
 using TMS.API.DTOs.Categories.Requests;
 using TMS.API.DTOs.Categories.Responses;
 using TMS.API.Helpers;

@@ -12,7 +12,7 @@ using TMS.API.Helpers.DBInitializer;
 using TMS.API.Middlewares;
 using TMS.API.Models;
 using TMS.API.Services.Categories;
-using TMS.API.Services.Programs;
+using TMS.API.Services.TrainingPrograms.All_except_Trainee;
 using TMS.API.Services.Registers;
 using TMS.API.Services.Tokens;
 using TMS.API.Services.TrainingPrograms;

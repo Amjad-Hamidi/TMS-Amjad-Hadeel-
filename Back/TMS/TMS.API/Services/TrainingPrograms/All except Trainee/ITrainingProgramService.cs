@@ -2,9 +2,9 @@
 using TMS.API.DTOs.TrainingPrograms.Requests;
 using TMS.API.Models;
 using TMS.API.Services.IService;
-using TMS.API.Services.Programs;
+using TMS.API.Services.TrainingPrograms;
 
-namespace TMS.API.Services.TrainingPrograms
+namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
 {
     public interface ITrainingProgramService : IService<TrainingProgram>
     {

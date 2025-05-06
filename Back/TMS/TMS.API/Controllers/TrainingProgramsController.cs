@@ -1,19 +1,11 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TMS.API.ConstantClaims;
-using TMS.API.Data;
-using TMS.API.DTOs.Categories.Requests;
-using TMS.API.DTOs.Categories.Responses;
 using TMS.API.DTOs.TrainingPrograms.Requests;
 using TMS.API.DTOs.TrainingPrograms.Responses;
 using TMS.API.Helpers;
-using TMS.API.Models;
-using TMS.API.Services.Categories;
-using TMS.API.Services.Programs;
-using TMS.API.Services.TrainingPrograms;
+using TMS.API.Services.TrainingPrograms.All_except_Trainee;
 
 namespace TMS.API.Controllers
 {
