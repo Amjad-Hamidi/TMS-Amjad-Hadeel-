@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TMS.API.Data;
 using TMS.API.DTOs.Categories.Requests;
+using TMS.API.DTOs.Categories.Responses;
+using TMS.API.DTOs.Pages;
 using TMS.API.Helpers;
 using TMS.API.Models;
 using TMS.API.Services.IService;
@@ -20,8 +22,34 @@ namespace TMS.API.Services.Categories
             this.tMSDbContext = tMSDbContext;
         }
 
-        
-        public async Task<Category> AddAsync(CategoryRequestDto categoryRequest, HttpContext httpContext)
+
+        public async Task<PagedResult<CategoryResponse>> GetAllAsync(int page, int limit, string? search)
+        {
+            IQueryable<Category> query = tMSDbContext.Categories.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(c => c.Name.Contains(search) || c.Description.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var pagedItems = await query
+                .AsNoTracking()
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            return new PagedResult<CategoryResponse>
+            {
+                Items = pagedItems.Adapt<IEnumerable<CategoryResponse>>(),
+                TotalCount = totalCount,
+                Page = page,
+                Limit = limit
+            };
+        }
+
+        public async Task<Category> AddAsync(AddCategoryDto categoryRequest, HttpContext httpContext)
         {
             string? imageUrl = null;
 
@@ -32,7 +60,7 @@ namespace TMS.API.Services.Categories
 
             var category = categoryRequest.Adapt<Category>(); // Update action in CategoriesController موجودة في نهاية CategoryResponse بتتحول بال
             category.CategoryImageUrl = imageUrl; // CategoryResponse لل Adapt لانو بناء عليها بالسطر الي فوقها بدنا نعمل Category ضرورية , بدونها ما بحفظ الصورة في
-
+           
             await tMSDbContext.Categories.AddAsync(category);
             await tMSDbContext.SaveChangesAsync();
             return category;
@@ -47,24 +75,22 @@ namespace TMS.API.Services.Categories
                 .FirstOrDefaultAsync(c => c.Id == id);
             if (categoryInDb == null) return false;
 
-            string? imageUrl = categoryInDb.CategoryImageUrl;
+            // MapsterConfig.cs موجود توزيعها وشكلها في != null تنسخ القيم فقط الي 
+            updateCategoryDto.Adapt(categoryInDb); // ثم تحت بغير الصورة لو هو بعث domain model لازم انسخ كل القيم بالاول على ال
 
             if(updateCategoryDto.CategoryImageFile != null && updateCategoryDto.CategoryImageFile.Length > 0)
             {
-                FileHelper.DeleteFileFromUrl(imageUrl); 
+                FileHelper.DeleteFileFromUrl(categoryInDb.CategoryImageUrl); 
                 // Save the new image
-                imageUrl = await FileHelper.SaveFileAync(updateCategoryDto.CategoryImageFile, httpContext, "images/categories");
+                categoryInDb.CategoryImageUrl = await FileHelper.SaveFileAync(updateCategoryDto.CategoryImageFile, httpContext, "images/categories");
             }
-
-            // MapsterConfig.cs موجود توزيعها وشكلها في != null تنسخ القيم فقط الي 
-            updateCategoryDto.Adapt(categoryInDb);
-            categoryInDb.CategoryImageUrl = imageUrl; // imageUrl بدل ال if(updateCategoryDto.CategoryImageFile != null && updateCategoryDto.CategoryImageFile.Length > 0)  ال body ما بنحفظ بدونها , او بحطها مباشرة في DB يعني الرابط في Category ضرورية , بدونها ما بحفظ الصورة في
 
             tMSDbContext.Categories.Update(categoryInDb);
             await tMSDbContext.SaveChangesAsync();
             return true;
         }
 
+        // Service<Category> هون من ال override معموله 
         public async Task<bool> RemoveAsync(int id, CancellationToken cancellationToken)
         {
             var categoryInDb = await tMSDbContext.Categories.FindAsync(id);

@@ -76,6 +76,10 @@
               "target": "Package",
               "version": "[9.0.3, )"
             },
+            "MimeTypesMap": {
+              "target": "Package",
+              "version": "[1.0.9, )"
+            },
             "Scalar.AspNetCore": {
               "target": "Package",
               "version": "[2.1.1, )"

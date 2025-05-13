@@ -347,3 +347,4 @@ D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\refint\TMS.API.dll
 D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\TMS.API.pdb
 D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\TMS.API.genruntimeconfig.cache
 D:\TMS Asp.net\TMS\TMS.API\obj\Debug\net9.0\ref\TMS.API.dll
+D:\TMS Asp.net\TMS\TMS.API\bin\Debug\net9.0\MimeTypesMap.dll

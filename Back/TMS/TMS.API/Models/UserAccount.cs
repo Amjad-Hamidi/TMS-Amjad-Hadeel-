@@ -23,6 +23,10 @@ namespace TMS.API.Models
 
         public UserRole Role { get; set; } // Add, Update in TrainingProgramsController وبتفيدني في IdentityUser مش موجودة في 
 
+        public string? CVPath { get; set; } // only for (Trainee/Supervisor)
+
+
+
         // every Company can create many Training Programs
         public ICollection<TrainingProgram> CreatedPrograms { get; set; } = new List<TrainingProgram>();
 
@@ -33,7 +37,7 @@ namespace TMS.API.Models
         public ICollection<ProgramTrainee> EnrolledPrograms { get; set; } = new List<ProgramTrainee>();
 
 
-        // اله هي الايميل value فقط , الي ال UserName هو ان ترجع IdentityUser في ToString السلوك الافتراضي ل
+        // UserName هو ان ترجع IdentityUser في ToString السلوك الافتراضي ل
         /*
         public override string ToString()
         {

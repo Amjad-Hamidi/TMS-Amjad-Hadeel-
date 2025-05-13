@@ -1,14 +1,9 @@
-﻿using Azure.Core;
-using Mapster;
+﻿using Mapster;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using TMS.API.Data;
 using TMS.API.DTOs.Categories.Requests;
 using TMS.API.DTOs.Categories.Responses;
 using TMS.API.Helpers;
-using TMS.API.Models;
 using TMS.API.Services.Categories;
 
 namespace TMS.API.Controllers
@@ -30,11 +25,10 @@ namespace TMS.API.Controllers
 
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int limit = 10, [FromQuery] string? search = null)
         {
-            var categories = await _categoryService.GetAsync();
-
-            return Ok(categories.Adapt<IEnumerable<CategoryResponse>>());
+            var result = await _categoryService.GetAllAsync(page, limit, search);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -47,7 +41,7 @@ namespace TMS.API.Controllers
 
         [HttpPost("")]
         [Authorize(Roles = $"{StaticData.Admin}")] 
-        public async Task<IActionResult> Create([FromForm] CategoryRequestDto categoryRequest)
+        public async Task<IActionResult> Create([FromForm] AddCategoryDto categoryRequest)
         {
             // Backend validation
             if (!ModelState.IsValid)
@@ -84,7 +78,7 @@ namespace TMS.API.Controllers
 
             var updated = await _categoryService.EditAsync(id, updateCategoryDto, HttpContext);
             if(!updated)
-                return NotFound();
+                return NotFound($"This category with Id '{id}' not found to update.");
             return NoContent();
         }
 
@@ -94,7 +88,7 @@ namespace TMS.API.Controllers
         {
             var deleted = await _categoryService.RemoveAsync(id, CancellationToken.None);
             if (!deleted)
-                return NotFound("This category not found to delete.");
+                return NotFound($"This category with Id '{id}' not found to delete.");
             return NoContent();
         }
 
