@@ -20,6 +20,12 @@ namespace TMS.API.DTOs.TrainingPrograms.Requests
         public int SeatsAvailable { get; set; }
         [Range(0,5)]
         public decimal Rating { get; set; }
+
+        [Url(ErrorMessage = "Invalid content URL.")]
+        public string ContentUrl { get; set; }
+
+        [Url(ErrorMessage = "Invalid classroom URL.")]
+        public string ClassroomUrl { get; set; }
         public int CategoryId { get; set; } // لإرسال التصنيف المرتبط
         public int? CompanyId { get; set; }
         public int? SupervisorId { get; set; }

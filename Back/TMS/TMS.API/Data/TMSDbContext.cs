@@ -70,11 +70,39 @@ namespace TMS.API.Data
                 .Property(p => p.SupervisorId)
                 .IsRequired(false);
 
+
+
+            //============ Category ============
+
             // DB في Category.Name منع تكرار ال   
             modelBuilder.Entity<Category>() // وبحط شرط CategoriesController هاي مش كافية بروح عال backend لو بدي اشتغل على مستوى
                 .HasIndex(c => c.Name)
                 .IsUnique(); // بمنعني SQL DB فقط, لو اجيت اضيف يدوي في DB بشتغل على نطاق ال 
 
+
+
+            //============ FeedBack ============
+          
+            // هو الوقت الحالي Feedback اعطاء وقت الانشاء في ال 
+            modelBuilder.Entity<Feedback>()
+                .Property(f => f.CreatedAt)
+                .HasDefaultValueSql("GETDATE()");
+
+            // many feedbacks لها مرسل واحد فقط , كل مرسل ممكن يكون ارسل feedback كل
+            modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.FromUserAccount)
+                .WithMany() // many feedbacks
+                .HasForeignKey(f => f.FromUserAccountId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // many feedbacks لها مستقبل واحد فقط , كل مستقبل ممكن يكون استقبل feedback كل
+            modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.ToUserAccount)
+                .WithMany() // many feedbacks
+                .HasForeignKey(f => f.ToUserAccountId)
+                .OnDelete(DeleteBehavior.Restrict); // من قبل feedback اذا كان مستقبل UserAccount منع حذف ال
+            // إذا تم حذف المرسل -> يتم حذف الفيدباك معه
+            // إذا تم حذف المستقبل -> يُمنع الحذف إن كان له فيدباك
 
             base.OnModelCreating(modelBuilder);
 
@@ -94,6 +122,10 @@ namespace TMS.API.Data
 
 
         public DbSet<ProgramTrainee> ProgramTrainees { get; set; }
+
+        public DbSet<PasswordResetCode> PasswordResetCodes { get; set; }
+
+        public DbSet<Feedback> Feedbacks { get; set; }
 
 
     }

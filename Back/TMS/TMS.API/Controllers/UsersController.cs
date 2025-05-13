@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
+using TMS.API.ConstantClaims;
+using TMS.API.DTOs.Pages;
 using TMS.API.DTOs.Users;
 using TMS.API.Helpers;
 using TMS.API.Models;
@@ -14,7 +17,7 @@ namespace TMS.API.Controllers
     [Route("api/[controller]")]
     [ApiController] // من حالها !ModelState.IsValid  بتعمل ال [ApiController] : ملاحظة
     //[Authorize] // تأكد أن جميع العمليات تتطلب تسجيل الدخول
-    [Authorize(Roles = $"{StaticData.Admin}")]
+    //[Authorize(Roles = $"{StaticData.Admin}")]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -36,15 +39,29 @@ namespace TMS.API.Controllers
 
 
         // عرض جميع اليوزرز
-        [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+        [HttpGet("search")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers(
+            [FromQuery] string? search,
+            UserRole? role,
+            [FromQuery] int page = 1, 
+            [FromQuery] int limit = 10)
         {
-            var usersDto = await userService.GetAll();
-            return Ok(usersDto);
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var result = await userService.GetAll(page, limit, search, role);
+            return Ok(new PagedResult<GetUsersDto>
+            {
+                Items = result.Items,
+                TotalCount = result.TotalCount,
+                Page = result.Page,
+                Limit = result.Limit
+            });
         }
 
         // UserAccountId احضار اليوزر بناء على ال
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
         public async Task<ActionResult<ApplicationUser>> GetById([FromRoute] int id)
         {
             try
@@ -58,8 +75,40 @@ namespace TMS.API.Controllers
             }
         }
 
+        
+        [HttpGet("supervisors")]
+        [Authorize(Roles = $"{StaticData.Admin}, {StaticData.Company}")]
+        public async Task<IActionResult> GetAllSupervisors(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var result = await userService.GetAllSupervisorsAsync(search, page, limit);
+
+            return Ok(result);
+        }
+
+        [HttpGet("my-trainees")]
+        [Authorize(Roles = StaticData.Supervisor)]
+        public async Task<IActionResult> GetMyTrainees(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var supervisorId = int.Parse(User.FindFirst(CustomClaimNames.UserAccountId)!.Value);
+
+            var result = await userService.GetTraineesForSupervisorAsync(supervisorId, search, page, limit);
+
+            return Ok(result);
+        }
+
 
         [HttpPost("Add-User")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
         public async Task<IActionResult> Add([FromForm] RegisterRequestModel registerRequestModel)
         {
             if (!ModelState.IsValid)
@@ -106,10 +155,11 @@ namespace TMS.API.Controllers
 
 
 
+        /* // It is made on the ProfilesController
         // Login عادي المهم يكون عامل User من قبل اي Email & Password & Role امكانية تحديث جميع الداتا باستثناء ال
         [HttpPatch("{id}")]
         [Authorize] 
-        public async Task<ActionResult> Update([FromRoute] int id, [FromForm] UpdateUserDto updateUserDto)
+        public async Task<ActionResult> Update([FromRoute] int id, [FromForm] UpdateProfileDto updateUserDto)
         {
             var identityResult = await userService.Edit(id, updateUserDto, HttpContext);
            
@@ -126,13 +176,14 @@ namespace TMS.API.Controllers
             }
 
             return NoContent();
-
         }
-        
+        */
+
 
 
         // Delete a user
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
             if(id == 1)
@@ -154,6 +205,7 @@ namespace TMS.API.Controllers
         }
 
         [HttpDelete("delete-all")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
         public async Task<ActionResult> DeleteAllUsersExceptAdmin()
         {
             try
@@ -172,6 +224,7 @@ namespace TMS.API.Controllers
 
 
         [HttpPatch("ChangeRole/{userId}")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
         public async Task<ActionResult> ChangeRole([FromRoute] int userId, [FromBody] ChangeRoleDto changeRoleDto)
         {
             if(changeRoleDto.RoleName != UserRole.Company &&
@@ -186,9 +239,20 @@ namespace TMS.API.Controllers
 
             try
             {
+                var user = await userManager.Users
+                   .Include(u => u.UserAccount)
+                   .FirstOrDefaultAsync(u => u.UserAccount.Id == userId);
+
+                if (user == null)
+                    return NotFound(new { Message = $"User with ID '{userId}' not found." });
+
+                // No change applied to the same Role
+                if (user.UserAccount.Role == changeRoleDto.RoleName)
+                    return BadRequest(new { Message = "User already has this role." });
+
                 var result = await userService.ChangeRole(userId, changeRoleDto.RoleName);
                 if (!result)
-                    return NotFound(new { Message = $"User with ID {userId} not found." });
+                    return NotFound(new { Message = $"User with ID '{userId}' not found." });
 
                 return NoContent();
             }
@@ -200,6 +264,7 @@ namespace TMS.API.Controllers
         }
 
         [HttpPatch("LockUnLock/{userId}")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
         public async Task<IActionResult> LockUnLock([FromRoute] int userId)
         {
             var result = await userService.LockUnLock(userId);

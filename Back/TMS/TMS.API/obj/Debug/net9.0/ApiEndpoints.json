@@ -54,6 +54,22 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.AccountController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/Account/forgot-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "forgotPasswordDto",
+        "Type": "TMS.API.DTOs.Users.ForgotPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "Login",
     "RelativePath": "api/Account/Login",
     "HttpMethod": "POST",
@@ -161,13 +177,45 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "TMS.API.Controllers.AccountController",
+    "Method": "SendCode",
+    "RelativePath": "api/Account/send-code",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sendCodeDto",
+        "Type": "TMS.API.DTOs.Users.SendCodeDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "TMS.API.Controllers.CategoriesController",
     "Method": "GetAll",
     "RelativePath": "api/Categories",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -191,6 +239,11 @@
       {
         "Name": "CategoryImageFile",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "GeneralSkills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],
@@ -239,6 +292,11 @@
         "Name": "CategoryImageFile",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      },
+      {
+        "Name": "GeneralSkills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -270,6 +328,361 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "TMS.API.Controllers.FeedbacksController",
+    "Method": "DeleteFeedback",
+    "RelativePath": "api/Feedbacks/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.FeedbacksController",
+    "Method": "GetDashboard",
+    "RelativePath": "api/Feedbacks/dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.FeedbacksController",
+    "Method": "DeleteAllSentFeedbacks",
+    "RelativePath": "api/Feedbacks/delete-all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.FeedbacksController",
+    "Method": "GetReceivedFeedbacks",
+    "RelativePath": "api/Feedbacks/received",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "programId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "rating",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.FeedbacksController",
+    "Method": "EditFeedback",
+    "RelativePath": "api/Feedbacks/receiver-user/{receiverId}/feedback/{feedbackId}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "reciverId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "feedbackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "Message",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Rating",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Attachment",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "receiverId",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.FeedbacksController",
+    "Method": "SendFeedback",
+    "RelativePath": "api/Feedbacks/send",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ToUserAccountId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "TrainingProgramId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Message",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Rating",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Attachment",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.FeedbacksController",
+    "Method": "GetSentFeedbacks",
+    "RelativePath": "api/Feedbacks/sent",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "programId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "rating",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "GetProfileById",
+    "RelativePath": "api/Profiles/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "DeleteCV",
+    "RelativePath": "api/Profiles/delete-cv",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "DownloadCV",
+    "RelativePath": "api/Profiles/download-cv",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "DownloadCVForUser",
+    "RelativePath": "api/Profiles/download-cv/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "GetMyProfile",
+    "RelativePath": "api/Profiles/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/Profiles/update-profile",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "FirstName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Gender",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "BirthDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfileImageFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "UploadCV",
+    "RelativePath": "api/Profiles/upload-cv",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CVFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProgramEnrollmentsController",
+    "Method": "GetAllApplicantsForMyCompany",
+    "RelativePath": "api/ProgramEnrollments/all-applicants",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "TMS.API.Controllers.ProgramEnrollmentsController",
     "Method": "GetApplicants",
     "RelativePath": "api/ProgramEnrollments/applicants/{programId}",
@@ -281,6 +694,21 @@
         "Name": "programId",
         "Type": "System.Int32",
         "IsRequired": true
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -313,13 +741,29 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
     "ContainingType": "TMS.API.Controllers.ProgramEnrollmentsController",
     "Method": "ReviewApplication",
-    "RelativePath": "api/ProgramEnrollments/review",
+    "RelativePath": "api/ProgramEnrollments/review/trainee/{traineeId}/program/{programId}",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -327,12 +771,12 @@
       {
         "Name": "traineeId",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "programId",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "accept",
@@ -419,6 +863,16 @@
       {
         "Name": "Rating",
         "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ClassroomUrl",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -514,6 +968,16 @@
         "IsRequired": false
       },
       {
+        "Name": "ContentUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ClassroomUrl",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "CategoryId",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
@@ -549,7 +1013,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -559,7 +1034,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -595,7 +1081,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -605,7 +1102,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -615,7 +1123,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -625,7 +1144,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -648,26 +1178,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.UsersController",
-    "Method": "GetAllUsers",
-    "RelativePath": "api/Users",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[TMS.API.Models.ApplicationUser, TMS.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "TMS.API.Controllers.UsersController",
@@ -694,57 +1204,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.UsersController",
-    "Method": "Update",
-    "RelativePath": "api/Users/{id}",
-    "HttpMethod": "PATCH",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "FirstName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "LastName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "UserName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Phone",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Gender",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "BirthDate",
-        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "ProfileImageFile",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "TMS.API.Controllers.UsersController",
@@ -871,6 +1330,99 @@
         "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetMyTrainees",
+    "RelativePath": "api/Users/my-trainees",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Users/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "role",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[TMS.API.Models.ApplicationUser, TMS.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetAllSupervisors",
+    "RelativePath": "api/Users/supervisors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

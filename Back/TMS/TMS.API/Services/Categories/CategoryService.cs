@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TMS.API.Data;
 using TMS.API.DTOs.Categories.Requests;
+using TMS.API.DTOs.Categories.Responses;
+using TMS.API.DTOs.Pages;
 using TMS.API.Helpers;
 using TMS.API.Models;
 using TMS.API.Services.IService;
@@ -20,7 +22,33 @@ namespace TMS.API.Services.Categories
             this.tMSDbContext = tMSDbContext;
         }
 
-        
+
+        public async Task<PagedResult<CategoryResponse>> GetAllAsync(int page, int limit, string? search)
+        {
+            IQueryable<Category> query = tMSDbContext.Categories.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(c => c.Name.Contains(search) || c.Description.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var pagedItems = await query
+                .AsNoTracking()
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            return new PagedResult<CategoryResponse>
+            {
+                Items = pagedItems.Adapt<IEnumerable<CategoryResponse>>(),
+                TotalCount = totalCount,
+                Page = page,
+                Limit = limit
+            };
+        }
+
         public async Task<Category> AddAsync(AddCategoryDto categoryRequest, HttpContext httpContext)
         {
             string? imageUrl = null;
@@ -32,7 +60,7 @@ namespace TMS.API.Services.Categories
 
             var category = categoryRequest.Adapt<Category>(); // Update action in CategoriesController موجودة في نهاية CategoryResponse بتتحول بال
             category.CategoryImageUrl = imageUrl; // CategoryResponse لل Adapt لانو بناء عليها بالسطر الي فوقها بدنا نعمل Category ضرورية , بدونها ما بحفظ الصورة في
-
+           
             await tMSDbContext.Categories.AddAsync(category);
             await tMSDbContext.SaveChangesAsync();
             return category;
@@ -56,7 +84,6 @@ namespace TMS.API.Services.Categories
                 // Save the new image
                 categoryInDb.CategoryImageUrl = await FileHelper.SaveFileAync(updateCategoryDto.CategoryImageFile, httpContext, "images/categories");
             }
-
 
             tMSDbContext.Categories.Update(categoryInDb);
             await tMSDbContext.SaveChangesAsync();

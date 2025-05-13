@@ -8,8 +8,30 @@
         {
             if (file == null || file.Length == 0) return null;
 
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (folderName.Contains("cv"))
+            {
+                var allowedCvExtensions = new[] { ".pdf", ".doc", ".docx" };
+
+                if (!allowedCvExtensions.Contains(fileExtension))
+                    throw new InvalidOperationException("🚫 Only .pdf, .doc, or .docx files are allowed for CVs.");
+            }
+            else
+            {
+                var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".jiff" };
+
+                if (!allowedImageExtensions.Contains(fileExtension))
+                    throw new InvalidOperationException("🚫 Only image files are allowed.");
+            }
+
+            const long maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
+            if (file.Length > maxSizeInBytes)
+                throw new InvalidOperationException("🚫 File size exceeds the 5MB limit.");
+
             // توليد اسم ملف فريد
-            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName); // OR:  Guid.NewGuid().ToString() + Path.GetFileName(file.FileName);
+            var fileName = Guid.NewGuid() + fileExtension; // OR:  Guid.NewGuid().ToString() + fileExtension;
 
             // تحديد مسار المجلد الذي سيتم تخزين الملف فيه
             var folderPath = Path.Combine(WebRootPath, folderName);

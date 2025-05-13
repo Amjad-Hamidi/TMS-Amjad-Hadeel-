@@ -1,12 +1,12 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using TMS.API.Data;
+using TMS.API.DTOs.Pages;
 using TMS.API.DTOs.Users;
+using TMS.API.DTOs.Users.Supervisors;
+using TMS.API.DTOs.Users.Trainees;
 using TMS.API.Helpers;
 using TMS.API.Models;
 using TMS.API.Models.AuthenticationModels;
@@ -30,33 +30,60 @@ namespace TMS.API.Services.Users
             this.userRegistrationService = userRegistrationService;
         }
 
-        public async Task<IEnumerable<GetUsersDto>> GetAll()
+        public async Task<PagedResult<GetUsersDto>> GetAll(int page, int limit, string? search, UserRole? role)
         {
-            var users = await GetAsync(
+            var query = await GetAsync(
                 expression: u => u.UserAccount != null, // Example filter to fetch all users who have a UserAccount
                 includes: new Expression<Func<ApplicationUser, object>>[] { u => u.UserAccount }, // Example include for related UserAccount
                 isTracked: false
             );
 
-            var sortedUsers = users.OrderBy(userApp => userApp.UserAccount.Id).ToList();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(u =>
+                    u.FirstName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    u.LastName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    u.UserName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    u.Email.Contains(search, StringComparison.OrdinalIgnoreCase)
+                );
+            }
+
+            if (role != null)
+            {
+                query = query.Where(u => u.UserAccount.Role == role);
+            }
+
+            query = query.AsQueryable();
+            var totalCount = query.Count();
+
 
             // Map to DTO
-            var usersDto = sortedUsers.Select(user => new GetUsersDto
-            {
-                UserAccountId = user.UserAccount.Id,
-                ApplicationUserId = user.Id,
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Gender = Enum.GetName(typeof(ApplicationUserGender), user.Gender),
-                BirthDate = user.BirthDate,
-                Phone = user.PhoneNumber,
-                ProfileImageUrl = user.ProfileImageUrl,
-                Role = Enum.GetName(typeof(UserRole), user.UserAccount.Role)
-            }).ToList();
+            var pagedUsers = query
+                .OrderBy(u => u.UserAccount.Id)
+                .Skip((page-1) * limit)
+                .Take(limit)
+                .Select(user => new GetUsersDto
+                {
+                    UserAccountId = user.UserAccount.Id,
+                    ApplicationUserId = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Gender = Enum.GetName(typeof(ApplicationUserGender), user.Gender),
+                    BirthDate = user.BirthDate,
+                    Phone = user.PhoneNumber,
+                    ProfileImageUrl = user.ProfileImageUrl,
+                    Role = Enum.GetName(typeof(UserRole), user.UserAccount.Role)
+                }).ToList();
 
-            return usersDto;
+            return new PagedResult<GetUsersDto>
+            {
+                Items = pagedUsers,
+                TotalCount = totalCount,
+                Page = page,
+                Limit = limit
+            };
         }
 
 
@@ -92,14 +119,102 @@ namespace TMS.API.Services.Users
         }
 
 
+        public async Task<PagedResult<SupervisorDto>> GetAllSupervisorsAsync(string? search, int page, int limit)
+        {
+            var query = _context.UserAccounts
+                .Where(u => u.Role == UserRole.Supervisor)
+                .Include(u => u.ApplicationUser)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(u =>
+                    u.ApplicationUser.FirstName.Contains(search) ||
+                    u.ApplicationUser.LastName.Contains(search) ||
+                    u.ApplicationUser.Email.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(u => u.ApplicationUser.FirstName)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Select(u => new SupervisorDto
+                {
+                    Id = u.Id,
+                    FullName = u.ApplicationUser.FirstName + " " + u.ApplicationUser.LastName,
+                    Email = u.ApplicationUser.Email,
+                    PhoneNumber = u.ApplicationUser.PhoneNumber,
+                    ProfileImageUrl = u.ApplicationUser.ProfileImageUrl,
+                    CVPath = u.CVPath
+                })
+                .ToListAsync();
+
+            return new PagedResult<SupervisorDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                Limit = limit
+            };
+        }
+
+        public async Task<PagedResult<TraineeDto>> GetTraineesForSupervisorAsync(int supervisorId, string? search, int page, int limit)
+        {
+            var query = _context.ProgramTrainees
+                .Where(pt => pt.TrainingProgram.SupervisorId == supervisorId)
+                .Include(pt => pt.Trainee).ThenInclude(a => a.ApplicationUser)
+                .Include(pt => pt.TrainingProgram).ThenInclude(tp => tp.Category)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(pt =>
+                    pt.Trainee.ApplicationUser.FirstName.Contains(search) ||
+                    pt.Trainee.ApplicationUser.LastName.Contains(search) ||
+                    pt.Trainee.ApplicationUser.Email.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var trainees = await query
+                .OrderBy(pt => pt.TraineeId)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Select(pt => new TraineeDto
+                {
+                    Id = pt.Trainee.Id,
+                    FullName = pt.Trainee.ApplicationUser.FirstName + " " + pt.Trainee.ApplicationUser.LastName,
+                    Email = pt.Trainee.ApplicationUser.Email,
+                    PhoneNumber = pt.Trainee.ApplicationUser.PhoneNumber,
+                    ProfileImageUrl = pt.Trainee.ApplicationUser.ProfileImageUrl,
+                    CVPath = pt.Trainee.CVPath,
+                    TrainingProgramId = pt.TrainingProgram.TrainingProgramId,
+                    TrainingProgramName = pt.TrainingProgram.Title,
+                    CategoryId = pt.TrainingProgram.Category.Id,
+                    CategoryName = pt.TrainingProgram.Category.Name
+                })
+                .ToListAsync();
+
+            return new PagedResult<TraineeDto>
+            {
+                Items = trainees,
+                TotalCount = totalCount,
+                Page = page,
+                Limit = limit
+            };
+        }
+
+
         public async Task<IdentityResult> Add(RegisterRequestModel registerRequestModel)
         {
             return await userRegistrationService.RegisterUserAsync(registerRequestModel);
         }
 
-
+        /* // It is made on the ProfileService
         public async Task<IdentityResult?> Edit(int id,
-            UpdateUserDto updateUserDto,
+            UpdateProfileDto updateUserDto,
             HttpContext httpContext)
         {
             var applicationUserInDb = await _userManager.Users
@@ -125,6 +240,8 @@ namespace TMS.API.Services.Users
             return result; // return IdentityResult
 
         }
+        */
+
 
         public async Task<bool> RemoveUserAsync(int id, CancellationToken cancellationToken)
         {

@@ -18,6 +18,9 @@ using TMS.API.Services.Tokens;
 using TMS.API.Services.TrainingPrograms;
 using TMS.API.Services.TrainingPrograms.Trainee;
 using TMS.API.Services.Users;
+using TMS.API.Services.Passwords;
+using TMS.API.Services.Profiles;
+using TMS.API.Services.Feedbacks;
 
 namespace TMS.API
 {
@@ -91,9 +94,17 @@ namespace TMS.API
             // IUserService عملنا حقن فيه لل UsersController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
             builder.Services.AddScoped<IUserService, UserService>();
 
-
+            // IProgramEnrollmentService عملنا حقن فيه لل ProgramEnrollmentsController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
             builder.Services.AddScoped<IProgramEnrollmentService, ProgramEnrollmentService>();
 
+            // IPasswordResetCodeService عملنا حقن فيه لل AccountController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IPasswordResetCodeService, PasswordResetCodeService>();
+
+            // IProfileService عملنا حقن فيه لل ProfilesController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IProfileService, ProfileService>();
+
+            // IFeedbackService عملنا حقن فيه لل FeedbacksController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
             // ASP.NET Core. داخل  Dependency Injection container في الـ IHttpContextAccessor بتسجل خدمة 
             builder.Services.AddHttpContextAccessor(); // عشان موضوع توليد الملف وحفظه مع الامتداد كامل TrainingProgramService.cs مربوطة مع 

@@ -1,9 +1,9 @@
 ﻿using Mapster;
 using TMS.API.DTOs.Categories.Requests;
 using TMS.API.DTOs.Categories.Responses;
+using TMS.API.DTOs.Profiles;
 using TMS.API.DTOs.TrainingPrograms.Requests;
 using TMS.API.DTOs.TrainingPrograms.Responses;
-using TMS.API.DTOs.Users;
 using TMS.API.Models;
 
 namespace TMS.API.Helpers
@@ -23,7 +23,7 @@ namespace TMS.API.Helpers
                 .IgnoreNullValues(true);
 
             // UpdateUserDto -> ApplicationUser (null values ignored)
-            TypeAdapterConfig<UpdateUserDto, ApplicationUser>
+            TypeAdapterConfig<UpdateProfileDto, ApplicationUser>
                 .NewConfig()
                 .IgnoreNullValues(true);
                 //.Ignore(dest => dest.RefreshToken) ApplicationUser مش رح يعملهن مابنج ل UpdateUserDto اذا لاحقا ضفتهن على

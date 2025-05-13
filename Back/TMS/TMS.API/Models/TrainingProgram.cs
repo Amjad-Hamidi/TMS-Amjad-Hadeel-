@@ -30,6 +30,10 @@ namespace TMS.API.Models
         public string? RejectionReason { get; set; }
         public DateTime? RejectionDate { get; set; }
 
+        public string ContentUrl { get; set; } = null!;
+        public string ClassroomUrl { get; set; } = null!;
+
+
 
         // Navigation Properties
         public int CategoryId { get; set; }

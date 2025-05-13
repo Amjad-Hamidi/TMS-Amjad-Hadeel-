@@ -11,5 +11,7 @@ namespace TMS.API.DTOs.Categories.Requests
         [MaxLength(200, ErrorMessage = "Description must not exceed 200 characters.")]
         public string? Description { get; set; }
         public IFormFile? CategoryImageFile { get; set; }
+        public List<string>? GeneralSkills { get; set; }
+
     }
 }

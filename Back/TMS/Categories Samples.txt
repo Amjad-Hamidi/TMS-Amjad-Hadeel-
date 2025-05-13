@@ -1,8 +1,0 @@
-Web-Development
-This is web development category.
-
-Mobile-App-Development
-This is mobile application development category.
-
-Quran
-This is Quaran category.

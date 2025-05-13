@@ -3,6 +3,7 @@
     public class RejectedCompanyProgramDto
     {
         public int TrainingProgramId { get; set; }
+        public string CategoryName { get; set; }
         public string Title { get; set; }
         public string SupervisorName { get; set; }
 

@@ -15,6 +15,8 @@ namespace TMS.API.DTOs.TrainingPrograms.Responses
         public string ImagePath { get; set; }
         public int SeatsAvailable { get; set; }
         public decimal Rating { get; set; }
+        public string ContentUrl { get; set; }          
+        public string ClassroomUrl { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

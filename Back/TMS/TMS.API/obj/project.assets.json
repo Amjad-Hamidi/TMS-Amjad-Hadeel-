@@ -1087,6 +1087,15 @@
           }
         }
       },
+      "MimeTypesMap/1.0.9": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/MimeTypesMap.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/MimeTypesMap.dll": {}
+        }
+      },
       "Mono.TextTemplating/3.0.0": {
         "type": "package",
         "dependencies": {
@@ -3679,6 +3688,19 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "MimeTypesMap/1.0.9": {
+      "sha512": "M0TuSCwL1a8QV0VKw8ysY4AIs6v/Aor3N7GXQeqgNlAvqjx9Kj9KxNd09Pg5RzpY1tCOU8mkrfYBi1Lxwj8quQ==",
+      "type": "package",
+      "path": "mimetypesmap/1.0.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/MimeTypesMap.dll",
+        "mimetypesmap.1.0.9.nupkg.sha512",
+        "mimetypesmap.nuspec"
+      ]
+    },
     "Mono.TextTemplating/3.0.0": {
       "sha512": "YqueG52R/Xej4VVbKuRIodjiAhV0HR/XVbLbNrJhCZnzjnSjgMJ/dCdV0akQQxavX6hp/LC6rqLGLcXeQYU7XA==",
       "type": "package",
@@ -4748,6 +4770,7 @@
       "Microsoft.AspNetCore.OpenApi >= 9.0.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.3",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.3",
+      "MimeTypesMap >= 1.0.9",
       "Scalar.AspNetCore >= 2.1.1"
     ]
   },
@@ -4758,11 +4781,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\TMS.API.csproj",
+      "projectUniqueName": "D:\\TMS Asp.net\\TMS\\TMS.API\\TMS.API.csproj",
       "projectName": "TMS.API",
-      "projectPath": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\TMS.API.csproj",
+      "projectPath": "D:\\TMS Asp.net\\TMS\\TMS.API\\TMS.API.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\TMS (Front+Back)\\Back\\TMS\\TMS.API\\obj\\",
+      "outputPath": "D:\\TMS Asp.net\\TMS\\TMS.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4826,6 +4849,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[9.0.3, )"
+          },
+          "MimeTypesMap": {
+            "target": "Package",
+            "version": "[1.0.9, )"
           },
           "Scalar.AspNetCore": {
             "target": "Package",

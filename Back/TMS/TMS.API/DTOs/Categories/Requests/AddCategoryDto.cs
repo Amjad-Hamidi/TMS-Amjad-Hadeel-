@@ -11,5 +11,9 @@ namespace TMS.API.DTOs.Categories.Requests
         [MaxLength(200, ErrorMessage = "Description must not exceed 200 characters.")]
         public string Description { get; set; }
         public IFormFile CategoryImageFile { get; set; }
+        [Required(ErrorMessage = "At least one skill is required.")]
+        [MinLength(1, ErrorMessage = "At least one skill is required.")]
+        public List<string> GeneralSkills { get; set; }
+
     }
 }

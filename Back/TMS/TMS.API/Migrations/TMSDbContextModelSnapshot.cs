@@ -259,6 +259,10 @@ namespace TMS.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GeneralSkillsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -269,6 +273,78 @@ namespace TMS.API.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("TMS.API.Models.Feedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AttachmentUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("FromUserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToUserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingProgramId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromUserAccountId");
+
+                    b.HasIndex("ToUserAccountId");
+
+                    b.HasIndex("TrainingProgramId");
+
+                    b.ToTable("Feedbacks");
+                });
+
+            modelBuilder.Entity("TMS.API.Models.PasswordResetCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpirationCode")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("PasswordResetCodes");
                 });
 
             modelBuilder.Entity("TMS.API.Models.ProgramTrainee", b =>
@@ -310,8 +386,16 @@ namespace TMS.API.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ClassroomUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ContentUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -383,6 +467,9 @@ namespace TMS.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CVPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -444,6 +531,44 @@ namespace TMS.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TMS.API.Models.Feedback", b =>
+                {
+                    b.HasOne("TMS.API.Models.UserAccount", "FromUserAccount")
+                        .WithMany()
+                        .HasForeignKey("FromUserAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TMS.API.Models.UserAccount", "ToUserAccount")
+                        .WithMany()
+                        .HasForeignKey("ToUserAccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TMS.API.Models.TrainingProgram", "TrainingProgram")
+                        .WithMany()
+                        .HasForeignKey("TrainingProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FromUserAccount");
+
+                    b.Navigation("ToUserAccount");
+
+                    b.Navigation("TrainingProgram");
+                });
+
+            modelBuilder.Entity("TMS.API.Models.PasswordResetCode", b =>
+                {
+                    b.HasOne("TMS.API.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("TMS.API.Models.ProgramTrainee", b =>

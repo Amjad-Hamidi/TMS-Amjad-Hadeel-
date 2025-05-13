@@ -1,16 +1,14 @@
 ﻿using Mapster;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using System.Security.Claims;
 using TMS.API.ConstantClaims;
 using TMS.API.Data;
-using TMS.API.DTOs.Categories.Requests;
+using TMS.API.DTOs.Pages;
 using TMS.API.DTOs.TrainingPrograms.Requests;
 using TMS.API.Helpers;
 using TMS.API.Models;
 using TMS.API.Services.IService;
-using TMS.API.Services.TrainingPrograms;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
 {
@@ -34,7 +32,8 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
 
-        public async Task<IEnumerable<TrainingProgram>> GetAsyncWithCondWithoutDetails(string? search, int page, int limit)
+        // only for Approved Programs (it suits for all actors except guest)
+        public async Task<PagedResult<TrainingProgram>> GetAsyncWithCondWithoutDetails(string? search, int page, int limit)
         {
             if (page < 1)
                 page = 1;
@@ -42,7 +41,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
                 limit = 10; // العاشر, فشق عن اول عشرة TrainingProgram بلش من ال
 
 
-            var trainingPrograms = tMSDbContext.TrainingPrograms
+            var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved)
                 .Include(tp => tp.Category)
                 .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser) // CompanyName from ApplicationUser
@@ -52,20 +51,30 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                trainingPrograms = trainingPrograms.Where(tp =>
+                query = query.Where(tp =>
                     tp.Title.Contains(search) ||
                     tp.Description.Contains(search));
             }
 
+            var total = await query.CountAsync();
+
             // Apply pagination
-            trainingPrograms = trainingPrograms
+            var items = query
                 .Skip((page - 1) * limit)
                 .Take(limit);
 
-            return await trainingPrograms.ToListAsync();
+            //return await trainingPrograms.ToListAsync();
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
         }
+        
 
-
+        // only for Approved Programs (it suits for all actors except guest)
         public async Task<TrainingProgram?> GetOneAsyncWithoutDetails(int id)
         {
             var trainingProgram = await tMSDbContext.TrainingPrograms
@@ -80,6 +89,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
 
+        // only for Company => make a request to Admin, Admin => accept/reject the pending requests (he can also add manually)
         public async Task<TrainingProgram> AddAsync(AddTrainingProgramDto addTrainingProgramDto, HttpContext httpContext)
         {
             var role = httpContext.User.FindFirst(ClaimTypes.Role)?.Value;
@@ -157,6 +167,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
 
+        // only for Company & Admin (with ensuring that the TP is for this Company not to others & Editting is for Pending TP only)
         public async Task<bool> EditAsync(int id, UpdateTrainingProgramDto updateTrainingProgramDto, HttpContext httpContext)
         {
             var trainingProgramInDb = await tMSDbContext.TrainingPrograms
@@ -166,7 +177,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             var role = httpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             var userIdClaim = httpContext.User.FindFirst(CustomClaimNames.UserAccountId)?.Value;
 
-            if (role == "Company" && trainingProgramInDb.CompanyId != int.Parse(userIdClaim))
+            if (role == "Company" && trainingProgramInDb.CompanyId != int.Parse(userIdClaim)) // اذا مش هو معناها في شركة ثانية بتحاول تعدل على برنامج شركة غيرها ApplicationUserId عبارة عن userIdClaim ال 
             {
                 throw new UnauthorizedAccessException("You can only edit your own training programs.");
             }
@@ -228,6 +239,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             return true;
         }
 
+        // just for Admin
         public async Task<bool> RemoveAsync(int id, CancellationToken cancellationToken)
         {
             var trainingProgram = await tMSDbContext.TrainingPrograms.FindAsync(id);
@@ -240,6 +252,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             return true;
         }
 
+        // just for Admin
         public async Task<bool> RemoveAllAsync(CancellationToken cancellationToken)
         {
             var trainingPrograms = await tMSDbContext.TrainingPrograms.ToListAsync(cancellationToken);
@@ -266,7 +279,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             return true;            
         }
       
-
+        // just for Admin (accept requests of TP that coming from Companies)
         public async Task<ProgramActionResult> ApproveAsync(int id)
         {
             var program = await tMSDbContext.TrainingPrograms.FindAsync(id);
@@ -285,27 +298,54 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             return ProgramActionResult.Approved;
         }
 
-        public async Task<IEnumerable<TrainingProgram>> GetPendingAsync()
+        // just for Admin (Pending TP)
+        public async Task<PagedResult<TrainingProgram>> GetPendingAsync(int page, int limit)
         {
-            return await tMSDbContext.TrainingPrograms
+            var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Pending)
                 .Include(tp => tp.Category)
                 .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser) // CompanyName from ApplicationUser
-                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser) // SupervisorName from ApplicationUser
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser); // SupervisorName from ApplicationUser
+
+            var total = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * limit)
+                .Take(limit)
                 .ToListAsync();
+
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
         }
 
-        public async Task<IEnumerable<TrainingProgram>> GetPendingByCompanyAsync(int companyId)
+        // just for Company (Pending TP), note that TP is tailored for that Company, not to others
+        public async Task<PagedResult<TrainingProgram>> GetPendingByCompanyAsync(int companyId, int page, int limit)
         {
-            return await tMSDbContext.TrainingPrograms
-                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Pending &&
-                             tp.CompanyId == companyId)
+            var query = tMSDbContext.TrainingPrograms
+                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Pending && tp.CompanyId == companyId)
                 .Include(tp => tp.Category)
                 .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser) // CompanyName from ApplicationUser
-                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser) // SupervisorName from ApplicationUser
-                .ToListAsync();
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser); // SupervisorName from ApplicationUser
+
+            var total = await query.CountAsync();
+            var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
+
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
+
         }
 
+        // just for Admin (Reject pending requests that come from Companies with rejection reason)
         public async Task<ProgramActionResult> RejectAsync(int id, string reason)
         {
             var program = await tMSDbContext.TrainingPrograms.FindAsync(id);
@@ -326,43 +366,89 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             return ProgramActionResult.Rejected;
         }
 
-        public async Task<IEnumerable<TrainingProgram>> GetRejectedAsync()
+        // just for Admin (display all rejected requests for varient Companies)
+        public async Task<PagedResult<TrainingProgram>> GetRejectedAsync(int page, int limit)
         {
-            return await tMSDbContext.TrainingPrograms
+            var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Rejected)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser) // CompanyName from ApplicationUser
-                .ToListAsync();
+                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser); // CompanyName from AoolicationUser
+
+            var total = await query.CountAsync();
+            var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
+
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
+
         }
 
-        public async Task<IEnumerable<TrainingProgram>> GetRejectedByCompanyAsync(int companyId)
+        // just for Company, (this TP is for specific Company, others no)
+        public async Task<PagedResult<TrainingProgram>> GetRejectedByCompanyAsync(int companyId, int page, int limit)
         {
-            return await tMSDbContext.TrainingPrograms
-                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Rejected
-                            && tp.CompanyId == companyId)
+            var query = tMSDbContext.TrainingPrograms
+                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Rejected && tp.CompanyId == companyId)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Supervisor).ThenInclude(c => c.ApplicationUser) // SupervisorName from ApplicationUser
-                .ToListAsync();
+                .Include(tp => tp.Supervisor).ThenInclude(c => c.ApplicationUser); // SupervisorName from ApplicationUser
+
+            var total = await query.CountAsync();
+            var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
+
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
+
+
         }
 
-
-        public async Task<IEnumerable<TrainingProgram>> GetApprovedByCompanyAsync(int companyId)
+        // just for Company, (this TP is for specific Company, others no)
+        public async Task<PagedResult<TrainingProgram>> GetApprovedByCompanyAsync(int companyId, int page, int limit)
         {
-            return await tMSDbContext.TrainingPrograms
-                .Where(tp => tp.CompanyId == companyId && tp.ApprovalStatus == TrainingProgramStatus.Approved)
+            var query = tMSDbContext.TrainingPrograms
+                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved && tp.CompanyId == companyId)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser)
-                .ToListAsync();
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser);
+
+            var total = await query.CountAsync();
+            var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
+
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
         }
 
-        public async Task<IEnumerable<TrainingProgram>> GetBySupervisorAsync(int supervisorId)
+        // just for Supervisor, (this TP is for specific Supervisor, others no)
+        public async Task<PagedResult<TrainingProgram>> GetBySupervisorAsync(int supervisorId, int page, int limit)
         {
-            return await tMSDbContext.TrainingPrograms
-                .Where(tp => tp.SupervisorId == supervisorId && tp.ApprovalStatus == TrainingProgramStatus.Approved)
+            var query = tMSDbContext.TrainingPrograms
+                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved && tp.SupervisorId == supervisorId)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser)
-                .ToListAsync();
+                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser);
+
+            var total = await query.CountAsync();
+            var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
+
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
         }
+
 
 
     }
