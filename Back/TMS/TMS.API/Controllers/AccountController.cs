@@ -2,18 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using TMS.API.Models;
 using TMS.API.Models.AuthenticationModels;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using TMS.API.Services.Tokens;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
-using System.Threading.Tasks;
 using TMS.API.Services.Registers;
-using Mapster;
 using TMS.API.DTOs.Users;
+using TMS.API.Services.Passwords;
 
 namespace TMS.API.Controllers
 {
@@ -24,18 +18,21 @@ namespace TMS.API.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
         private readonly JwtService jwtService;
+        private readonly IPasswordResetCodeService passwordResetCodeService;
 
         public IUserRegistrationService registrationService { get; }
 
         public AccountController(UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             JwtService jwtService,
-            IUserRegistrationService registrationService)
+            IUserRegistrationService registrationService,
+            IPasswordResetCodeService passwordResetCodeService)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.jwtService = jwtService;
             this.registrationService = registrationService;
+            this.passwordResetCodeService = passwordResetCodeService;
         }
 
 
@@ -300,6 +297,30 @@ namespace TMS.API.Controllers
             });
         }
 
+
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            var result = await passwordResetCodeService.ForgotPasswordSendCode(forgotPasswordDto);
+            
+            if (!result)
+                return BadRequest(new { message = "Email not found." });
+
+            return Ok(new { message = "Reset Code sent to your Email." });
+        }
+
+
+        [HttpPatch("send-code")]
+        public async Task<IActionResult> SendCode([FromBody] SendCodeDto sendCodeDto)
+        {
+            var (isSuccess, message) = await passwordResetCodeService.SendCodeVerification(sendCodeDto);
+
+            if (!isSuccess)
+                return BadRequest(new { message });
+
+            return Ok(new {message});
+        }
 
 
     }

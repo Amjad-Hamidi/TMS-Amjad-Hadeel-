@@ -17,7 +17,7 @@ namespace TMS.API.Data
         {
             modelBuilder.Entity<TrainingProgram>() // double مش decimal عشنه Rating عشان بس اخلص من التحذير لل
                 .Property(p => p.Rating)
-                .HasPrecision(18, 2);
+                .HasPrecision(3, 2);
 
 
 
@@ -70,11 +70,39 @@ namespace TMS.API.Data
                 .Property(p => p.SupervisorId)
                 .IsRequired(false);
 
+
+
+            //============ Category ============
+
             // DB في Category.Name منع تكرار ال   
             modelBuilder.Entity<Category>() // وبحط شرط CategoriesController هاي مش كافية بروح عال backend لو بدي اشتغل على مستوى
                 .HasIndex(c => c.Name)
                 .IsUnique(); // بمنعني SQL DB فقط, لو اجيت اضيف يدوي في DB بشتغل على نطاق ال 
 
+
+
+            //============ FeedBack ============
+          
+            // هو الوقت الحالي Feedback اعطاء وقت الانشاء في ال 
+            modelBuilder.Entity<Feedback>()
+                .Property(f => f.CreatedAt)
+                .HasDefaultValueSql("GETDATE()");
+
+            // many feedbacks لها مرسل واحد فقط , كل مرسل ممكن يكون ارسل feedback كل
+            modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.FromUserAccount)
+                .WithMany() // many feedbacks
+                .HasForeignKey(f => f.FromUserAccountId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // many feedbacks لها مستقبل واحد فقط , كل مستقبل ممكن يكون استقبل feedback كل
+            modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.ToUserAccount)
+                .WithMany() // many feedbacks
+                .HasForeignKey(f => f.ToUserAccountId)
+                .OnDelete(DeleteBehavior.Restrict); // من قبل feedback اذا كان مستقبل UserAccount منع حذف ال
+            // إذا تم حذف المرسل -> يتم حذف الفيدباك معه
+            // إذا تم حذف المستقبل -> يُمنع الحذف إن كان له فيدباك
 
             base.OnModelCreating(modelBuilder);
 
@@ -85,34 +113,6 @@ namespace TMS.API.Data
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("ApplicationUsersLogins");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("ApplicationUsersTokens");
-
-            /* // اذا بدي اضيف اشي جاهز يدويا
-            var admin = new UserAccount
-            {
-                Id = "93020b0c-ecf9-4b2a-9ec5-2ef5675f2cf3",
-                UserName = "Admin",
-                NormalizedUserName = "ADMIN",
-                Email = "admin@gmail.com",
-                NormalizedEmail = "ADMIN@GMAIL.COM",
-                EmailConfirmed = true,
-                PasswordHash = "AQAAAAIAAYagAAAAECrNWPQ/3zoKfIf/ye21teHJj3fS1E8ByVvMuxpStSCUzB64aU+jAdUWFYJxbAP4vA==", // قيمة ثابتة
-                SecurityStamp = "41ee04f4-e323-4a88-b0e5-58bd514940c7", // قيمة ثابتة
-                ConcurrencyStamp = "ae885420-6c72-4c70-bc08-4a74231f4a4e", // قيمة ثابتة
-                PhoneNumberConfirmed = false,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                FullName = "Administartor"
-            };
-           
-
-            // لانو التشفير بكون منفصل , لازم يكون كلشي ثابت مش اشي متغير HasData() هاي ممنوعة , ممنوع تيجي مع 
-            var passwordHasher = new PasswordHasher<UserAccount>();
-            admin.PasswordHash = passwordHasher.HashPassword(admin, "Admin@123");
-
-            modelBuilder.Entity<UserAccount>().HasData(admin);
-             */
-
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; } // Users in DB
@@ -122,6 +122,10 @@ namespace TMS.API.Data
 
 
         public DbSet<ProgramTrainee> ProgramTrainees { get; set; }
+
+        public DbSet<PasswordResetCode> PasswordResetCodes { get; set; }
+
+        public DbSet<Feedback> Feedbacks { get; set; }
 
 
     }

@@ -1,5 +1,12 @@
 ﻿namespace TMS.API.Models
 {
+    public enum EnrollmentStatus
+    {
+        Pending,
+        Accepted,
+        Rejected
+    }
+
     public class ProgramTrainee
     {
         // By Convention, P.K is the name of the class + Id
@@ -10,7 +17,9 @@
         public TrainingProgram TrainingProgram { get; set; }
 
         // true = Enrolled, false = Not Enrolled
-        public bool Status { get; set; } // true = متواصل, false = منقطع
+        public EnrollmentStatus Status { get; set; } = EnrollmentStatus.Pending;
         public DateTime EnrolledAt { get; set; } = DateTime.Now; // Status = true تاريخ التسجيل في حال كانت 
+
+        public string CVPath { get; set; } // CV file path
     }
 }

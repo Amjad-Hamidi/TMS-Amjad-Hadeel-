@@ -9,13 +9,18 @@ using System.Text;
 using TMS.API.Data;
 using TMS.API.Helpers;
 using TMS.API.Helpers.DBInitializer;
+using TMS.API.Middlewares;
 using TMS.API.Models;
 using TMS.API.Services.Categories;
-using TMS.API.Services.Programs;
+using TMS.API.Services.TrainingPrograms.All_except_Trainee;
 using TMS.API.Services.Registers;
 using TMS.API.Services.Tokens;
 using TMS.API.Services.TrainingPrograms;
+using TMS.API.Services.TrainingPrograms.Trainee;
 using TMS.API.Services.Users;
+using TMS.API.Services.Passwords;
+using TMS.API.Services.Profiles;
+using TMS.API.Services.Feedbacks;
 
 namespace TMS.API
 {
@@ -89,6 +94,17 @@ namespace TMS.API
             // IUserService عملنا حقن فيه لل UsersController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
             builder.Services.AddScoped<IUserService, UserService>();
 
+            // IProgramEnrollmentService عملنا حقن فيه لل ProgramEnrollmentsController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IProgramEnrollmentService, ProgramEnrollmentService>();
+
+            // IPasswordResetCodeService عملنا حقن فيه لل AccountController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IPasswordResetCodeService, PasswordResetCodeService>();
+
+            // IProfileService عملنا حقن فيه لل ProfilesController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IProfileService, ProfileService>();
+
+            // IFeedbackService عملنا حقن فيه لل FeedbacksController في ال DI لانا عملنا Service لل life cycle time يجب تحديد ال
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
             // ASP.NET Core. داخل  Dependency Injection container في الـ IHttpContextAccessor بتسجل خدمة 
             builder.Services.AddHttpContextAccessor(); // عشان موضوع توليد الملف وحفظه مع الامتداد كامل TrainingProgramService.cs مربوطة مع 
@@ -129,8 +145,12 @@ namespace TMS.API
             });
                    
 
+            builder.Services.AddAuthorization(); // Authorization Service (انا ضفتها)
 
             var app = builder.Build();
+
+            // وغيرها AddAsync, EditAsync في ال TrainingProgramService مثل الي موجودة في exceptions بعالج شكل ال 
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // CORS لامكانية الربط مع الفرونت
             app.UseCors(policy =>
@@ -139,9 +159,6 @@ namespace TMS.API
                       .AllowAnyHeader());
 
 
-
-            builder.Services.AddAuthorization(); // Autherization Service (انا ضفتها)
-            //builder.Services.AddScoped<JwtService>(); // dependecy injection for Jwt
 
 
             // Configure the HTTP request pipeline.
