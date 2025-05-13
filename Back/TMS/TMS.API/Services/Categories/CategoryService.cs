@@ -1,8 +1,5 @@
-﻿using Azure.Core;
-using Mapster;
+﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using TMS.API.Data;
 using TMS.API.DTOs.Categories.Requests;
 using TMS.API.DTOs.Categories.Responses;
@@ -60,7 +57,10 @@ namespace TMS.API.Services.Categories
 
             var category = categoryRequest.Adapt<Category>(); // Update action in CategoriesController موجودة في نهاية CategoryResponse بتتحول بال
             category.CategoryImageUrl = imageUrl; // CategoryResponse لل Adapt لانو بناء عليها بالسطر الي فوقها بدنا نعمل Category ضرورية , بدونها ما بحفظ الصورة في
-           
+
+            // manually assign the skills to trigger the Json serialization
+            category.GeneralSkills = categoryRequest.GeneralSkills;
+
             await tMSDbContext.Categories.AddAsync(category);
             await tMSDbContext.SaveChangesAsync();
             return category;
@@ -83,6 +83,12 @@ namespace TMS.API.Services.Categories
                 FileHelper.DeleteFileFromUrl(categoryInDb.CategoryImageUrl); 
                 // Save the new image
                 categoryInDb.CategoryImageUrl = await FileHelper.SaveFileAync(updateCategoryDto.CategoryImageFile, httpContext, "images/categories");
+            }
+
+            // manually assign the skills to trigger the Json serialization
+            if (updateCategoryDto.GeneralSkills != null)
+            {
+                categoryInDb.GeneralSkills = updateCategoryDto.GeneralSkills;
             }
 
             tMSDbContext.Categories.Update(categoryInDb);
