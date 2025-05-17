@@ -1,0 +1,72 @@
+.trainees-page {
+    padding: 40px;
+    background: linear-gradient(to right, #fef0e3, #fceaff);
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .trainees-page h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #555;
+  }
+  
+  .trainee-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+  }
+  
+  .trainee-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    width: 220px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease;
+  }
+  
+  .trainee-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 2px solid #ffd6e3;
+  }
+  
+  .trainee-card h3 {
+    font-size: 18px;
+    margin: 10px 0 5px;
+    color: #333;
+  }
+  
+  .trainee-card a {
+    display: block;
+    margin-bottom: 10px;
+    color: #865fc5;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .trainee-card button {
+    background: linear-gradient(to right, #ffc3a0, #ffafbd);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .trainee-card button:hover {
+    background: linear-gradient(to right, #ffafbd, #ffc3a0);
+  }
+  

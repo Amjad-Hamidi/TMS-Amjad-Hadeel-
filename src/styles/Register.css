@@ -1,0 +1,140 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #d6d0f5, #f5d0ea, #d0f5f2);
+  background-size: 600% 600%;
+  animation: shineBackground 15s ease infinite;
+}
+
+@keyframes shineBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* حاوية التسجيل */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.register-form {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 30px 40px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+  text-align: center;
+  color: #5a4fcf;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #555;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+  font-size: 16px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #5a4fcf;
+  outline: none;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #7f75f0, #b884f1);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.4s ease, transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(90, 79, 207, 0.3);
+}
+
+.submit-btn:hover {
+  background: linear-gradient(90deg, #b884f1, #7f75f0);
+  transform: scale(1.02);
+}
+
+.success-box {
+  background-color: #d4f8e8;
+  color: #207d56;
+  border: 1px solid #b0f2d4;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.error-box {
+  background-color: #fde2e2;
+  color: #e63946;
+  border: 1px solid #f8c0c0;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.error-text {
+  color: #e63946;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .register-form {
+    padding: 20px;
+  }
+}
+
+
+input, textarea, select {
+  color: #000 !important; /* اجعل النص باللون الأسود */
+  background-color: #fff !important; /* خلفية بيضاء */
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 14px;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+  color: #999; /* لون placeholder */
+  }
+  
+  
+  
+  

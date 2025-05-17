@@ -1,0 +1,71 @@
+.supervisor-container {
+  padding: 50px;
+  background: linear-gradient(to right, #f4f9ff, #ffffff);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .supervisor-container h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 40px;
+  color: #1e2a47;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .program-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 30px;
+  }
+  
+  .program-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  }
+  
+  .program-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .program-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+  }
+  
+  .program-content {
+  padding: 20px;
+  }
+  
+  .program-content h2 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  color: #2c3e50;
+  }
+  
+  .program-content p {
+  margin: 6px 0;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.5;
+  }
+  
+  .program-content .tags {
+  margin-top: 10px;
+  color: #555;
+  font-weight: bold;
+  background: #e3f2fd;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  
+  

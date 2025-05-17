@@ -1,0 +1,182 @@
+/* استخدام خط Poppins لزيادة الوضوح */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* إعدادات الخطوط */
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Dashboard container */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f5f5f5; /* خلفية خفيفة */
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #9b59b6; /* اللون البنفسجي */
+  color: white;
+  padding: 30px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1.8rem;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Sidebar links */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar ul li a:hover {
+  background: #8e44ad; /* لون أغمق للبنفسجي */
+  transform: scale(1.05);
+}
+
+/* Main content */
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+  margin-left: 250px;
+  color: #34495e;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2.5rem;
+  color: #34495e;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  animation: fadeIn 2s ease-out;
+}
+
+/* Overview box container */
+.overview {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  animation: fadeIn 2s ease-out;
+}
+
+/* Individual box styles */
+.box {
+  background: #e0bbe3; /* لون بنفسجي فاتح للمربعات */
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  flex: 1;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.box:hover {
+  transform: translateY(-10px);
+}
+
+.box h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #8e44ad; /* لون بنفسجي داكن */
+}
+
+.box p {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+/* Action buttons */
+.btn {
+  background-color: #8e44ad; /* نفس اللون البنفسجي الداكن */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #9b59b6;
+  transform: scale(1.05);
+}
+
+/* Icons beside buttons */
+.icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.additional-sections {
+  margin-top: 40px;
+  display: flex;
+  gap: 40px;
+}
+
+.section {
+  background-color: #ecf0f1;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.action-btn {
+  background-color: #9b59b6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: #8e44ad;
+}
