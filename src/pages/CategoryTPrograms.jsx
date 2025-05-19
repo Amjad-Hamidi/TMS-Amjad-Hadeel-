@@ -1,97 +1,98 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/ViewPrograms.css";
-import ApplyModal from "./ApplyModal"; // تأكدي من المسار حسب مشروعك
-
-const programs = [
-  {
-    name: "Full-Stack Web Development",
-    startDate: "2025-06-01",
-    endDate: "2025-09-30",
-    location: "Amman, Jordan",
-    status: "Open",
-    image:
-      "https://images.unsplash.com/photo-1581090700227-1e8e2fe05b53?auto=format&fit=crop&w=800&q=80",
-    company: "TechCorp",
-    supervisor: "Eng. Lina Harb",
-    rating: 4.7,
-    seats: 20,
-    approval: "Pending"
-  },
-  {
-    name: "Data Science Bootcamp",
-    startDate: "2025-07-15",
-    endDate: "2025-10-15",
-    location: "Online",
-    status: "Closed",
-    image:
-      "https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=800&q=80",
-    company: "DataSpark",
-    supervisor: "Dr. Nour Odeh",
-    rating: 4.5,
-    seats: 0,
-    approval: "Approved"
-  }
-];
+import ApplyModal from "./ApplyModal"; // استيراد المودال
 
 export default function CategoryTPrograms() {
-  const [selectedProgram, setSelectedProgram] = useState(null);
+  const navigate = useNavigate();
+  const { categoryId } = useParams();
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedProgram, setSelectedProgram] = useState(null); // لمودال التقديم
 
-  const handleApply = (program) => {
-    setSelectedProgram(program);
-  };
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch(
+          `http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/by-category/${categoryId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-  const closeModal = () => {
-    setSelectedProgram(null);
-  };
-
-  const handleSuccess = () => {
-    alert("Application sent successfully!");
-    setSelectedProgram(null);
-  };
-  const navigate = useNavigate(); // هنا بنستخدم useNavigate للتنقل بين الصفحات
-  
-  const handleBack = () => {
-    navigate(-1); // يقوم بالعودة للصفحة السابقة
+        if (!response.ok) throw new Error("Network error");
+        const data = await response.json();
+        setPrograms(data.items || []);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+
+    fetchPrograms();
+  }, [categoryId]);
+
+  const handleApplySuccess = (programId) => {
+    // بعد النجاح يمكنك تحديث واجهة المستخدم أو عرض إشعار
+    console.log(`Applied to program ${programId}`);
+  };
+
   return (
     <div className="programs-page">
-      <h1 className="category-title">Web Development Programs</h1>
+      <h1 className="category-title">Training Programs</h1>
 
-      <div className="programs-grid">
-        {programs.map((prog, i) => (
-          <div className="program-card" key={i}>
-            <img src={prog.image} alt={prog.name} />
-            <div className="info">
-              <h2>{prog.name}</h2>
-              <p><strong>Start:</strong> {prog.startDate}</p>
-              <p><strong>End:</strong> {prog.endDate}</p>
-              <p><strong>Location:</strong> {prog.location}</p>
-              <p><strong>Status:</strong> {prog.status}</p>
-              <p><strong>Company:</strong> {prog.company}</p>
-              <p><strong>Supervisor:</strong> {prog.supervisor}</p>
-              <p><strong>Rating:</strong> ⭐ {prog.rating}</p>
-              <p><strong>Seats:</strong> {prog.seats}</p>
-              <p><strong>Approval:</strong> {prog.approval}</p>
-              <button className="apply-btn" onClick={() => handleApply(prog)}>
-                Apply
-              </button>
+      {loading ? (
+        <p>Loading programs...</p>
+      ) : programs.length === 0 ? (
+        <p>No training programs found.</p>
+      ) : (
+        <div className="programs-grid">
+          {programs.map((prog) => (
+            <div className="program-card" key={prog.id}>
+              <img src={prog.imagePath} alt={prog.title} />
+              <div className="info">
+                <h2>{prog.title}</h2>
+                <p><strong>Start:</strong> {prog.startDate?.slice(0, 10)}</p>
+                <p><strong>End:</strong> {prog.endDate?.slice(0, 10)}</p>
+                <p><strong>Location:</strong> {prog.location}</p>
+                <p><strong>Status:</strong> {prog.status ? "Open" : "Closed"}</p>
+                <p><strong>Company:</strong> {prog.companyName}</p>
+                <p><strong>Supervisor:</strong> {prog.supervisorName}</p>
+                <p><strong>Rating:</strong> ⭐ {prog.rating}</p>
+                <p><strong>Seats:</strong> {prog.seatsAvailable}</p>
+                <p><strong>Approval:</strong> {
+                  prog.approvalStatus === 0 ? "Pending"
+                  : prog.approvalStatus === 1 ? "Approved"
+                  : "Rejected"
+                }</p>
+
+                <button
+                  disabled={!prog.status || prog.seatsAvailable === 0}
+                  onClick={() => setSelectedProgram(prog)}
+                >
+                  Apply
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
+      <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+
+      {/* Show modal if program selected */}
       {selectedProgram && (
         <ApplyModal
-          program={{ title: selectedProgram.name, company: selectedProgram.company }}
-          onClose={closeModal}
-          onSuccess={handleSuccess}
+          program={selectedProgram}
+          onClose={() => setSelectedProgram(null)}
+          onApplySuccess={handleApplySuccess}
         />
       )}
-       <button className="back-btn" onClick={handleBack}>
-    Back
-    </button>
     </div>
-    
   );
 }

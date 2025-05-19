@@ -1,83 +1,127 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/TDashboard.css";
 
-const trainee = {
-skills: ["HTML", "CSS", "JavaScript", "React", "Redux"]
-};
+export default function TraineeDashboard() {
+  const [categories, setCategories] = useState([]);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-const programsDummy = [
-{
-id: 1,
-title: "Full‑Stack Bootcamp",
-categoryId: "CAT001",
-description: "Intensive MERN stack track.",
-requiredSkills: ["HTML", "CSS", "JavaScript", "React", "Node"],
-image: "https://images.unsplash.com/photo-1581090700227-1e8e2fe05b53?auto=format&fit=crop&w=600&q=80"
-},
-{
-id: 2,
-title: "Data Analysis Basics",
-categoryId: "CAT002",
-description: "Excel, Python & Tableau.",
-requiredSkills: ["Python", "Excel", "SQL"],
-image: "https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=600&q=80"
-}
-];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          "http://amjad-hamidi-tms.runasp.net/api/Categories?page=1&limit=10",
+          {
+            headers: {
+              Accept: "*/*",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
 
-export default function Dashboard() {
-const [programs] = useState(programsDummy);
-const [query, setQuery] = useState("");
-const navigate = useNavigate(); // Hook للتنقل
+        if (!response.ok) throw new Error("Failed to fetch categories");
 
-// الدالة للتنقل إلى صفحة CategoryTPrograms عند الضغط على الزر
-const handleViewProgramClick = () => {
-navigate("/CategoryTPrograms");
-};
+        const data = await response.json();
+        setCategories(Array.isArray(data) ? data : data.items || []);
+      } catch (err) {
+        setError(err.message || "Error loading categories");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-return (
-<div className="shell">
-{/* ----- Sidebar ----- */}
-<div className="logout-btn" onClick={() => {
-window.location.href = "/login";
-}}>
-<i className="fas fa-sign-out-alt"></i> Logout
-</div>
+    fetchCategories();
+  }, []);
 
-{/* ----- Main content ----- */}
-<main className="main">
-<h1>Explore Categories</h1>
+  const handleViewProgramClick = (categoryId) => {
+    navigate(`/CategoryTPrograms/${categoryId}`);
+  };
 
-<div className="search">
-<input
-placeholder="Search programs…"
-value={query}
-onChange={e => setQuery(e.target.value)}
-/>
-</div>
+  return (
+    <div className="shell">
+      <div
+        className="logout-btn"
+        onClick={() => {
+          localStorage.clear();
+          window.location.href = "/login";
+        }}
+      >
+        <i className="fas fa-sign-out-alt"></i> Logout
+      </div>
 
-<div className="grid">
-{programs
-.filter(p => p.title.toLowerCase().includes(query.toLowerCase()))
-.map(p => (
-<div key={p.id} className="card">
-<img src={p.image} alt="Program" className="card-img" />
-<h3>{p.title}</h3>
-<span className="category-id">Category ID: {p.categoryId}</span>
-<p className="desc">{p.description}</p>
-<button
-className="view-btn"
-onClick={handleViewProgramClick} // استخدام الدالة هنا
->
-View Training Programs
-</button>
-</div>
-))}
+      <main className="main">
+        <h1>Explore Categories</h1>
 
-{programs.filter(p => p.title.toLowerCase().includes(query.toLowerCase())).length === 0 &&
-<p className="empty">No programs found.</p>}
-</div>
-</main>
-</div>
-);
+        <div className="search">
+          <input
+            placeholder="Search your programs…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+
+        {loading && <p>Loading...</p>}
+        {error && <p className="error">{error}</p>}
+
+        <div className="grid">
+          {categories
+            .filter((c) =>
+              c.name?.toLowerCase().includes(query.toLowerCase())
+            )
+            .map((c) => {
+              const hasImage = !!c.categoryImage;
+              const imageUrl = hasImage
+                ? c.categoryImage.startsWith("http")
+                  ? c.categoryImage
+                  : `http://amjad-hamidi-tms.runasp.net${c.categoryImage}`
+                : null;
+
+              return (
+                <div key={c.id} className="card">
+                  {hasImage && (
+                    <img
+                      src={imageUrl}
+                      alt={c.name}
+                      className="card-img"
+                      onError={() =>
+                        console.warn("⚠️ Failed to load image:", imageUrl)
+                      }
+                    />
+                  )}
+
+                  <h3>{c.name}</h3>
+                  <p className="desc">{c.description}</p>
+
+                  {c.generalSkills && c.generalSkills.length > 0 && (
+                    <ul className="skills-list">
+                      {c.generalSkills.map((skill, idx) => (
+                        <li key={idx} className="skill-item">
+                          {skill}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <button
+                    className="view-btn"
+                    onClick={() => handleViewProgramClick(c.id)}
+                  >
+                    View Training Programs
+                  </button>
+                </div>
+              );
+            })}
+
+          {!loading &&
+            categories.filter((c) =>
+              c.name?.toLowerCase().includes(query.toLowerCase())
+            ).length === 0 && <p className="empty">No categories found.</p>}
+        </div>
+      </main>
+    </div>
+  );
 }

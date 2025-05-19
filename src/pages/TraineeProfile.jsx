@@ -1,116 +1,90 @@
-import React, { useState } from "react";
-import "../styles/TraineeProfile.css";
+import React, { useEffect, useState } from "react";
 
-const dummyProfile = {
-  name: "Sara Odeh",
-  email: "sara@example.com",
-};
+const TraineeProfile = () => {
+  const [trainee, setTrainee] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-const myPrograms = [
-  { id: 1, title: "Full‑Stack Bootcamp", status: "Current" },
-  { id: 2, title: "Data Analysis Basics", status: "Completed" },
-];
+  useEffect(() => {
+    const fetchTrainee = async () => {
+      setLoading(true);
+      setError("");
 
-export default function TraineeProfile() {
-  const [form, setForm] = useState(dummyProfile);
-  const [cv, setCV] = useState(null);
-  const [profileImage, setProfileImage] = useState("https://i.pravatar.cc/150?img=68");
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) throw new Error("No access token found.");
 
-  const handleUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setCV({ name: file.name, url: URL.createObjectURL(file) });
-  };
+        const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/Profiles/me", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setProfileImage(URL.createObjectURL(file));
-  };
+        // Log status and headers
+        console.log("Response status:", response.status);
+        console.log("Response headers:", [...response.headers.entries()]);
 
-  const save = async () => {
-    setSaving(true);
-    await new Promise((r) => setTimeout(r, 1000)); // API call later
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
+        const text = await response.text();
+        console.log("Response text:", text);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch trainee profile. Status: ${response.status}`);
+        }
+
+        // Try parsing JSON after logging
+        const data = JSON.parse(text);
+
+        setTrainee({
+          id: data.id,
+          fullName: data.fullName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          profileImageUrl: data.profileImageUrl,
+          role: data.role,
+          cvPath: data.cvPath,
+        });
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrainee();
+  }, []);
+
+  if (loading) return <p>Loading trainee profile...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="prof-wrap">
-      <div className="profile-card">
-        {/* صورة الملف الشخصي */}
-        <div className="image-container">
-          <label htmlFor="upload-photo">
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="profile-pic clickable"
-              title="Click to change photo"
-            />
-          </label>
-          <input
-            id="upload-photo"
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleImageChange}
-          />
-        </div>
-
-        <h2>My Profile</h2>
-
-        <label>Name</label>
-        <input
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-        />
-
-        <label>Email</label>
-        <input
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
-
-        <label>Resume (PDF/DOCX)</label>
-        {cv ? (
-          <div className="cv-row">
-            <a href={cv.url} target="_blank" rel="noreferrer">
-              {cv.name}
-            </a>
-            <button onClick={() => setCV(null)}>×</button>
-          </div>
+    <div>
+      <h2>Trainee Profile</h2>
+      <p><strong>ID:</strong> {trainee.id}</p>
+      <p><strong>Full Name:</strong> {trainee.fullName}</p>
+      <p><strong>Email:</strong> {trainee.email}</p>
+      <p><strong>Phone Number:</strong> {trainee.phoneNumber}</p>
+      <p><strong>Role:</strong> {trainee.role}</p>
+      <p>
+        <strong>Profile Image:</strong>{" "}
+        {trainee.profileImageUrl ? (
+          <img src={trainee.profileImageUrl} alt="Profile" width={100} />
         ) : (
-          <input type="file" accept=".pdf,.doc,.docx" onChange={handleUpload} />
+          "No image available"
         )}
-
-        <label>My Training Programs</label>
-        <div className="prog-section">
-          <div className="column">
-            <h4>Current</h4>
-            {myPrograms
-              .filter((p) => p.status === "Current")
-              .map((p) => (
-                <p key={p.id}>• {p.title}</p>
-              ))}
-          </div>
-          <div className="column">
-            <h4>Completed</h4>
-            {myPrograms
-              .filter((p) => p.status === "Completed")
-              .map((p) => (
-                <p key={p.id}>• {p.title}</p>
-              ))}
-          </div>
-        </div>
-
-        <button className="save" disabled={saving} onClick={save}>
-          {saving ? "Saving…" : "Save"}
-        </button>
-        {saved && <p className="ok">Saved ✓</p>}
-      </div>
+      </p>
+      <p>
+        <strong>CV:</strong>{" "}
+        {trainee.cvPath ? (
+          <a href={trainee.cvPath} target="_blank" rel="noopener noreferrer">
+            Download CV
+          </a>
+        ) : (
+          "No CV uploaded"
+        )}
+      </p>
     </div>
   );
-}
+};
+
+export default TraineeProfile;

@@ -1,55 +1,67 @@
 // src/pages/TraineeApplications.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/TraineeApplications.css";
 
-const dummyApps = [
-  {
-    id: 1,
-    program: "Full‑Stack Bootcamp",
-    description: "Intensive web development track.",
-    duration: "3 months",
-    start: "2025‑05‑01",
-    end: "2025‑08‑01",
-    location: "Amman",
-    submitted: "2025‑03‑20",
-    status: "Pending",
-    response: "Application under review",
-    supervisor: "Eng. Lina Khaled",
-    category: "Web Development"
-  },
-  {
-    id: 2,
-    program: "Data Analysis Basics",
-    description: "Excel, Python & Tableau fundamentals.",
-    duration: "6 weeks",
-    start: "2025‑04‑15",
-    end: "2025‑05‑30",
-    location: "Remote",
-    submitted: "2025‑02‑28",
-    status: "Accepted",
-    response: "Welcome aboard! see you on 15 Apr.",
-    supervisor: "Dr. Mahmoud Awad",
-    category: "Data Analysis"
-  },
-  {
-    id: 3,
-    program: "React Frontend Mastery",
-    description: "Advanced React & TypeScript.",
-    duration: "2 months",
-    start: "2025‑06‑10",
-    end: "2025‑08‑10",
-    location: "Nablus",
-    submitted: "2025‑03‑01",
-    status: "Rejected",
-    response: "Seats full, try next cohort.",
-    supervisor: "Eng. Huda Omar",
-    category: "Frontend"
-  }
-];
+const statusMap = {
+  0: "Pending",
+  1: "Accepted",
+  2: "Rejected"
+};
 
 export default function TraineeApplications() {
-  const [apps] = useState(dummyApps);
+  const [apps, setApps] = useState([]);
   const [filter, setFilter] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchApps = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) throw new Error("No access token found.");
+
+        const res = await fetch("http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const text = await res.text();
+        const data = JSON.parse(text);
+
+        const appsFormatted = data.items.map(app => ({
+          id: app.trainingProgramId,
+          program: app.title,
+          description: app.description || "No description.",
+          duration: app.durationInDays ? `${app.durationInDays} days` : "N/A",
+          start: app.startDate?.split("T")[0] || "N/A",
+          end: app.endDate?.split("T")[0] || "N/A",
+          location: app.location || "TBD",
+          submitted: "—", // If your API supports it later, replace here.
+          status: statusMap[app.status] || "Pending",
+          response: app.status === 1
+            ? "You’ve been accepted! See you soon 🎉"
+            : app.status === 2
+            ? "Unfortunately, your application was rejected."
+            : "Application under review.",
+          supervisor: app.supervisorName || "N/A",
+          category: app.categoryName || "General"
+        }));
+
+        setApps(appsFormatted);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load applications.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchApps();
+  }, []);
 
   const shown = filter === "All" ? apps : apps.filter(a => a.status === filter);
 
@@ -69,39 +81,49 @@ export default function TraineeApplications() {
         ))}
       </div>
 
-      <div className="cards-grid">
-        {shown.map(app => (
-          <div key={app.id} className={`app-card ${app.status.toLowerCase()}`}>
-            <div className="badge">
-              {app.status === "Accepted" ? "✅" : app.status === "Rejected" ? "❌" : "⏳"}
+      {loading ? (
+        <p>Loading applications...</p>
+      ) : error ? (
+        <p className="error">{error}</p>
+      ) : (
+        <div className="cards-grid">
+          {shown.map(app => (
+            <div key={app.id} className={`app-card ${app.status.toLowerCase()}`}>
+              <div className="badge">
+                {app.status === "Accepted"
+                  ? "✅"
+                  : app.status === "Rejected"
+                  ? "❌"
+                  : "⏳"}
+              </div>
+
+              <h3>#{app.id} - {app.program}</h3>
+              <p className="desc">{app.description}</p>
+
+              <div className="info-row">
+                <span>{app.duration}</span>
+                <span>{app.location}</span>
+              </div>
+
+              <ul className="meta">
+                <li><strong>Category:</strong> {app.category}</li>
+                <li><strong>Supervisor:</strong> {app.supervisor}</li>
+                <li><strong>Start:</strong> {app.start}</li>
+                <li><strong>End:</strong> {app.end}</li>
+                <li><strong>Submitted:</strong> {app.submitted}</li>
+              </ul>
+
+              <p className="response">{app.response}</p>
+
+              {app.status === "Rejected" && (
+                <button className="browse-btn">Browse Similar Programs</button>
+              )}
             </div>
+          ))}
 
-            <h3>{app.program}</h3>
-            <p className="desc">{app.description}</p>
-
-            <div className="info-row">
-              <span>{app.duration}</span>
-              <span>{app.location}</span>
-            </div>
-
-            <ul className="meta">
-              <li><strong>Category:</strong> {app.category}</li>
-              <li><strong>Supervisor:</strong> {app.supervisor}</li>
-              <li><strong>Start:</strong> {app.start}</li>
-              <li><strong>End:</strong> {app.end}</li>
-              <li><strong>Submitted:</strong> {app.submitted}</li>
-            </ul>
-
-            <p className="response">{app.response}</p>
-
-            {app.status === "Rejected" && (
-              <button className="browse-btn">Browse Similar Programs</button>
-            )}
-          </div>
-        ))}
-
-        {shown.length === 0 && <p className="empty">No applications here.</p>}
-      </div>
+          {shown.length === 0 && <p className="empty">No applications here.</p>}
+        </div>
+      )}
     </div>
   );
 }

@@ -81,8 +81,8 @@ function App() {
 <Route path="CompanyFeedbacks" element={<CompanyFeedbacks />} />
 
 </Route>
-<Route path="CategoryTProgramsW" element={<CategoryTProgramsW />} />
-
+<Route path="/CategoryTProgramsW/:categoryId" element={<CategoryTProgramsW />} />
+<Route path="/CategoryTPrograms/:categoryId" element={<CategoryTPrograms />} />
 
 
         {/* Supervisor */}

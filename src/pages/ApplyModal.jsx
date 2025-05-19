@@ -1,49 +1,118 @@
+// ApplyModal.jsx
 import React, { useState } from "react";
 import "../styles/ApplyModal.css";
+import Swal from "sweetalert2";
 
+export default function ApplyModal({ program, onClose, onApplySuccess }) {
+  const [cvFile, setCvFile] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-export default function ApplyModal({ program, onClose, onSuccess }) {
-  const [msg, setMsg]     = useState("");
-  const [sending, setSending] = useState(false);
-  const [done, setDone]   = useState(false);
+  const handleFileChange = (e) => {
+    setCvFile(e.target.files[0]);
+    console.log("📄 CV File Selected:", e.target.files[0]);
+  };
 
-  /* محاكاة طلب API */
-  const submit = async () => {
-    setSending(true);
-    await new Promise(r => setTimeout(r, 1200)); // استبدله بـ fetch API
-    setSending(false);
-    setDone(true);
-    onSuccess();          // يعطّل زر Apply بالخارج
+  const handleApply = async () => {
+    if (!cvFile) {
+      Swal.fire({
+        icon: "warning",
+        title: "CV Required",
+        text: "Please upload your CV before applying.",
+        confirmButtonColor: "#3085d6",
+      });
+      console.warn("⚠️ No CV file uploaded.");
+      return;
+    }
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Unauthorized",
+        text: "You must be logged in to apply.",
+        confirmButtonColor: "#d33",
+      });
+      console.error("⛔ No access token found.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const formData = new FormData();
+    formData.append("TrainingProgramId", program.trainingProgramId);
+    formData.append("CV", cvFile);
+
+    console.log("🟢 APPLYING TO PROGRAM:");
+    console.log("Program Object:", program);
+    console.log("Program ID:", program.trainingProgramId);
+    console.log("Selected CV File:", cvFile);
+    console.log("Access Token:", token);
+    console.log("API Endpoint:", "http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll");
+
+    try {
+      const response = await fetch(
+        `http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      const contentType = response.headers.get("content-type");
+
+      if (!response.ok) {
+        let errorMessage = "Failed to apply";
+
+        if (contentType && contentType.includes("application/json")) {
+          const errData = await response.json();
+          errorMessage = errData.message || errorMessage;
+        } else {
+          const errText = await response.text();
+          errorMessage = errText || errorMessage;
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Application Submitted!",
+        text: "You have successfully applied to this program.",
+        confirmButtonColor: "#3085d6",
+      });
+
+      onApplySuccess(program.trainingProgramId);
+      onClose();
+    } catch (error) {
+      console.error("🔴 Error during application:", error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Application Failed",
+        text: error.message,
+        confirmButtonColor: "#d33",
+      });
+    } finally {
+      setSubmitting(false);
+      console.log("🟡 Submission finished");
+    }
   };
 
   return (
-    <div className="apply-back">
-      <div className="apply-card">
-        <button className="close" onClick={onClose}>×</button>
+    <div className="modal-backdrop">
+      <div className="modal-content">
+        <h2>Apply to: {program.title}</h2>
 
-        {done ? (
-          <div className="done">
-            <i className="fas fa-check-circle"></i>
-            <h3>Application Sent!</h3>
-            <p>You will receive a response via email.</p>
-            <button onClick={onClose}>OK</button>
-          </div>
-        ) : (
-          <>
-            <h3>Apply to {program.title}</h3>
-            <p className="co">{program.company}</p>
+        <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} />
 
-            <textarea
-              placeholder="Optional message…"
-              value={msg}
-              onChange={e=>setMsg(e.target.value)}
-            />
-
-            <button className="send" disabled={sending} onClick={submit}>
-              {sending ? "Sending…" : "Send Application"}
-            </button>
-          </>
-        )}
+        <div className="modal-buttons">
+          <button onClick={onClose} disabled={submitting}>Cancel</button>
+          <button onClick={handleApply} disabled={submitting}>
+            {submitting ? "Submitting..." : "Apply"}
+          </button>
+        </div>
       </div>
     </div>
   );

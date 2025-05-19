@@ -1,40 +1,65 @@
 // src/pages/TraineePrograms.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/TraineePrograms.css";
 
-const dummyPrograms = [
-  {
-    id: 1,
-    title: "Full‑Stack Bootcamp",
-    description: "Intensive MERN track.",
-    duration: "3 months",
-    start: "2025‑05‑01",
-    end: "2025‑08‑01",
-    location: "Amman",
-    status: "Ongoing",
-    contentUrl: "https://docs.techcorp.com/bootcamp",
-    classroomUrl: "https://classroom.google.com/bootcamp",
-    supervisor: "Eng. Lina Qasem",
-    category: "Web Development"
-  },
-  {
-    id: 2,
-    title: "Data Analysis Basics",
-    description: "Excel, Python & Tableau.",
-    duration: "6 weeks",
-    start: "2025‑04‑15",
-    end: "2025‑05‑30",
-    location: "Remote",
-    status: "Completed",
-    contentUrl: "https://drive.dataspark.com/analysis",
-    classroomUrl: "https://teams.microsoft.com/dataspark",
-    supervisor: "Dr. Omar Abu Saif",
-    category: "Data Science"
-  }
-];
-
 export default function TraineePrograms() {
-  const [programs] = useState(dummyPrograms); // لاحقاً fetch API
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) throw new Error("No access token found.");
+
+        const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        const text = await response.text();
+        console.log("Response text:", text);
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const data = JSON.parse(text);
+
+        const formattedPrograms = data.items.map(p => ({
+          id: p.trainingProgramId,
+          title: p.title,
+          category: p.categoryName,
+          start: p.startDate?.split("T")[0] || "",
+          end: p.endDate?.split("T")[0] || "",
+          status: p.status === 1 ? "Ongoing" : "Completed",
+          description: p.description || "No description provided.",
+          duration: p.durationInDays ? `${p.durationInDays} days` : "N/A",
+          location: p.location || "TBD",
+          contentUrl: p.contentUrl || "#",
+          classroomUrl: p.classroomUrl || "#",
+          supervisor: p.supervisorName || "N/A"
+        }));
+
+        setPrograms(formattedPrograms);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
+
+  if (loading) return <p>Loading programs...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="prog-wrap">
@@ -45,7 +70,7 @@ export default function TraineePrograms() {
           <div key={p.id} className={`card ${p.status.toLowerCase()}`}>
             <div className="badge">{p.status}</div>
 
-            <h3>{p.title}</h3>
+            <h3>#{p.id} - {p.title}</h3>
             <p className="desc">{p.description}</p>
 
             <ul className="meta">
