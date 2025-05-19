@@ -1,144 +1,308 @@
-
-
-
-
-
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/TraineeFeedback.css";
 
-const dummy = [
-{
-id: 31,
-source: "Trainee",
-author: "Rana Jaber",
-authorImg: "/avatars/trainee2.png",
-receiverImg: "/avatars/supervisor.png",
-date: "2025-05-10 09:15",
-rating: 4.7,
-msg: "Appreciated your guidance on the backend structure.",
-type: "Praise",
-attachment: null,
-target: "Supervisor"
-},
-{
-id: 32,
-source: "Company",
-author: "TechBridge HR",
-authorImg: "/avatars/company3.png",
-receiverImg: "/avatars/supervisor.png",
-date: "2025-05-13 11:30",
-rating: 4.3,
-msg: "Thanks for supporting trainees’ attendance reporting.",
-type: "General",
-attachment: "report-summary.pdf",
-target: "Supervisor"
-},
-{
-id: 33,
-source: "Company",
-author: "InnovateX Team Lead",
-authorImg: "/avatars/company1.png",
-receiverImg: "/avatars/supervisor.png",
-date: "2025-05-15 15:00",
-rating: 3.9,
-msg: "Please improve communication for project progress tracking.",
-type: "Suggestion",
-attachment: null,
-target: "Supervisor"
-}
-];
+const feedbackTypes = {
+  1: "General",
+  2: "Suggestion",
+  3: "Complaint",
+  4: "Praise",
+};
 
-export default function SupervisorFeedback() {
-const [filterSource, setFilterSource] = useState("All");
-const [filterType, setFilterType] = useState("All");
-const [search, setSearch] = useState("");
+const SupervisorFeedback = () => {
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [loadingFeedbacks, setLoadingFeedbacks] = useState(false);
+  const [loadingSend, setLoadingSend] = useState(false);
+  const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
-const sorted = useMemo(() =>
-[...dummy]
-.filter(f => f.target === "Supervisor")
-.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-, []);
+  const [showForm, setShowForm] = useState(false);
 
-const filtered = sorted.filter(f =>
-(filterSource === "All" || f.source === filterSource) &&
-(filterType === "All" || f.type === filterType) &&
-f.msg.toLowerCase().includes(search.toLowerCase())
-);
+  const [toUserId, setToUserId] = useState("");
+  const [trainingProgramId, setTrainingProgramId] = useState("");
+  const [message, setMessage] = useState("");
+  const [rating, setRating] = useState(1);
+  const [type, setType] = useState("General");
+  const [attachment, setAttachment] = useState(null);
 
-return (
-<div className="fb-wrap">
-<h2>Supervisor Feedback</h2>
+  const allowedTypes = ["General", "Suggestion", "Complaint", "Praise"];
 
-{/* Search bar */}
-<input
-type="text"
-className="search-bar"
-placeholder="🔍 Search feedback..."
-value={search}
-onChange={(e) => setSearch(e.target.value)}
-/>
+  const token = localStorage.getItem("accessToken");
 
-{/* Filters */}
-<div className="fb-filter">
-<label>Source:</label>
-{["All", "Trainee", "Company"].map((f) => (
-<button
-key={f}
-className={filterSource === f ? "active" : ""}
-onClick={() => setFilterSource(f)}
->
-{f}
-</button>
-))}
+  // Fetch received feedbacks for supervisor
+  const fetchFeedbacks = async () => {
+    if (!token) {
+      setError("User is not authenticated. Please log in.");
+      return;
+    }
+    setLoadingFeedbacks(true);
+    setError("");
+    try {
+      const res = await fetch(
+        "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch feedbacks.");
+      }
+      const data = await res.json();
+      setFeedbacks(data.items || []);
+    } catch (err) {
+      setError(err.message || "Failed to load feedbacks.");
+    } finally {
+      setLoadingFeedbacks(false);
+    }
+  };
 
-<label>Type:</label>
-{["All", "General", "Suggestion", "Praise"].map((t) => (
-<button
-key={t}
-className={filterType === t ? "active" : ""}
-onClick={() => setFilterType(t)}
->
-{t}
-</button>
-))}
-</div>
+  useEffect(() => {
+    fetchFeedbacks();
+  }, []);
 
-{/* Feedback list */}
-<div className="fb-list">
-{filtered.map((f) => (
-<div key={f.id} className={`fb-card ${f.source.toLowerCase()}`}>
-<div className="row">
-<img src={f.authorImg} className="avatar" alt="author" />
-<span className="badge">{f.source}</span>
-<span className="rating">⭐ {f.rating}</span>
-</div>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoadingSend(true);
+    setError("");
+    setSuccessMsg("");
 
-<p className="msg">{f.msg}</p>
+    if (!token) {
+      setError("User is not authenticated. Please log in.");
+      setLoadingSend(false);
+      return;
+    }
 
-<div className="meta">
-<img src={f.receiverImg} className="avatar sm" alt="receiver" />
-<span>{f.author}</span>
-<span>{f.date}</span>
-<span className="type">{f.type}</span>
-</div>
+    if (!toUserId) {
+      setError("Please enter the receiver's User ID.");
+      setLoadingSend(false);
+      return;
+    }
 
-{f.attachment && (
-<div className="attach">
-📎 <a href={`/${f.attachment}`} target="_blank" rel="noopener noreferrer">{f.attachment}</a>
-</div>
-)}
+    if (!trainingProgramId) {
+      setError("Please enter the Training Program ID.");
+      setLoadingSend(false);
+      return;
+    }
 
-<button className="edit-btn">✏️ Edit</button>
-</div>
-))}
+    if (message.length < 5) {
+      setError("Message must be at least 5 characters.");
+      setLoadingSend(false);
+      return;
+    }
+    if (rating < 1 || rating > 5) {
+      setError("Rating must be between 1 and 5.");
+      setLoadingSend(false);
+      return;
+    }
+    if (!allowedTypes.includes(type)) {
+      setError("Invalid feedback type.");
+      setLoadingSend(false);
+      return;
+    }
 
-{filtered.length === 0 && <p className="empty">No feedback found.</p>}
-</div>
-</div>
-);
-}
+    try {
+      const formData = new FormData();
+      formData.append("ToUserAccountId", toUserId);
+      formData.append("TrainingProgramId", trainingProgramId);
+      formData.append("Message", message);
+      formData.append("Rating", rating);
+      formData.append("Type", type);
+      if (attachment) {
+        formData.append("Attachment", attachment);
+      }
 
+      const res = await fetch(
+        "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/send",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
+      const text = await res.text();
 
+      if (!res.ok) {
+        throw new Error(text || "Failed to send feedback.");
+      }
 
+      setSuccessMsg(text || "✅ Feedback sent successfully.");
+      setMessage("");
+      setRating(1);
+      setType("General");
+      setToUserId("");
+      setTrainingProgramId("");
+      setAttachment(null);
 
+      setShowForm(false);
+      fetchFeedbacks(); // Refresh feedback list
+    } catch (err) {
+      setError(err.message || "❌ Something went wrong.");
+    } finally {
+      setLoadingSend(false);
+    }
+  };
+
+  return (
+    <div className="fb-wrap" style={{ maxWidth: 700, margin: "auto", padding: 20 }}>
+      <h1>Received Feedbacks (Supervisor)</h1>
+
+      {error && <p className="error">{error}</p>}
+
+      {loadingFeedbacks ? (
+        <p>Loading feedbacks...</p>
+      ) : feedbacks.length === 0 ? (
+        <p>No feedbacks received yet.</p>
+      ) : (
+        <ul className="feedback-list" style={{ listStyle: "none", padding: 0 }}>
+          {feedbacks.map((fb, idx) => (
+            <li
+              key={idx}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: 6,
+                padding: 15,
+                marginBottom: 15,
+                boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                display: "flex",
+                gap: 15,
+              }}
+            >
+              <img
+                src={fb.fromImageUrl}
+                alt={fb.fromFullName}
+                style={{ width: 60, height: 60, borderRadius: "50%", objectFit: "cover" }}
+              />
+              <div style={{ flex: 1 }}>
+                <strong>{fb.fromFullName}</strong> <br />
+                <small style={{ color: "#666" }}>
+                  Program: {fb.programName} | Type: {feedbackTypes[fb.type] || "Unknown"} | Rating: {fb.rating} ⭐
+                </small>
+                <p style={{ marginTop: 8 }}>{fb.message}</p>
+                {fb.attachmentUrl && (
+                  <p>
+                    Attachment:{" "}
+                    <a href={fb.attachmentUrl} target="_blank" rel="noreferrer">
+                      View
+                    </a>
+                  </p>
+                )}
+                <small style={{ color: "#999" }}>
+                  {new Date(fb.createdAt).toLocaleString()}
+                </small>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {!showForm ? (
+        <button
+          onClick={() => setShowForm(true)}
+          className="open-feedback-btn"
+          style={{
+            marginTop: 20,
+            padding: "10px 20px",
+            fontSize: 16,
+            cursor: "pointer",
+          }}
+        >
+          Send Feedback
+        </button>
+      ) : (
+        <div style={{ marginTop: 20 }}>
+          <button
+            onClick={() => setShowForm(false)}
+            className="close-feedback-btn"
+            style={{ marginBottom: 15, cursor: "pointer" }}
+          >
+            Close Form
+          </button>
+
+          <h2>Send Feedback to Supervisor</h2>
+
+          <form onSubmit={handleSubmit} encType="multipart/form-data" className="fb-form">
+            <label>
+              To User ID:
+              <input
+                type="number"
+                value={toUserId}
+                onChange={(e) => setToUserId(e.target.value)}
+                required
+              />
+            </label>
+
+            <label>
+              Training Program ID:
+              <input
+                type="number"
+                value={trainingProgramId}
+                onChange={(e) => setTrainingProgramId(e.target.value)}
+                required
+              />
+            </label>
+
+            <label>
+              Message:
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                minLength={5}
+                required
+              />
+            </label>
+
+            <label>
+              Rating (1 to 5):
+              <input
+                type="number"
+                min="1"
+                max="5"
+                step="0.1"
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+                required
+              />
+            </label>
+
+            <label>
+              Feedback Type:
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                required
+              >
+                {allowedTypes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              Attachment (optional):
+              <input
+                type="file"
+                accept=".pdf,.png,.jpg,.jpeg,.docx"
+                onChange={(e) => setAttachment(e.target.files[0])}
+              />
+            </label>
+
+            <button type="submit" disabled={loadingSend}>
+              {loadingSend ? "Sending..." : "Send Feedback"}
+            </button>
+
+            {error && <p className="error">{error}</p>}
+            {successMsg && <p className="success">{successMsg}</p>}
+          </form>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SupervisorFeedback;

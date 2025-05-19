@@ -1,94 +1,92 @@
-// EditModal.jsx
 import React, { useState } from "react";
 import "../styles/EditModal.css";
 
-const feedbackTypeLabels = {
-  0: "General",
-  1: "Suggestion",
-  2: "Complaint",
-  3: "Praise",
-};
-
 export default function EditModal({ feedback, onSave, onClose }) {
-  console.log("EditModal - Received feedback prop:", feedback);
-
-  const [message, setMessage] = useState(feedback?.message || "");
-  const [rating, setRating] = useState(feedback?.rating || 1);
-  const [type, setType] = useState(feedback?.type ?? 0);
+  const [editedMessage, setEditedMessage] = useState(feedback.message || "");
+  const [editedRating, setEditedRating] = useState(feedback.rating || 0);
+  const [editedType, setEditedType] = useState(feedback.type || 0);
+  const [editedAttachment, setEditedAttachment] = useState(feedback.attachment || "");
 
   const handleSave = async () => {
     const token = localStorage.getItem("accessToken");
 
-    const payload = {};
-    if (message !== feedback?.message) payload.message = message;
-    if (rating !== feedback?.rating) payload.rating = rating;
-    if (type !== feedback?.type) payload.type = type;
-
-    console.log("EditModal - Attempting to update feedback with:", {
-      receiverId: feedback?.receiverId, // استخدام القيمة من الخاصية feedback
-      feedbackId: feedback?.feedbackId, // استخدام القيمة من الخاصية feedback
-      payload,
-      token,
-    });
-
     try {
       const response = await fetch(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/receiver-user/${feedback?.receiverId}/feedback/${feedback?.feedbackId}`,
+        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/${feedback.receiverId}/${feedback.feedbackId}`,
         {
           method: "PATCH",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(payload),
+          body: JSON.stringify({
+            message: editedMessage,
+            rating: editedRating,
+            type: editedType,
+            attachment: editedAttachment,
+          }),
         }
       );
 
-      console.log("EditModal - PATCH Response:", response);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("EditModal - Failed to update feedback:", response.status, errorText);
-        throw new Error(`Failed to update feedback: ${response.status} - ${errorText}`);
+        console.error("EditModal - Failed to update feedback:", errorText);
+        alert("Failed to update feedback.");
+        return;
       }
 
-      const updatedData = await response.json();
-      console.log("EditModal - Feedback updated successfully:", updatedData);
-      onSave(updatedData);
+      const updatedItem = await response.json();
+      console.log("EditModal - Feedback updated:", updatedItem);
+      onSave(updatedItem);
     } catch (error) {
-      console.error("EditModal - Error updating feedback:", error);
+      console.error("EditModal - Error while updating feedback:", error);
+      alert("An error occurred while updating feedback.");
     }
   };
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
+      <div className="modal-content">
         <h3>Edit Feedback</h3>
 
-        <label>Message</label>
-        <textarea value={message} onChange={(e) => setMessage(e.target.value)} />
-
-        <label>Rating</label>
-        <input
-          type="number"
-          min="1"
-          max="5"
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
+        <label>Message:</label>
+        <textarea
+          value={editedMessage}
+          onChange={(e) => setEditedMessage(e.target.value)}
         />
 
-        <label>Type</label>
-        <select value={type} onChange={(e) => setType(Number(e.target.value))}>
-          {Object.entries(feedbackTypeLabels).map(([val, label]) => (
-            <option key={val} value={val}>
-              {label}
-            </option>
-          ))}
+        <label>Rating:</label>
+        <input
+          type="number"
+          value={editedRating}
+          min={1}
+          max={5}
+          onChange={(e) => setEditedRating(parseInt(e.target.value))}
+        />
+
+        <label>Type:</label>
+        <select
+          value={editedType}
+          onChange={(e) => setEditedType(parseInt(e.target.value))}
+        >
+          <option value={0}>General</option>
+          <option value={1}>Suggestion</option>
+          <option value={2}>Complaint</option>
+          <option value={3}>Praise</option>
         </select>
 
-        <div className="modal-actions">
+        <label>Attachment URL:</label>
+        <input
+          type="text"
+          value={editedAttachment}
+          onChange={(e) => setEditedAttachment(e.target.value)}
+        />
+
+        <div className="modal-buttons">
           <button onClick={handleSave}>Save</button>
-          <button className="cancel" onClick={onClose}>Cancel</button>
+          <button onClick={onClose} className="cancel">
+            Cancel
+          </button>
         </div>
       </div>
     </div>

@@ -1,90 +1,101 @@
-import React, { useState } from "react";
-import "../styles/PendingTrainingPrograms.css";
-
-const dummyPrograms = [
-{
-id: 1,
-name: "AI for Business",
-companyName: "FutureTech Inc.",
-description: "Learn how AI impacts business decision making.",
-startDate: "2025-06-01",
-endDate: "2025-07-15",
-students: 35,
-location: "Amman, Jordan",
-image: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=600&q=80",
-supervisor: "Eng. Laila Jamal",
-status: "pending"
-},
-{
-id: 2,
-name: "Cybersecurity Basics",
-companyName: "SecureNow",
-description: "Introduction to digital security principles.",
-startDate: "2025-06-10",
-endDate: "2025-08-01",
-students: 20,
-location: "Irbid, Jordan",
-image: "https://images.unsplash.com/photo-1581092334042-ec2bb7f6f4cb?auto=format&fit=crop&w=600&q=80",
-supervisor: "Dr. Omar Hassan",
-status: "accepted"
-}
-];
+import React, { useEffect, useState } from "react";
+import "../styles/CTraineePrograms.css";
 
 export default function PendingTrainingPro() {
-const [filter, setFilter] = useState("pending");
-const [programs, setPrograms] = useState(dummyPrograms);
+  const [programs, setPrograms] = useState([]);
+  const [expanded, setExpanded] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const handleAction = (id, action) => {
-const updated = programs.map(p =>
-p.id === id ? { ...p, status: action } : p
-);
-setPrograms(updated);
-};
+  const baseUrl = "https://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/all-pending";
+  const token = localStorage.getItem("accessToken");
 
-const filtered = programs.filter(p => filter === "all" || p.status === filter);
+  useEffect(() => {
+    if (!token) {
+      setError("Authorization token not found");
+      setLoading(false);
+      return;
+    }
 
-return (
-<div className="pending-shell">
-<h1>Training Programs Management</h1>
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
 
-<div className="filter">
-<button onClick={() => setFilter("all")}>All</button>
-<button onClick={() => setFilter("pending")}>Pending</button>
-<button onClick={() => setFilter("accepted")}>Accepted</button>
-<button onClick={() => setFilter("rejected")}>Rejected</button>
-</div>
+    fetch(`${baseUrl}?page=1&limit=10`, { headers })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        const items = data.items || [];
+        // نضبط كل برنامج ليكون له status "Pending"
+        const pendingPrograms = items.map((p) => ({
+          ...p,
+          status: "Pending",
+        }));
+        setPrograms(pendingPrograms);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        setError("Failed to load pending programs.");
+        setLoading(false);
+      });
+  }, [token]);
 
-<div className="program-list">
-{filtered.map(p => (
-<div key={p.id} className="program-card">
-<img src={p.image} alt={p.name} />
-<div className="info">
-<h2>{p.name}</h2>
-<p><strong>Company:</strong> {p.companyName}</p>
-<p>{p.description}</p>
-<p><strong>Start:</strong> {p.startDate} — <strong>End:</strong> {p.endDate}</p>
-<p><strong>Students:</strong> {p.students}</p>
-<p><strong>Location:</strong> {p.location}</p>
-<p><strong>Supervisor:</strong> {p.supervisor}</p>
-</div>
-{p.status === "pending" && (
-<div className="actions">
-<button className="accept" onClick={() => handleAction(p.id, "accepted")}>Accept</button>
-<button className="reject" onClick={() => handleAction(p.id, "rejected")}>Reject</button>
-</div>
-)}
-{p.status !== "pending" && (
-<span className={`status-tag ${p.status}`}>{p.status.toUpperCase()}</span>
-)}
-</div>
-))}
-</div>
-</div>
-);
+  if (loading) return <p>Loading programs...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
+
+  return (
+    <div className="prog-wrap">
+      <h2>Pending Training Programs</h2>
+
+      <div className="grid">
+        {programs.length === 0 && <p>No pending programs found.</p>}
+        {programs.map((p) => (
+          <div key={p.trainingProgramId} className={`card ${p.status.toLowerCase()}`}>
+            <div className="badge">{p.status}</div>
+            {p.imagePath && <img src={p.imagePath} alt={p.title} className="prog-img" />}
+            <h3>{p.title}</h3>
+            <span className="company">{p.companyName || "No Company Name"}</span>
+            <ul className="meta">
+              <li><strong>ID:</strong> {p.trainingProgramId}</li>
+              {p.categoryName && <li><strong>Category:</strong> {p.categoryName}</li>}
+              {p.supervisorName && <li><strong>Supervisor:</strong> {p.supervisorName}</li>}
+              {p.durationInDays && <li><strong>Duration (days):</strong> {p.durationInDays}</li>}
+              {p.duration && <li><strong>Duration:</strong> {p.duration}</li>}
+              {p.startDate && (
+                <li><strong>Start:</strong> {new Date(p.startDate).toLocaleDateString()}</li>
+              )}
+              {p.endDate && (
+                <li><strong>End:</strong> {new Date(p.endDate).toLocaleDateString()}</li>
+              )}
+              {p.rejectionReason && (
+                <li><strong>Rejection Reason:</strong> {p.rejectionReason}</li>
+              )}
+            </ul>
+
+            <button
+              className="apply"
+              onClick={() => setExpanded(expanded === p.trainingProgramId ? null : p.trainingProgramId)}
+            >
+              {expanded === p.trainingProgramId ? "Hide" : "Show"}
+            </button>
+
+            {expanded === p.trainingProgramId && (
+              <div>
+                {p.description && <p><strong>Description:</strong> {p.description}</p>}
+                {p.contentUrl && (
+                  <p><a href={p.contentUrl} target="_blank" rel="noreferrer">عرض المحتوى</a></p>
+                )}
+                {p.classroomUrl && (
+                  <p><a href={p.classroomUrl} target="_blank" rel="noreferrer">رابط الفصل</a></p>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
-
-
-
-
-
-
