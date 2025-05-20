@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {jwtDecode} from "jwt-decode";  // صححت الاستيراد
+import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import "../styles/UserManagement.css";
+
+const roleOptions = ["Admin", "Company", "Supervisor", "Trainee"];
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
@@ -10,17 +12,20 @@ function UserManagement() {
   const [editingRoleUserId, setEditingRoleUserId] = useState(null);
   const [newRole, setNewRole] = useState("");
   const [lockedUsers, setLockedUsers] = useState({});
+  const [currentUserRole, setCurrentUserRole] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    const role = localStorage.getItem("role");
+    setCurrentUserRole(role);
+
     if (token) {
       try {
-        const decodedToken = jwtDecode(token);
-        console.log("Decoded token:", decodedToken);
+        jwtDecode(token); // Validate token
         setAccessToken(token);
         fetchUsers(token);
       } catch (error) {
-        console.error("Invalid token:", error);
+        console.error("❌ Invalid token:", error);
         setMessage("❌ Invalid access token");
       }
     } else {
@@ -29,62 +34,62 @@ function UserManagement() {
   }, []);
 
   const fetchUsers = async (token) => {
+    console.log("📡 Fetching users...");
     try {
       const response = await fetch(
         "http://amjad-hamidi-tms.runasp.net/api/Users/search",
         {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-
       const data = await response.json();
-      console.log("Fetched users data:", data);
+      console.log("📥 Received users:", data);
 
       if (Array.isArray(data.items)) {
         setUsers(data.items);
         setMessage("");
       } else {
-        console.error("Unexpected users format", data);
+        console.error("Unexpected format", data);
         setUsers([]);
         setMessage("❌ Unexpected data format received.");
       }
-    } catch (error) {
-      console.error("Error fetching users:", error);
+    } catch (err) {
+      console.error("❌ Error fetching users:", err);
       setUsers([]);
       setMessage("❌ Error fetching users");
     }
   };
 
   const startRoleEdit = (user) => {
+    console.log(`✏️ Start editing role for: ${user.firstName} ${user.lastName}`);
     setEditingRoleUserId(user.userAccountId);
     setNewRole(user.role);
   };
 
   const saveRole = async (userId) => {
     const user = users.find((u) => u.userAccountId === userId);
-    if (!user) return;
-
-    if (newRole === user.role) {
+    if (!user || newRole === user.role) {
+      console.log("⚠️ No change in role or user not found.");
       setEditingRoleUserId(null);
       return;
     }
 
     const result = await Swal.fire({
-      title: `Are you sure you want to change role to ${newRole}?`,
+      title: `Change role of ${user.firstName} ${user.lastName} to ${newRole}?`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, change it!",
-      cancelButtonText: "Cancel",
+      confirmButtonText: "Yes",
     });
 
     if (result.isConfirmed) {
+      const body = JSON.stringify({ roleName: newRole });
+
+      console.log("🧪 Changing role...");
+      console.log("User ID:", userId);
+      console.log("New Role:", newRole);
+      console.log("Body Sent:", body);
+
       try {
         const response = await fetch(
           `http://amjad-hamidi-tms.runasp.net/api/Users/ChangeRole/${userId}`,
@@ -94,47 +99,48 @@ function UserManagement() {
               Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ role: newRole }),
+            body,
           }
         );
 
         const responseText = await response.text();
+        console.log("🔍 Response Status:", response.status);
+        console.log("🔍 Response Text:", responseText);
 
         if (!response.ok) {
-          try {
-            const errorJson = JSON.parse(responseText);
-            console.error("ChangeRole error JSON:", errorJson);
-          } catch {
-            console.error("ChangeRole response is not JSON");
-          }
-          throw new Error(`Failed to update role: ${response.status}`);
+          throw new Error(`❌ Failed to update role. ${responseText}`);
         }
 
-        Swal.fire("Updated!", "User role has been updated.", "success");
-
-        setUsers(
-          users.map((u) =>
+        Swal.fire("✅ Role Updated", `${user.firstName} is now ${newRole}`, "success");
+        setUsers((prev) =>
+          prev.map((u) =>
             u.userAccountId === userId ? { ...u, role: newRole } : u
           )
         );
         setEditingRoleUserId(null);
-      } catch (error) {
-        console.error("ChangeRole catch error:", error);
-        Swal.fire("Error!", error.message, "error");
+      } catch (err) {
+        console.error("❌ Role update error:", err);
+        Swal.fire("Error", err.message, "error");
       }
     }
   };
 
   const deleteUser = async (userId, role) => {
-    if (role === "Admin") return; // لا تحذف الأدمين
+    const user = users.find((u) => u.userAccountId === userId);
+    if (!user) return;
+
+    if (role === "Admin") {
+      Swal.fire("🚫 Not allowed", "Cannot delete an Admin user.", "error");
+      return;
+    }
+
+    console.log(`🗑️ Attempting to delete user: ${user.firstName} ${user.lastName}`);
 
     const result = await Swal.fire({
-      title: "Are you sure you want to delete this user?",
-      text: "This action cannot be undone!",
+      title: `Delete ${user.firstName} ${user.lastName}?`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete!",
-      cancelButtonText: "Cancel",
+      confirmButtonText: "Yes, delete",
     });
 
     if (result.isConfirmed) {
@@ -143,84 +149,53 @@ function UserManagement() {
           `http://amjad-hamidi-tms.runasp.net/api/Users/${userId}`,
           {
             method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
+            headers: { Authorization: `Bearer ${accessToken}` },
           }
         );
 
-        const responseText = await response.text();
+        if (!response.ok) throw new Error("❌ Failed to delete user.");
 
-        if (!response.ok) {
-          try {
-            const errorJson = JSON.parse(responseText);
-            console.error("Delete error JSON:", errorJson);
-          } catch {
-            console.error("Delete response is not JSON");
-          }
-          throw new Error(`Failed to delete user: ${response.status}`);
-        }
-
-        Swal.fire("Deleted!", "User has been deleted.", "success");
-
-        setUsers(users.filter((u) => u.userAccountId !== userId));
-      } catch (error) {
-        console.error("Delete catch error:", error);
-        Swal.fire("Error!", error.message, "error");
+        setUsers((prev) => prev.filter((u) => u.userAccountId !== userId));
+        Swal.fire("🗑️ Deleted", `${user.firstName} was deleted successfully`, "success");
+        console.log("✅ User deleted:", userId);
+      } catch (err) {
+        console.error("❌ Delete error:", err);
+        Swal.fire("Error", err.message, "error");
       }
     }
   };
 
   const toggleLock = async (userId) => {
-    const isLocked = lockedUsers[userId] || false;
-    const actionText = isLocked ? "Unblock" : "Block";
+    const user = users.find((u) => u.userAccountId === userId);
+    if (!user) return;
 
-    const result = await Swal.fire({
-      title: `Are you sure you want to ${actionText} this user?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: `Yes, ${actionText}!`,
-      cancelButtonText: "Cancel",
-    });
-
-    if (!result.isConfirmed) return;
+    console.log(`🔐 Toggling lock for: ${user.firstName} ${user.lastName}`);
 
     try {
       const response = await fetch(
         `http://amjad-hamidi-tms.runasp.net/api/Users/LockUnLock/${userId}`,
         {
           method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
 
-      const responseText = await response.text();
-
-      if (!response.ok) {
-        try {
-          const errorJson = JSON.parse(responseText);
-          console.error("LockUnLock error JSON:", errorJson);
-        } catch {
-          console.error("LockUnLock response is not JSON");
-        }
-        throw new Error(`Failed to ${actionText.toLowerCase()} user: ${response.status}`);
-      }
-
-      Swal.fire(
-        `${actionText}ed!`,
-        `User has been ${actionText.toLowerCase()}ed successfully.`,
-        "success"
-      );
+      const result = await response.json();
+      console.log("🔄 Lock toggle response:", result);
 
       setLockedUsers((prev) => ({
         ...prev,
-        [userId]: !isLocked,
+        [userId]: !prev[userId],
       }));
-    } catch (error) {
-      console.error("LockUnLock catch error:", error);
-      Swal.fire("Error!", error.message, "error");
+
+      Swal.fire(
+        "🔒 Status",
+        `${user.firstName} is now ${lockedUsers[userId] ? "unblocked" : "blocked"} for 5 Minutes.`,
+        "info"
+      );
+    } catch (err) {
+      console.error("❌ Lock error:", err);
+      Swal.fire("Error", "❌ Failed to update lock status", "error");
     }
   };
 
@@ -242,84 +217,78 @@ function UserManagement() {
           </tr>
         </thead>
         <tbody>
-          {users.length === 0 ? (
-            <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
-                No users found.
+          {users.map((user) => (
+            <tr key={user.userAccountId}>
+              <td>{user.userAccountId}</td>
+              <td>
+                {user.profileImageUrl ? (
+                  <img
+                    src={user.profileImageUrl}
+                    alt="Profile"
+                    className="profile-img"
+                  />
+                ) : (
+                  <span>No image</span>
+                )}
+              </td>
+              <td>{`${user.firstName} ${user.lastName}`}</td>
+              <td>{user.email}</td>
+              <td>
+                {editingRoleUserId === user.userAccountId ? (
+                  <select
+                    value={newRole}
+                    onChange={(e) => setNewRole(e.target.value)}
+                  >
+                    {roleOptions.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  user.role
+                )}
+              </td>
+              <td>
+                {editingRoleUserId === user.userAccountId ? (
+                  <button onClick={() => saveRole(user.userAccountId)}>
+                    Save
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => startRoleEdit(user)}
+                    disabled={
+                      currentUserRole !== "Admin" || user.role === "Admin"
+                    }
+                  >
+                    Edit Role
+                  </button>
+                )}
+
+                <button
+                  onClick={() => deleteUser(user.userAccountId, user.role)}
+                  disabled={user.role === "Admin"}
+                >
+                  Delete
+                </button>
+
+                {user.role !== "Admin" && (
+                  <button
+                    onClick={() => toggleLock(user.userAccountId)}
+                    style={{
+                      marginTop: "4px",
+                      backgroundColor: lockedUsers[user.userAccountId]
+                        ? "#6c757d"
+                        : "#ffc107",
+                      color: "black",
+                    }}
+                  >
+                    {lockedUsers[user.userAccountId] ? "Unblock" : "Block"}
+                  </button>
+                )}
               </td>
             </tr>
-          ) : (
-            users.map((user) => (
-              <tr key={user.userAccountId}>
-                <td>{user.userAccountId}</td>
-                <td>
-                  {user.profileImageUrl ? (
-                    <img
-                      src={user.profileImageUrl}
-                      alt="profile"
-                      className="profile-img"
-                    />
-                  ) : (
-                    <span>No image</span>
-                  )}
-                </td>
-                <td>{`${user.firstName} ${user.lastName}`}</td>
-                <td>{user.email}</td>
-                <td>
-                  {editingRoleUserId === user.userAccountId ? (
-                    <select
-                      value={newRole}
-                      onChange={(e) => setNewRole(e.target.value)}
-                    >
-                      <option value="Company">Company</option>
-                      <option value="Supervisor">Supervisor</option>
-                      <option value="Trainee">Trainee</option>
-                    </select>
-                  ) : (
-                    user.role
-                  )}
-                </td>
-                <td>
-                  {editingRoleUserId === user.userAccountId ? (
-                    <button onClick={() => saveRole(user.userAccountId)}>
-                      Save
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => startRoleEdit(user)}
-                      disabled={user.role === "Admin"}
-                    >
-                      Edit Role
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => deleteUser(user.userAccountId, user.role)}
-                    disabled={user.role === "Admin"}
-                    style={{ marginLeft: "8px" }}
-                  >
-                    Delete
-                  </button>
-
-                  {user.role !== "Admin" && (
-                    <button
-                      onClick={() => toggleLock(user.userAccountId)}
-                      style={{
-                        marginLeft: "8px",
-                        marginTop: "4px",
-                        backgroundColor: lockedUsers[user.userAccountId]
-                          ? "green"
-                          : "red",
-                        color: "white",
-                      }}
-                    >
-                      {lockedUsers[user.userAccountId] ? "Unlock" : "Lock"}
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))
-          )}
+          ))}
         </tbody>
       </table>
     </div>
