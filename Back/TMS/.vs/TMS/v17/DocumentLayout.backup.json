@@ -1,0 +1,198 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\controllers\\profilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\profilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\controllers\\feedbackscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\feedbackscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\feedbacks\\feedbackservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\feedbacks\\feedbackservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\feedbacks\\ifeedbackservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\feedbacks\\ifeedbackservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\services\\categories\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\categories\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/./TMS/True/SqlTable/dbo.Feedbacks.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|d:\\tms (front\u002Bback)\\back\\tms\\tms.api\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 283,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Program.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Program.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Program.cs*",
+              "RelativeToolTip": "TMS.API\\Program.cs*",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAgwKQAAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T20:54:08.805Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\appsettings.json",
+              "RelativeDocumentMoniker": "TMS.API\\appsettings.json",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\appsettings.json",
+              "RelativeToolTip": "TMS.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-13T20:49:02.989Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProfilesController.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\ProfilesController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\ProfilesController.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\ProfilesController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\ProfilesController.cs",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAAAGgAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T20:27:02.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CategoryService.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Categories\\CategoryService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Categories\\CategoryService.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Categories\\CategoryService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Categories\\CategoryService.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAqwGsAAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T18:25:22.538Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FeedbackService.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Feedbacks\\FeedbackService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Feedbacks\\FeedbackService.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Feedbacks\\FeedbackService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Feedbacks\\FeedbackService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T09:37:31.021Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "dbo.Feedbacks.sql",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/./TMS/True/SqlTable/dbo.Feedbacks.sql",
+              "ToolTip": "ViewDataWindow_MSSQL__/./TMS/True/SqlTable/dbo.Feedbacks.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-05-13T18:29:18.02Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IFeedbackService.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Feedbacks\\IFeedbackService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\Feedbacks\\IFeedbackService.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Services\\Feedbacks\\IFeedbackService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\Feedbacks\\IFeedbackService.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAABMAAABoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T09:37:18.698Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FeedbacksController.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\FeedbacksController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\FeedbacksController.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Controllers\\FeedbacksController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\FeedbacksController.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAADwvw8AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T09:33:31.836Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Feedback.cs",
+              "DocumentMoniker": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\Feedback.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Models\\Feedback.cs",
+              "ToolTip": "D:\\TMS (Front\u002BBack)\\Back\\TMS\\TMS.API\\Models\\Feedback.cs",
+              "RelativeToolTip": "TMS.API\\Models\\Feedback.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T18:20:11.387Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 132,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 132,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
