@@ -1,0 +1,81 @@
+.company-profile {
+  background: linear-gradient(135deg, #fff1f9, #e3f2fd);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.company-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  padding: 50px 35px;
+  box-shadow: 0 25px 60px rgba(255, 182, 193, 0.4);
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+  overflow: hidden;
+  transition: 0.4s ease-in-out;
+}
+
+.company-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, #ffe1f0 0%, transparent 60%);
+  animation: shimmer 4s linear infinite;
+  z-index: 0;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.company-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 70px rgba(255, 105, 180, 0.45);
+}
+
+.company-logo {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #ffb6c1;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 1;
+}
+
+.company-name {
+  font-size: 36px;
+  color: #ff4081;
+  text-shadow: 1px 1px 4px #ffb6c1;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.company-info {
+  font-size: 18px;
+  color: #333;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+.company-info p {
+  margin: 12px 0;
+}
