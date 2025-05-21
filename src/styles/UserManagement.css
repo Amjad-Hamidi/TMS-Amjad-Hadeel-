@@ -1,0 +1,120 @@
+.user-management {
+    padding: 40px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f7f8fc, #e0e7ff);
+    min-height: 100vh;
+    color: #333;
+  }
+  
+  .user-management h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #4b0082;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .user-table th {
+    background-color: #4b0082;
+    color: #fff;
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+  
+  .user-table tr:hover {
+    background-color: #f2f2f2;
+    transition: 0.3s;
+  }
+  
+  .profile-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #4b0082;
+  }
+  
+  button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    margin: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    transform: scale(1.05);
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  button:nth-child(1) {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  button:nth-child(2) {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  button:nth-child(3) {
+    background-color: #ffc107;
+    color: black;
+  }
+  
+  .message-box,
+  .error-box {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .message-box {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .error-box {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  
+  

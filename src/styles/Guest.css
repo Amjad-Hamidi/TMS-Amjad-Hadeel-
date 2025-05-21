@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .guest-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #8e44ad, #f39c12, #c0392b, #1abc9c);
+        color: #fff;
+        padding: 30px;
+        animation: shimmer 12s infinite linear;
+        background-size: 600% 600%;
+        }
+        
+        @keyframes shimmer {
+        0% {
+        background-position: 0% 50%;
+        }
+        50% {
+        background-position: 100% 50%;
+        }
+        100% {
+        background-position: 0% 50%;
+        }
+        }
+        
+    .guest-header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+    }
+    
+    .guest-header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: #f7d774;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+    
+    .guest-header p {
+    font-size: 1.2rem;
+    color: #ddd;
+    }
+    
+    .login-btn {
+    margin-top: 20px;
+    background: #f7d774;
+    color: #1d1b31;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 0 10px #f7d774, 0 0 20px #f7d77480;
+    transition: all 0.3s ease-in-out;
+    }
+    
+    .login-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #f7d774, 0 0 30px #f7d774b0;
+    }
+    
+    .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 0 10px;
+    }
+    
+    .category-card {
+    background: #ffffff15;
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+    
+    .category-card:hover {
+    transform: translateY(-5px);
+    }
+    
+    .category-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    }
+    
+    .cat-info {
+    padding: 20px;
+    }
+    
+    .cat-info h2 {
+    color: #f7d774;
+    margin-bottom: 10px;
+    }
+    
+    .cat-info p {
+    color: #eee;
+    margin: 5px 0;
+    }
+    
+    
+    
