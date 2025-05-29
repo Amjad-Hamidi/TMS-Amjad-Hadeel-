@@ -90,6 +90,12 @@ export default function Login() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -102,6 +108,7 @@ export default function Login() {
           placeholder="Email address"
           value={email}
           onChange={e => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
         <input
@@ -109,6 +116,7 @@ export default function Login() {
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
         <div className="checkbox-group">

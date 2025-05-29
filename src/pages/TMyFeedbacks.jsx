@@ -78,6 +78,36 @@ export default function TMyFeedbacks() {
     Swal.fire("Success", "Feedback updated!", "success");
   };
 
+  const handleDelete = async (feedbackId) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "This feedback will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        const response = await fetchWithAuth(
+          `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/${feedbackId}`,
+          { method: "DELETE" }
+        );
+        if (!response.ok) {
+          const errorText = await response.text();
+          Swal.fire("Error", errorText || "Failed to delete feedback.", "error");
+          return;
+        }
+        setMyFeedbacks((prev) => prev.filter((f) => f.feedbackId !== feedbackId));
+        Swal.fire("Deleted!", "Your feedback has been deleted.", "success");
+      } catch (error) {
+        Swal.fire("Error", error.message || "Failed to delete feedback.", "error");
+      }
+    }
+  };
+
   const handlePageChange = (event, value) => {
     setPage(value);
   };
@@ -121,6 +151,14 @@ export default function TMyFeedbacks() {
                       onClick={() => handleEditClick(f)}
                     >
                       Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      sx={{ borderRadius: 2, fontWeight: 700 }}
+                      onClick={() => handleDelete(f.feedbackId)}
+                    >
+                      Delete
                     </Button>
                   </Stack>
                   <Typography variant="body1" sx={{ fontSize: 18, mb: 1, color: "#333" }}>

@@ -44,6 +44,11 @@ import AdminLayout from "./layouts/AdminLayout";
 import CategoryTProgramsW from "./pages/CategoryTProgramsW";
 import Guest from "./pages/Guest";
 import ForgetPassword from "./pages/ForgetPassword";
+import CompaniesSupervisors from "./pages/CompaniesSupervisors";
+import TraineeSupervisor from "./pages/TraineeSupervisor";
+import CompaniesTrainees from "./pages/CompaniesTrainees";
+
+
 
 
 import TMyFeedbacks from "./pages/TMyFeedbacks";
@@ -63,6 +68,8 @@ function App() {
           <Route path="TraineeProfile" element={<TraineeProfile />} />
           <Route path="TraineePrograms" element={<TraineePrograms />} />
           <Route path="TraineeApplications" element={<TraineeApplications />} />
+          <Route path="CompaniesSupervisors" element={<CompaniesSupervisors />} />
+
           <Route path="TraineeFeedback" element={<TraineeFeedback />} />
           <Route path="TMyFeedbacks" element={<TMyFeedbacks />} />
         </Route>
@@ -77,6 +84,8 @@ function App() {
 <Route path="AddTrainingProgram" element={<AddTrainingProgram />} />
 <Route path="CompanyApplications" element={<CompanyApplications />} />
 <Route path="CompanyTrainingPrograms" element={<CompanyTrainingPrograms />} />
+<Route path="TraineeSupervisor" element={<TraineeSupervisor />} />
+
 <Route path="CompanyFeedback" element={<CompanyFeedback />} />
 <Route path="CompanyFeedbacks" element={<CompanyFeedbacks />} />
 
@@ -93,6 +102,8 @@ function App() {
 <Route path="SupervisorProfile" element={<SupervisorProfile />} />
 <Route path="SupervisorPrograms" element={<SupervisorPrograms />} />
 <Route path="STraineesList" element={<STraineesList />} />
+<Route path="CompaniesTrainees" element={<CompaniesTrainees />} />
+
 <Route path="SupervisorFeedback" element={<SupervisorFeedback />} />
 <Route path="SupervisorFeedbacks" element={<SupervisorFeedbacks />} />
 

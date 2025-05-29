@@ -1,4 +1,4 @@
-// SupervisorFeedbacks.jsx
+// CompanyFeedbacks.jsx
 import React, { useEffect, useState } from "react";
 import EditModal from "../pages/EditModal";
 import Swal from "sweetalert2";
@@ -15,7 +15,7 @@ import {
   Avatar,
   Fade,
 } from "@mui/material";
-import { fetchWithAuth } from '../utils/fetchWithAuth';
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 const feedbackTypeLabels = {
   0: "General",
@@ -26,8 +26,8 @@ const feedbackTypeLabels = {
 
 const LIMIT = 6;
 
-export default function SupervisorFeedbacks() {
-  const [supervisorFeedbacks, setSupervisorFeedbacks] = useState([]);
+export default function CompanyFeedbacks() {
+  const [companyFeedbacks, setCompanyFeedbacks] = useState([]);
   const [editItem, setEditItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -47,7 +47,7 @@ export default function SupervisorFeedbacks() {
         return;
       }
       const data = await response.json();
-      setSupervisorFeedbacks(data.items || []);
+      setCompanyFeedbacks(data.items || []);
       setTotalPages(data.totalPages || 1);
       setTotalCount(data.totalCount || 0);
     } catch (error) {
@@ -70,9 +70,42 @@ export default function SupervisorFeedbacks() {
     });
   };
 
+  const handleDeleteClick = async (feedbackId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the feedback.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetchWithAuth(
+          `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/${feedbackId}`,
+          {
+            method: "DELETE",
+          }
+        );
+        if (!response.ok) {
+          throw new Error(await response.text());
+        }
+
+        setCompanyFeedbacks((prev) =>
+          prev.filter((f) => f.feedbackId !== feedbackId)
+        );
+        Swal.fire("Deleted!", "The feedback has been deleted.", "success");
+      } catch (error) {
+        Swal.fire("Error", error.message || "Failed to delete feedback.", "error");
+      }
+    }
+  };
+
   const handleEditSave = async (updatedItem) => {
     try {
-      setSupervisorFeedbacks((prev) =>
+      setCompanyFeedbacks((prev) =>
         prev.map((f) => (f.feedbackId === updatedItem.feedbackId ? updatedItem : f))
       );
       setEditItem(null);
@@ -80,7 +113,7 @@ export default function SupervisorFeedbacks() {
     } catch (error) {
       let msg = "Failed to update feedback.";
       try {
-        const errObj = typeof error === 'string' ? JSON.parse(error) : error;
+        const errObj = typeof error === "string" ? JSON.parse(error) : error;
         if (errObj && errObj.errors) {
           msg = Object.values(errObj.errors).flat().join("\n");
         } else if (errObj && errObj.message) {
@@ -96,58 +129,121 @@ export default function SupervisorFeedbacks() {
   };
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
-      <Typography variant="h3" sx={{ fontWeight: 700, mb: 3, color: "#1e3c72", letterSpacing: 1, textAlign: "center" }}>
-        Supervisor Sent Feedback
+    <Box
+      sx={{
+        maxWidth: 900,
+        mx: "auto",
+        p: { xs: 1, md: 4 },
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)",
+      }}
+    >
+      <Typography
+        variant="h3"
+        sx={{
+          fontWeight: 700,
+          mb: 3,
+          color: "#1e3c72",
+          letterSpacing: 1,
+          textAlign: "center",
+        }}
+      >
+        Company Sent Feedback
       </Typography>
-      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2, justifyContent: "center" }}>
+
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        sx={{ mb: 2, justifyContent: "center" }}
+      >
         <Chip label={`Total: ${totalCount}`} color="primary" />
         <Chip label={`Page: ${page} / ${totalPages}`} color="secondary" />
         <Chip label={`Limit: ${LIMIT}`} color="info" />
       </Stack>
+
       {loading ? (
         <Stack alignItems="center" sx={{ my: 6 }}>
           <CircularProgress size={44} color="primary" />
         </Stack>
-      ) : supervisorFeedbacks.length === 0 ? (
+      ) : companyFeedbacks.length === 0 ? (
         <Typography align="center" color="text.secondary" sx={{ mt: 6, fontSize: 22 }}>
           No feedback sent yet.
         </Typography>
       ) : (
         <Stack spacing={3} sx={{ mb: 4 }}>
-          {supervisorFeedbacks.map((f, idx) => (
-            <Fade in timeout={400 + idx * 80} key={f.id}>
-              <Card elevation={5} sx={{ borderRadius: 4, background: "linear-gradient(120deg, #fff 80%, #e3f2fd 100%)", boxShadow: "0 8px 32px 0 #00000011" }}>
+          {companyFeedbacks.map((f, idx) => (
+            <Fade in timeout={400 + idx * 80} key={f.feedbackId}>
+              <Card
+                elevation={5}
+                sx={{
+                  borderRadius: 4,
+                  background:
+                    "linear-gradient(120deg, #fff 80%, #e3f2fd 100%)",
+                  boxShadow: "0 8px 32px 0 #00000011",
+                }}
+              >
                 <CardContent>
-                  <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 1 }}>
-                    <Avatar src={f.toImageUrl} alt={f.toFullName} sx={{ width: 48, height: 48, border: "2px solid #1976d2" }} />
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{ mb: 1 }}
+                  >
+                    <Avatar
+                      src={f.toImageUrl}
+                      alt={f.toFullName}
+                      sx={{ width: 48, height: 48, border: "2px solid #1976d2" }}
+                    />
                     <Typography variant="h6" sx={{ fontWeight: 700, flex: 1 }}>
                       To: {f.toFullName}
                     </Typography>
+
                     {f.rating != null && (
-                      <Chip label={`⭐ ${f.rating}`} color="warning" sx={{ fontWeight: 700, fontSize: 18 }} />
+                      <Chip
+                        label={`⭐ ${f.rating}`}
+                        color="warning"
+                        sx={{ fontWeight: 700, fontSize: 18 }}
+                      />
                     )}
+
                     <Button
                       variant="outlined"
                       color="primary"
-                      sx={{ borderRadius: 2, fontWeight: 700, ml: 2 }}
+                      sx={{ borderRadius: 2, fontWeight: 700 }}
                       onClick={() => handleEditClick(f)}
                     >
                       Edit
                     </Button>
+
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      sx={{ borderRadius: 2, fontWeight: 700 }}
+                      onClick={() => handleDeleteClick(f.feedbackId)}
+                    >
+                      Delete
+                    </Button>
                   </Stack>
-                  <Typography variant="body1" sx={{ fontSize: 18, mb: 1, color: "#333" }}>
+
+                  <Typography
+                    variant="body1"
+                    sx={{ fontSize: 18, mb: 1, color: "#333" }}
+                  >
                     {f.message}
                   </Typography>
+
                   <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
                     <Chip label={feedbackTypeLabels[f.type] || "Unknown"} color="info" />
                     <Typography variant="body2" color="text.secondary">
                       {new Date(f.createdAt).toLocaleString()}
                     </Typography>
                   </Stack>
+
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                     <strong>Program:</strong> {f.programName}
                   </Typography>
+
                   {f.attachmentUrl && (
                     <Button
                       href={f.attachmentUrl}
@@ -166,6 +262,7 @@ export default function SupervisorFeedbacks() {
           ))}
         </Stack>
       )}
+
       <Stack alignItems="center" sx={{ mt: 4 }}>
         <Pagination
           count={totalPages}
@@ -189,6 +286,7 @@ export default function SupervisorFeedbacks() {
           }}
         />
       </Stack>
+
       {editItem && (
         <EditModal
           feedback={editItem}

@@ -1,61 +1,29 @@
-.trainee-layout {
-    display: flex;
-    height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .sidebar {
-    width: 240px;
-    background: #2c3e50;
-    color: #fff;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    }
-    
-    .sidebar-header h2 {
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 30px;
-    color: #f1c40f;
-    }
-    
-    .nav-links {
-    list-style: none;
-    padding: 0;
-    }
-    
-    .nav-links li {
-    margin-bottom: 15px;
-    }
-    
-    .nav-links a {
-    text-decoration: none;
-    color: #ecf0f1;
-    display: flex;
-    align-items: center;
-    padding: 10px 12px;
-    border-radius: 6px;
-    transition: background 0.3s;
-    gap: 10px;
-    }
-    
-    .nav-links a:hover {
-    background: #34495e;
-    }
-    
-    .nav-links a.active {
-    background: #1abc9c;
-    color: #fff;
-    }
-    
-    .main-content {
-    flex-grow: 1;
-    padding: 30px;
-    background: #ecf0f1;
-    overflow-y: auto;
-    }
-    
-    
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: #1e1e2f;
+  color: white;
+  padding: 20px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  z-index: 100;
+  width: 250px; /* العرض الكامل */
+}
+
+.trainee-layout.collapsed .sidebar {
+  width: 60px; /* العرض بعد التصغير */
+}
+
+.main-content {
+  margin-left: 250px; /* نفس عرض السايدبار الكامل */
+  padding: 20px;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  width: calc(100% - 250px);
+}
+
+.trainee-layout.collapsed .main-content {
+  margin-left: 60px; /* نفس عرض السايدبار المصغر */
+  width: calc(100% - 60px);
+}

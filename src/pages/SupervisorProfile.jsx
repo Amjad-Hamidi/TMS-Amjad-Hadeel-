@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
+import {
+  Box,
+  Typography,
+  Avatar,
+  CircularProgress,
+  Alert,
+  Link,
+  Paper
+} from "@mui/material";
 
 const SupervisorProfile = () => {
   const [supervisor, setSupervisor] = useState(null);
@@ -14,11 +23,7 @@ const SupervisorProfile = () => {
       try {
         const response = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/Profiles/me");
 
-        console.log("Response status:", response.status);
-        console.log("Response headers:", [...response.headers.entries()]);
-
         const text = await response.text();
-        console.log("Response text:", text);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch supervisor profile. Status: ${response.status}`);
@@ -46,36 +51,51 @@ const SupervisorProfile = () => {
     fetchSupervisor();
   }, []);
 
-  if (loading) return <p>Loading supervisor profile...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <Box sx={{ marginLeft: "60px", p: 4 }}><CircularProgress /></Box>;
+  if (error) return <Box sx={{ marginLeft: "60px", p: 4 }}><Alert severity="error">{error}</Alert></Box>;
 
   return (
-    <div>
-      <h2>Supervisor Profile</h2>
-      <p><strong>ID:</strong> {supervisor.id}</p>
-      <p><strong>Full Name:</strong> {supervisor.fullName}</p>
-      <p><strong>Email:</strong> {supervisor.email}</p>
-      <p><strong>Phone Number:</strong> {supervisor.phoneNumber}</p>
-      <p><strong>Role:</strong> {supervisor.role}</p>
-      <p>
-        <strong>Profile Image:</strong>{" "}
-        {supervisor.profileImageUrl ? (
-          <img src={supervisor.profileImageUrl} alt="Profile" width={100} />
-        ) : (
-          "No image available"
-        )}
-      </p>
-      <p>
-        <strong>CV:</strong>{" "}
-        {supervisor.cvPath ? (
-          <a href={supervisor.cvPath} target="_blank" rel="noopener noreferrer">
-            Download CV
-          </a>
-        ) : (
-          "No CV uploaded"
-        )}
-      </p>
-    </div>
+    <Box sx={{ marginLeft: "60px", padding: 4 }}>
+      <Paper elevation={3} sx={{ padding: 4, borderRadius: 3, maxWidth: 600 }}>
+        <Typography variant="h4" gutterBottom>
+          Supervisor Profile
+        </Typography>
+
+        <Box display="flex" alignItems="center" gap={2} mb={2}>
+          {supervisor.profileImageUrl ? (
+            <Avatar
+              src={supervisor.profileImageUrl}
+              alt="Profile"
+              sx={{ width: 80, height: 80 }}
+            />
+          ) : (
+            <Avatar sx={{ width: 80, height: 80 }}>
+              {supervisor.fullName?.[0] || "?"}
+            </Avatar>
+          )}
+          <Box>
+            <Typography variant="h6">{supervisor.fullName}</Typography>
+            <Typography color="text.secondary">{supervisor.role}</Typography>
+          </Box>
+        </Box>
+
+        <Typography><strong>ID:</strong> {supervisor.id}</Typography>
+        <Typography><strong>Email:</strong> {supervisor.email}</Typography>
+        <Typography><strong>Phone:</strong> {supervisor.phoneNumber}</Typography>
+
+        <Box mt={2}>
+          <Typography><strong>CV:</strong>{" "}
+            {supervisor.cvPath ? (
+              <Link href={supervisor.cvPath} target="_blank" rel="noopener">
+                Download CV
+              </Link>
+            ) : (
+              "No CV uploaded"
+            )}
+          </Typography>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

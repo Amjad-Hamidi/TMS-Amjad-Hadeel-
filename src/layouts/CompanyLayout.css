@@ -1,75 +1,135 @@
-
-
-
-
 .company-layout {
-display: flex;
-height: 100vh;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar مصغر */
+.sidebar-closed .sidebar {
+  width: 60px;
+}
+
+.sidebar-closed .sidebar .sidebar-header h2,
+.sidebar-closed .sidebar .nav-links span {
+  display: none; /* نخفي النص لما تكون مصغرة */
+}
+
+/* Sidebar موسع */
+.sidebar-open .sidebar {
+  width: 220px;
 }
 
 .sidebar {
-width: 240px;
-background: #1f2f46;
-color: #fff;
-padding: 20px;
-display: flex;
-flex-direction: column;
+  background-color: #1a1a1a;
+  color: white;
+  transition: width 0.3s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar-header h2 {
-font-size: 24px;
-display: flex;
-align-items: center;
-gap: 10px;
-margin-bottom: 30px;
-color: #00bcd4;
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
 }
 
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* روابط التنقل */
 .nav-links {
-list-style: none;
-padding: 0;
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
 }
 
 .nav-links li {
-margin-bottom: 15px;
+  margin: 15px 0;
 }
 
 .nav-links a {
-text-decoration: none;
-color: #ecf0f1;
-display: flex;
-align-items: center;
-padding: 10px 12px;
-border-radius: 6px;
-transition: background 0.3s;
-gap: 10px;
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  transition: background 0.3s;
 }
 
-.nav-links a:hover {
-background: #34495e;
-}
-
+.nav-links a:hover,
 .nav-links a.active {
-background: #00bcd4;
-color: #fff;
+  background-color: #333;
+}
+
+.nav-links i {
+  margin-right: 10px;
+  min-width: 20px;
+  text-align: center;
 }
 
 .main-content {
-flex-grow: 1;
-padding: 30px;
-background: #ecf0f1;
-overflow-y: auto;
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+}
+.sidebar {
+  background-color: #1a1a1a;
+  color: white;
+  transition: width 0.3s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  height: 100vh;       /* تأخذ ارتفاع الشاشة كامل */
+  position: fixed;     /* ثابتة عالشاشة */
+  top: 0;
+  left: 0;
+  z-index: 999;       /* فوق المحتوى */
 }
 
+.sidebar-closed .sidebar {
+  width: 60px;
+}
 
+.sidebar-open .sidebar {
+  width: 220px;
+}
 
+/* خلي قائمة التنقل (ul) تأخذ المساحة المتبقية وتسمح بالتمرير */
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
 
+  flex-grow: 1;       /* تكبر وتشغل المساحة المتبقية */
+  overflow-y: auto;   /* ظهور scrollbar لو طويل */
+}
 
+/* باقي التنسيقات كما هي */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  flex-shrink: 0; /* حتى لا ينضغط */
+}
 
+.main-content {
+  margin-left: 60px; /* نفس عرض الـ sidebar المصغر */
+  padding: 20px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  flex-grow: 1;
+  transition: margin-left 0.3s;
+}
 
-
-
-
-
-
+.sidebar-open + .main-content {
+  margin-left: 220px; /* نفس عرض الـ sidebar الموسع */
+}
