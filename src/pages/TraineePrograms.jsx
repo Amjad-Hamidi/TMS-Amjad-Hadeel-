@@ -1,6 +1,7 @@
 // src/pages/TraineePrograms.jsx
 import React, { useEffect, useState } from "react";
 import "../styles/TraineePrograms.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 export default function TraineePrograms() {
   const [programs, setPrograms] = useState([]);
@@ -13,15 +14,7 @@ export default function TraineePrograms() {
       setError("");
 
       try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) throw new Error("No access token found.");
-
-        const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments", {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        });
-
+        const response = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments");
         const text = await response.text();
         console.log("Response text:", text);
 

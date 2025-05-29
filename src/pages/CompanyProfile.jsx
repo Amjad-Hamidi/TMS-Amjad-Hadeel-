@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/CompanyProfile.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 export default function CompanyProfile() {
   const [company, setCompany] = useState(null);
@@ -10,15 +11,10 @@ export default function CompanyProfile() {
     const fetchCompanyProfile = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/Profiles/me", {
-          headers: {
-            Accept: "*/*",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
+        const response = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/Profiles/me", {
+          headers: { Accept: "*/*" },
         });
-
         if (!response.ok) throw new Error("Failed to load profile.");
-
         const data = await response.json();
         setCompany(data);
       } catch (err) {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/TraineeFeedback.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const feedbackTypes = {
   1: "General",
@@ -37,13 +38,8 @@ const SupervisorFeedback = () => {
     setLoadingFeedbacks(true);
     setError("");
     try {
-      const res = await fetch(
-        "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const res = await fetchWithAuth(
+        "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received"
       );
       if (!res.ok) {
         throw new Error("Failed to fetch feedbacks.");
@@ -112,13 +108,10 @@ const SupervisorFeedback = () => {
         formData.append("Attachment", attachment);
       }
 
-      const res = await fetch(
+      const res = await fetchWithAuth(
         "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/send",
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
           body: formData,
         }
       );

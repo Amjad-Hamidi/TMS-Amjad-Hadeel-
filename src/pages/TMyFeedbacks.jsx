@@ -15,6 +15,7 @@ import {
   Avatar,
   Fade,
 } from "@mui/material";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const feedbackTypeLabels = {
   0: "General",
@@ -35,15 +36,9 @@ export default function TMyFeedbacks() {
 
   const fetchMyFeedbacks = async (pageNum = 1) => {
     setLoading(true);
-    const token = localStorage.getItem("accessToken");
     try {
-      const response = await fetch(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/sent?page=${pageNum}&limit=${LIMIT}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await fetchWithAuth(
+        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/sent?page=${pageNum}&limit=${LIMIT}`
       );
       if (!response.ok) {
         const errorText = await response.text();

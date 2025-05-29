@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/TraineeFeedback.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const feedbackCategories = {
   1: "General",
@@ -34,15 +35,9 @@ const FeedbackComponent = () => {
     setIsLoading(true);
     setErrorMessage("");
     try {
-      const response = await fetch(
-        "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received",
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
+      const response = await fetchWithAuth(
+        "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received"
       );
-
       if (!response.ok) {
         throw new Error("Failed to fetch feedbacks.");
       }
@@ -115,13 +110,10 @@ const FeedbackComponent = () => {
         console.log(`${key}: ${value}`);
       }
 
-      const response = await fetch(
+      const response = await fetchWithAuth(
         "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/send",
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
           body: formData,
         }
       );

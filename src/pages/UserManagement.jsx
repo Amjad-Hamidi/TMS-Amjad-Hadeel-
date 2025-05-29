@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import "../styles/UserManagement.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const roleOptions = ["Admin", "Company", "Supervisor", "Trainee"];
 
@@ -36,13 +37,9 @@ function UserManagement() {
   const fetchUsers = async (token) => {
     console.log("📡 Fetching users...");
     try {
-      const response = await fetch(
-        "http://amjad-hamidi-tms.runasp.net/api/Users/search",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const response = await fetchWithAuth(
+        "http://amjad-hamidi-tms.runasp.net/api/Users/search"
       );
-
       const data = await response.json();
       console.log("📥 Received users:", data);
 

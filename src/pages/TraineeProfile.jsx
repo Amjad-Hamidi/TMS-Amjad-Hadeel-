@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const TraineeProfile = () => {
   const [trainee, setTrainee] = useState(null);
@@ -11,14 +12,7 @@ const TraineeProfile = () => {
       setError("");
 
       try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) throw new Error("No access token found.");
-
-        const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/Profiles/me", {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
+        const response = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/Profiles/me");
 
         // Log status and headers
         console.log("Response status:", response.status);

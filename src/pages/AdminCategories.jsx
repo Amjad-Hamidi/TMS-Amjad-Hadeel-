@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import '../styles/Categories.css';
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const AdminCategories = () => {
   const [name, setName] = useState('');
@@ -33,12 +34,8 @@ const AdminCategories = () => {
       
       skillsArray.forEach(skill => formData.append('GeneralSkills', skill));
 
-      const response = await fetch('http://amjad-hamidi-tms.runasp.net/api/Categories', {
+      const response = await fetchWithAuth('http://amjad-hamidi-tms.runasp.net/api/Categories', {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          // لا تضف Content-Type عند إرسال FormData، المتصفح يضبطها تلقائياً
-        },
         body: formData,
       });
 

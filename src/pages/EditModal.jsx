@@ -15,6 +15,7 @@ import {
   Box,
   Stack,
 } from "@mui/material";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const feedbackTypeLabels = {
   0: "General",
@@ -31,7 +32,6 @@ export default function EditModal({ feedback, onSave, onClose }) {
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
-    const token = localStorage.getItem("accessToken");
     setLoading(true);
     try {
       const formData = new FormData();
@@ -40,14 +40,10 @@ export default function EditModal({ feedback, onSave, onClose }) {
       formData.append("Type", editedType);
       if (editedAttachment) formData.append("Attachment", editedAttachment);
 
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/receiver-user/${feedback.receiverId}/feedback/${feedback.feedbackId}`,
         {
           method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            // Do NOT set Content-Type for FormData
-          },
           body: formData,
         }
       );

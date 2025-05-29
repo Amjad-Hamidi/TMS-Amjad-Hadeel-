@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/ViewPrograms.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
+import { Button } from "@mui/material";
 
 export default function CategoryTProgramsW() {
   const navigate = useNavigate();
@@ -12,21 +14,14 @@ export default function CategoryTProgramsW() {
     console.log("📦 categoryId from URL:", categoryId);
 
     const fetchPrograms = async () => {
-    try {
-      const token = localStorage.getItem('accessToken'); // تأكد أنك خزنت التوكن بعد تسجيل الدخول
-      const response = await fetch(`http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/by-category/${categoryId}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-        console.log(response)
+      try {
+        const response = await fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/by-category/${categoryId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         const data = await response.json();
         console.log("🟢 Programs fetched:", data);
         setPrograms(data.items || []);
@@ -46,6 +41,19 @@ export default function CategoryTProgramsW() {
 
   return (
     <div className="programs-page">
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ borderRadius: 8, fontWeight: 700 }}
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = "/login";
+          }}
+        >
+          LOGOUT
+        </Button>
+      </div>
       <h1 className="category-title">Training Programs</h1>
 
       {loading ? (

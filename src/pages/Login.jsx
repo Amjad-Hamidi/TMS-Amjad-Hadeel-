@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
@@ -9,6 +9,32 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    const role = localStorage.getItem("role");
+    if (accessToken && refreshToken && role) {
+      // Redirect to dashboard based on role
+      switch (role) {
+        case "Admin":
+          navigate("/admin");
+          break;
+        case "Supervisor":
+          navigate("/supervisor");
+          break;
+        case "Trainee":
+          navigate("/trainee");
+          break;
+        case "Company":
+          navigate("/company");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
+    }
+  }, [navigate]);
 
   const handleLogin = async () => {
     if (!email || !password) {

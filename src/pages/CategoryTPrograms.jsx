@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/ViewPrograms.css";
 import ApplyModal from "./ApplyModal"; // استيراد المودال
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 export default function CategoryTPrograms() {
   const navigate = useNavigate();
@@ -13,17 +14,12 @@ export default function CategoryTPrograms() {
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-        const response = await fetch(
+        const response = await fetchWithAuth(
           `http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/by-category/${categoryId}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
           }
         );
-
         if (!response.ok) throw new Error("Network error");
         const data = await response.json();
         setPrograms(data.items || []);

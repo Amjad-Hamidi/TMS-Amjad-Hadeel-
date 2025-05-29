@@ -17,6 +17,7 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const API_BASE = "http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms";
 const LIMIT = 6;
@@ -50,15 +51,8 @@ export default function PendingTrainingPro() {
     rejected: 1,
   });
 
-  const token = localStorage.getItem("accessToken");
-
   // Fetch programs based on tab and page
   useEffect(() => {
-    if (!token) {
-      setError("Authorization token not found");
-      setLoading(false);
-      return;
-    }
     setLoading(true);
     setError(null);
     setActionError(null);
@@ -69,7 +63,7 @@ export default function PendingTrainingPro() {
       if (type === "pending") url = `${API_BASE}/all-pending?page=${pageNum}&limit=${LIMIT}`;
       else if (type === "approved") url = `${API_BASE}/all-approved?page=${pageNum}&limit=${LIMIT}`;
       else if (type === "rejected") url = `${API_BASE}/all-rejected?page=${pageNum}&limit=${LIMIT}`;
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetchWithAuth(url);
       if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
       return res.json();
     };
@@ -112,7 +106,7 @@ export default function PendingTrainingPro() {
         });
     }
     // eslint-disable-next-line
-  }, [tab, page.all, page.pending, page.approved, page.rejected, token]);
+  }, [tab, page.all, page.pending, page.approved, page.rejected]);
 
   // Approve program
   const handleApprove = async (id) => {
@@ -120,9 +114,8 @@ export default function PendingTrainingPro() {
     setActionError(null);
     setActionSuccess(null);
     try {
-      const res = await fetch(`${API_BASE}/approve/${id}`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await fetchWithAuth(`${API_BASE}/approve/${id}`, {
+        method: "PATCH"
       });
       const text = await res.text();
       if (!res.ok) throw new Error(text);
@@ -143,9 +136,8 @@ export default function PendingTrainingPro() {
     setActionError(null);
     setActionSuccess(null);
     try {
-      const res = await fetch(`${API_BASE}/reject/${id}?reason=${encodeURIComponent(reason)}`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await fetchWithAuth(`${API_BASE}/reject/${id}?reason=${encodeURIComponent(reason)}`, {
+        method: "PATCH"
       });
       const text = await res.text();
       if (!res.ok) throw new Error(text);

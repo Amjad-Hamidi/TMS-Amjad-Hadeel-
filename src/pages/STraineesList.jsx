@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "../styles/TraineesList.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 export default function TraineesList() {
   const [trainees, setTrainees] = useState([]);
@@ -10,21 +11,12 @@ export default function TraineesList() {
   useEffect(() => {
     async function fetchTrainees() {
       try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        const response = await fetch(
-          "http://amjad-hamidi-tms.runasp.net/api/Users/trainees-supervisor",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
+        const response = await fetchWithAuth(
+          "http://amjad-hamidi-tms.runasp.net/api/Users/trainees-supervisor"
         );
-
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
-
         const data = await response.json();
         setTrainees(data.items);
       } catch (err) {

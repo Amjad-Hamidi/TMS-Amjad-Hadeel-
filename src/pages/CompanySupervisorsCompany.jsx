@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardMedia,
@@ -14,18 +13,17 @@ import {
   Chip,
   Pagination,
   Fade,
+  Button
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import "../styles/CompanySupervisors.css";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const LIMIT = 8;
 
-const CompanySupervisors = () => {
+const CompanySupervisorsCompany = () => {
   const [supervisors, setSupervisors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [viewType, setViewType] = useState("all"); // 'all' or 'company'
   const [search, setSearch] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [meta, setMeta] = useState({
@@ -39,15 +37,12 @@ const CompanySupervisors = () => {
   const fetchSupervisors = async (page = 1, limit = LIMIT, search = "") => {
     setLoading(true);
     setError(null);
-    let url =
-      viewType === "all"
-        ? `http://amjad-hamidi-tms.runasp.net/api/Users/all-supervisors?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`
-        : `http://amjad-hamidi-tms.runasp.net/api/Users/supervisors-company?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
+    let url = `http://amjad-hamidi-tms.runasp.net/api/Users/supervisors-company?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
     try {
       const res = await fetchWithAuth(url, {
         headers: { Accept: "*/*" },
       });
-      if (!res.ok) throw new Error("Failed to fetch supervisors");
+      if (!res.ok) throw new Error("Failed to fetch company supervisors");
       const data = await res.json();
       setSupervisors(Array.isArray(data) ? data : data.items || []);
       setMeta({
@@ -57,7 +52,7 @@ const CompanySupervisors = () => {
         totalPages: data.totalPages,
       });
     } catch (err) {
-      setError("Failed to load supervisors.");
+      setError("Failed to load company supervisors.");
     } finally {
       setLoading(false);
     }
@@ -66,7 +61,7 @@ const CompanySupervisors = () => {
   useEffect(() => {
     fetchSupervisors(meta.page, meta.limit, search);
     // eslint-disable-next-line
-  }, [viewType, meta.page, meta.limit]);
+  }, [meta.page, meta.limit]);
 
   useEffect(() => {
     if (searchTimeout) clearTimeout(searchTimeout);
@@ -82,8 +77,8 @@ const CompanySupervisors = () => {
     setMeta((prev) => ({ ...prev, page: value }));
   };
 
-  const handleViewCompanySupervisors = () => {
-    navigate("/company-supervisors");
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -91,28 +86,15 @@ const CompanySupervisors = () => {
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}>
         <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 3 }}>
           <Typography variant="h4" sx={{ fontWeight: 700, color: "#1e3c72" }}>
-            {viewType === "all" ? "All Supervisors" : "Company Supervisors"}
+            Company Supervisors
           </Typography>
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant={viewType === "all" ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => setViewType("all")}
-            >
-              All Supervisors
-            </Button>
-            <Button
-              variant={viewType === "company" ? "contained" : "outlined"}
-              color="secondary"
-              onClick={() => setViewType("company")}
-            >
-              Company Supervisors
-            </Button>
-          </Stack>
+          <Button variant="outlined" color="primary" onClick={handleBack}>
+            Back
+          </Button>
         </Stack>
         <TextField
           variant="outlined"
-          placeholder="Search supervisors…"
+          placeholder="Search company supervisors…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           sx={{ minWidth: 260, background: "#f5f7fa", borderRadius: 2, mb: 2 }}
@@ -131,10 +113,10 @@ const CompanySupervisors = () => {
         ) : (
           <Grid container spacing={4}>
             {supervisors.length === 0 ? (
-              <Grid item xs={12}><Typography>No supervisors found.</Typography></Grid>
+              <Grid item xs={12}><Typography>No company supervisors found.</Typography></Grid>
             ) : (
               supervisors.map((sup, idx) => (
-                <Fade in={!loading} timeout={600 + idx * 120} key={sup.id || sup.supervisorId}>
+                <Fade in={!loading} timeout={600 + idx * 120} key={sup.supervisorId}>
                   <Grid item xs={12} sm={6} md={4} lg={3}>
                     <Card
                       elevation={4}
@@ -164,7 +146,7 @@ const CompanySupervisors = () => {
                           {sup.fullName}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          <strong>ID:</strong> {sup.id || sup.supervisorId}
+                          <strong>ID:</strong> {sup.supervisorId}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           <strong>Email:</strong> {sup.email}
@@ -187,6 +169,23 @@ const CompanySupervisors = () => {
                           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                             No resume available
                           </Typography>
+                        )}
+                        {sup.programs && sup.programs.length > 0 && (
+                          <Box sx={{ mt: 2 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                              Programs:
+                            </Typography>
+                            {sup.programs.map((prog) => (
+                              <Box key={prog.programId} sx={{ mb: 1, pl: 1 }}>
+                                <Typography variant="body2" color="text.secondary">
+                                  <strong>{prog.title}</strong> ({new Date(prog.startDate).toLocaleDateString()} - {new Date(prog.endDate).toLocaleDateString()})
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  {prog.description}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Box>
                         )}
                       </CardContent>
                     </Card>
@@ -211,4 +210,4 @@ const CompanySupervisors = () => {
   );
 };
 
-export default CompanySupervisors;
+export default CompanySupervisorsCompany; 

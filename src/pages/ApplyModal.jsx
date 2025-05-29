@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import "../styles/ApplyModal.css";
 import Swal from "sweetalert2";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 export default function ApplyModal({ program, onClose, onApplySuccess }) {
   const [cvFile, setCvFile] = useState(null);
@@ -50,13 +51,10 @@ export default function ApplyModal({ program, onClose, onApplySuccess }) {
     console.log("API Endpoint:", "http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll");
 
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll`,
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
           body: formData,
         }
       );

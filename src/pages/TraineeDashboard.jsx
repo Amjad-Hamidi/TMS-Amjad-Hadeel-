@@ -16,6 +16,7 @@ import {
   Fade,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const TraineeDashboard = () => {
   const navigate = useNavigate();
@@ -35,10 +36,9 @@ const TraineeDashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("accessToken");
       const url = `http://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
-      const res = await fetch(url, {
-        headers: { Accept: "*/*", Authorization: `Bearer ${token}` },
+      const res = await fetchWithAuth(url, {
+        headers: { Accept: "*/*" },
       });
       if (!res.ok) throw new Error("Failed to fetch categories");
       const data = await res.json();

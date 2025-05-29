@@ -1,6 +1,7 @@
 // src/pages/TraineeApplications.jsx
 import React, { useState, useEffect } from "react";
 import "../styles/TraineeApplications.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const statusMap = {
   0: "Pending",
@@ -20,15 +21,7 @@ export default function TraineeApplications() {
       setError("");
 
       try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) throw new Error("No access token found.");
-
-        const res = await fetch("http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
+        const res = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments");
         const text = await res.text();
         const data = JSON.parse(text);
 
@@ -43,7 +36,7 @@ export default function TraineeApplications() {
           submitted: "—", // If your API supports it later, replace here.
           status: statusMap[app.status] || "Pending",
           response: app.status === 1
-            ? "You’ve been accepted! See you soon 🎉"
+            ? "You've been accepted! See you soon 🎉"
             : app.status === 2
             ? "Unfortunately, your application was rejected."
             : "Application under review.",

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/AddTrainingProgram.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 function AddTrainingProgram() {
   const [formData, setFormData] = useState({
@@ -58,11 +59,8 @@ function AddTrainingProgram() {
     }
 
     try {
-      const res = await fetch("http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms", {
+      const res = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
         body: data,
       });
 

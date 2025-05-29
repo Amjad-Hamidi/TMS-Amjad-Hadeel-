@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/SupervisorPrograms.css";
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 export default function SupervisorPrograms() {
   const [programs, setPrograms] = useState([]);
@@ -9,18 +10,10 @@ export default function SupervisorPrograms() {
   useEffect(() => {
     async function fetchPrograms() {
       try {
-        const accessToken = localStorage.getItem("accessToken"); // or get it from context/store
-
-        const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-supervised", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
+        const response = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-supervised");
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
-
         const data = await response.json();
         setPrograms(data.items);
       } catch (err) {
