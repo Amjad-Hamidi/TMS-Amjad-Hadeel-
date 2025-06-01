@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -44,7 +42,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import CategoryTProgramsW from "./pages/CategoryTProgramsW";
 import Guest from "./pages/Guest";
 import ForgetPassword from "./pages/ForgetPassword";
-
+import EditProfile from "./pages/EditProfile";
 
 import TMyFeedbacks from "./pages/TMyFeedbacks";
 
@@ -98,9 +96,7 @@ function App() {
 
 </Route>
 
-
-
-
+<Route path="/profile/edit" element={<EditProfile />} />
 
 
 

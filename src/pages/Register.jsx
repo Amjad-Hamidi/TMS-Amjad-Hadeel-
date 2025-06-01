@@ -1,12 +1,34 @@
-
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Register.css';
+import {
+  Box,
+  Grid,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Avatar,
+  IconButton,
+  InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+  useTheme,
+  useMediaQuery,
+  Alert,
+  Snackbar
+} from '@mui/material';
+import { Visibility, VisibilityOff, Google } from '@mui/icons-material';
+import logo from '../images/TMS Logo.png'; // Place the provided image as logo.png in src/
+
+const illustrationUrl = logo; // Use the same image for illustration
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -24,6 +46,9 @@ const RegisterForm = () => {
 
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,8 +86,10 @@ const RegisterForm = () => {
       const result = await response.json();
 
       if (response.ok) {
-        setSuccessMessage('✅ Registered successfully!');
+        setSuccessMessage('Registered Successfully, please confirm your email on Gmail');
+        setShowSnackbar(true);
         setErrors({});
+        setTimeout(() => navigate('/login'), 3000);
       } else {
         if (result.errors) {
           const fieldErrors = {};
@@ -75,109 +102,172 @@ const RegisterForm = () => {
         }
       }
     } catch (error) {
-      console.error('Error:', error);
       setErrors({ general: 'Something went wrong. Please try again.' });
     }
   };
 
+  const handleGoogleLogin = () => {
+    // Placeholder for Google login logic
+    alert('Google login not implemented.');
+  };
+
   return (
-    <div className="register-container">
-      <form className="register-form" onSubmit={handleSubmit}>
-        <h2>Register</h2>
-
+    <Grid container sx={{ minHeight: '100vh', background: theme.palette.background.default, transition: 'background 0.3s' }}>
+      {/* Illustration/Logo Side */}
+      <Grid item xs={12} md={6} sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: `linear-gradient(135deg, ${theme.palette.primary.light} 60%, ${theme.palette.secondary.light} 100%)`,
+        borderRadius: isMobile ? 0 : '0 40px 40px 0',
+        p: 4,
+      }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <img src={illustrationUrl} alt="TMS Logo" style={{ width: isMobile ? 120 : 200, borderRadius: '30%', marginBottom: 24, boxShadow: theme.shadows[4] }} />
+          <Typography variant={isMobile ? 'h5' : 'h3'} fontWeight={700} color="primary" sx={{ mb: 2 }}>
+            Welcome to TMS
+          </Typography>
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 350, mx: 'auto' }}>
+            Register to join our professional training management system.
+          </Typography>
+        </Box>
+      </Grid>
+      {/* Form Side */}
+      <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
+        <Paper elevation={isMobile ? 0 : 6} sx={{ width: '100%', maxWidth: 520, p: { xs: 2, md: 6 }, borderRadius: 4, boxShadow: isMobile ? 'none' : undefined, mx: 'auto' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Avatar src={logo} alt="TMS Logo" sx={{ width: 48, height: 48, mr: 1 }} />
+            <Typography variant="h4" fontWeight={700} color="primary">Register</Typography>
+          </Box>
         {errors.general && (
-          <div className="error-box">
-            <p>{errors.general}</p>
-          </div>
-        )}
-
-        <div className="form-group">
-          <label>First Name</label>
-          <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required />
-          {errors.firstname && <small className="error-text">{errors.firstname}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Last Name</label>
-          <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} required />
-          {errors.lastname && <small className="error-text">{errors.lastname}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Username</label>
-          <input type="text" name="userName" value={formData.userName} onChange={handleInputChange} required />
-          {errors.username && <small className="error-text">{errors.username}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Phone</label>
-          <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required />
-          {errors.phone && <small className="error-text">{errors.phone}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Email</label>
-          <input type="email" name="email" value={formData.email} onChange={handleInputChange} required />
-          {errors.email && <small className="error-text">{errors.email}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Password</label>
-          <input type="password" name="password" value={formData.password} onChange={handleInputChange} required />
-          {errors.password && <small className="error-text">{errors.password}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Confirm Password</label>
-          <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} required />
-          {errors.confirmpassword && <small className="error-text">{errors.confirmpassword}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Gender</label>
-          <select name="gender" value={formData.gender} onChange={handleInputChange} required>
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          {errors.gender && <small className="error-text">{errors.gender}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Birth Date</label>
-          <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} required />
-          {errors.birthdate && <small className="error-text">{errors.birthdate}</small>}
-        </div>
-
-        <div className="form-group">
-          <label>Profile Image</label>
-          <input type="file" accept="image/*" onChange={handleFileChange} />
-        </div>
-
-        <div className="form-group">
-          <label>Role</label>
-          <select name="role" value={formData.role} onChange={handleInputChange} required>
-            <option value="">Select Role</option>
-            <option value="Trainee">Trainee</option>
-            <option value="Trainer">Trainer</option>
-            <option value="Company">Company</option>
-          </select>
-          {errors.role && <small className="error-text">{errors.role}</small>}
-        </div>
-
-        <button type="submit" className="submit-btn">Register</button>
-
-        {successMessage && (
-          <div className="success-box" style={{ marginTop: '15px' }}>
-            <p>{successMessage}</p>
-          </div>
-        )}
+            <Alert severity="error" sx={{ mb: 2 }}>{errors.general}</Alert>
+          )}
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField label="First Name" name="firstName" value={formData.firstName} onChange={handleInputChange} fullWidth required error={!!errors.firstname} helperText={errors.firstname} autoComplete="given-name" />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Last Name" name="lastName" value={formData.lastName} onChange={handleInputChange} fullWidth required error={!!errors.lastname} helperText={errors.lastname} autoComplete="family-name" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField label="Username" name="userName" value={formData.userName} onChange={handleInputChange} fullWidth required error={!!errors.username} helperText={errors.username} autoComplete="username" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField label="Phone" name="phone" value={formData.phone} onChange={handleInputChange} fullWidth required error={!!errors.phone} helperText={errors.phone} autoComplete="tel" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField label="Email" name="email" value={formData.email} onChange={handleInputChange} fullWidth required error={!!errors.email} helperText={errors.email} autoComplete="email" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField label="Password" name="password" type={showPassword ? 'text' : 'password'} value={formData.password} onChange={handleInputChange} fullWidth required error={!!errors.password} helperText={errors.password} autoComplete="new-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword((show) => !show)} edge="end" aria-label="toggle password visibility">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField label="Confirm Password" name="confirmPassword" type={showConfirmPassword ? 'text' : 'password'} value={formData.confirmPassword} onChange={handleInputChange} fullWidth required error={!!errors.confirmpassword} helperText={errors.confirmpassword} autoComplete="new-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowConfirmPassword((show) => !show)} edge="end" aria-label="toggle confirm password visibility">
+                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required error={!!errors.gender} sx={{ minWidth: 180 }}>
+                  <InputLabel>Gender</InputLabel>
+                  <Select name="gender" value={formData.gender} label="Gender" onChange={handleInputChange}>
+                    <MenuItem value="">Select Gender</MenuItem>
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                  </Select>
+                  {errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Birth Date" name="birthDate" type="date" value={formData.birthDate} onChange={handleInputChange} fullWidth required error={!!errors.birthdate} helperText={errors.birthdate} InputLabelProps={{ shrink: true }} />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth sx={{ minWidth: 180 }} required error={!!errors.role}>
+                  <InputLabel>Role</InputLabel>
+                  <Select name="role" value={formData.role} label="Role" onChange={handleInputChange}>
+                    <MenuItem value="">Select Role</MenuItem>
+                    <MenuItem value="Trainee">Trainee</MenuItem>
+                    <MenuItem value="Supervisor">Supervisor</MenuItem>
+                    <MenuItem value="Company">Company</MenuItem>
+                  </Select>
+                  {errors.role && <FormHelperText>{errors.role}</FormHelperText>}
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel shrink>Profile Image</InputLabel>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1, justifyContent: 'center', p: 1, border: '1px solid #e0e0e0', borderRadius: 2, backgroundColor:'#fafafa', minHeight: '56px' }}>
+                    <Button variant="outlined" component="label" sx={{ textTransform: 'none', borderRadius: 2 }}>
+                      Upload Profile Image
+                      <input type="file" accept="image/*" hidden onChange={handleFileChange} />
+                    </Button>
+                    <Box sx={{ flex: 1, ml: 2 }}>
+                      {formData.profileImageFile ? (
+                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                          {formData.profileImageFile.name}
+                        </Typography>
+                      ) : (
+                        <Typography variant="body2" color="text.disabled" sx={{ fontStyle: 'italic' }}>
+                          No file selected
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button type="submit" variant="contained" color="primary" fullWidth size="large" sx={{ mt: 1, mb: 1, borderRadius: 2, fontWeight: 600 }}>
+                  Register
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="outlined" color="inherit" fullWidth startIcon={<Google />} sx={{ textTransform: 'none', borderRadius: 2, mt: 2 }} onClick={handleGoogleLogin}>
+                  Sign up with Google
+                </Button>
+              </Grid>
+              <Grid item xs={12} sx={{ textAlign: 'center', mt: 0}}>
+                <Typography variant="body2">
+                  Already have an account?{' '}
+                  <Button variant="text" size="small" onClick={() => navigate('/login')} sx={{ textTransform: 'none', fontWeight: 600 }}>
+                    Login
+                  </Button>
+                </Typography>
+              </Grid>       
+            </Grid>
       </form>
-    </div>
+        </Paper>
+        {/* Success Snackbar */}
+        <Snackbar
+          open={showSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          autoHideDuration={3000}
+          onClose={() => setShowSnackbar(false)}
+        >
+          <Alert severity="success" sx={{ width: '100%' }}>
+            Registered Successfully, please confirm your email on Gmail
+          </Alert>
+        </Snackbar>
+      </Grid>
+    </Grid>
   );
 };
 
 export default RegisterForm;
-
-
-
