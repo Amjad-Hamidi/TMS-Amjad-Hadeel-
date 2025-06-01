@@ -34,7 +34,6 @@ export default function Login() {
     const refreshToken = localStorage.getItem("refreshToken");
     const role = localStorage.getItem("role");
     if (accessToken && refreshToken && role) {
-      // Redirect to dashboard based on role
       switch (role) {
         case "Admin":
           navigate("/admin");
@@ -77,19 +76,15 @@ export default function Login() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        const apiErrorMessage = errorData.message;
-        setErrorMessage(apiErrorMessage);
+        setErrorMessage(errorData.message);
         return;
       }
 
       const data = await response.json();
-
-      // حفظ التوكنات والـ role
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       localStorage.setItem("role", data.role);
 
-      // توجيه حسب الدور
       switch (data.role) {
         case "Admin":
           navigate("/admin");
@@ -104,7 +99,7 @@ export default function Login() {
           navigate("/company");
           break;
         default:
-          navigate("/dashboard"); // fallback
+          navigate("/dashboard");
           break;
       }
     } catch (error) {
@@ -112,7 +107,7 @@ export default function Login() {
     }
   };
 
-    const handleKeyDown = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleLogin();
     }
@@ -139,6 +134,7 @@ export default function Login() {
           </Typography>
         </Box>
       </Grid>
+
       {/* Form Side */}
       <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
         <Paper elevation={isMobile ? 0 : 6} sx={{ width: '100%', maxWidth: 420, p: { xs: 2, md: 6 }, borderRadius: 4, boxShadow: isMobile ? 'none' : undefined, mx: 'auto' }}>
@@ -146,7 +142,9 @@ export default function Login() {
             <Avatar src={logo} alt="TMS Logo" sx={{ width: 48, height: 48, mr: 1 }} />
             <Typography variant="h4" fontWeight={700} color="primary">Sign in</Typography>
           </Box>
+
           {errorMessage && <Alert severity="error" sx={{ mb: 2 }}>{errorMessage}</Alert>}
+
           <TextField
             type="email"
             label="Email address"
@@ -157,6 +155,7 @@ export default function Login() {
             margin="normal"
             autoComplete="email"
           />
+
           <TextField
             type={showPassword ? 'text' : 'password'}
             label="Password"
@@ -176,6 +175,7 @@ export default function Login() {
               ),
             }}
           />
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', flexBasis: '66.66%' }}>
               <input
@@ -193,10 +193,15 @@ export default function Login() {
               Forgot password?
             </Button>
           </Box>
+
           <Button onClick={handleLogin} variant="contained" color="primary" fullWidth size="large" sx={{ mt: 3, mb: 1, borderRadius: 2, fontWeight: 600 }}>
             Sign in
           </Button>
-          <Button variant="outlined" color="inherit" fullWidth startIcon={<Google />} sx={{ textTransform: 'none', borderRadius: 2, mb: 2 }} onClick={() => alert('Google login not implemented.')}>Sign in with Google</Button>
+
+          <Button variant="outlined" color="inherit" fullWidth startIcon={<Google />} sx={{ textTransform: 'none', borderRadius: 2, mb: 2 }} onClick={() => alert('Google login not implemented.')}>
+            Sign in with Google
+          </Button>
+
           <Typography variant="body2" sx={{ textAlign: 'center', mt: 1 }}>
             Don't have an account?{' '}
             <Button variant="text" size="small" onClick={() => navigate('/register')} sx={{ textTransform: 'none', fontWeight: 600 }}>

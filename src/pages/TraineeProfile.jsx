@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   Card,
-  CardContent,
-  Typography,
-  Avatar,
   Grid,
+  Avatar,
+  Typography,
   CircularProgress,
   Alert,
   Box,
@@ -12,7 +11,6 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { fetchWithAuth } from '../utils/fetchWithAuth';
 import EditIcon from '@mui/icons-material/Edit';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -20,8 +18,8 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import WcIcon from '@mui/icons-material/Wc';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const TraineeProfile = () => {
   const [trainee, setTrainee] = useState(null);
@@ -67,11 +65,13 @@ const TraineeProfile = () => {
       </Box>
     );
   }
+
   if (error) {
     return (
       <Alert severity="error" sx={{ mt: 4 }}>{error}</Alert>
     );
   }
+
   return (
     <Box sx={{ maxWidth: 700, mx: 'auto', mt: 6, position: 'relative', p: 2 }}>
       <Card sx={{ borderRadius: 4, boxShadow: 3, p: 3, position: 'relative' }}>
@@ -111,14 +111,14 @@ const TraineeProfile = () => {
               <InsertDriveFileIcon sx={{ mr: 1, color: 'primary.main' }} />
               <Typography variant="body1">
                 <strong>CV:</strong>{' '}
-              {trainee.cvPath ? (
+                {trainee.cvPath ? (
                   <Link href={trainee.cvPath} target="_blank" rel="noopener" underline="hover">
-                  Download CV
-                </Link>
-              ) : (
+                    Download CV
+                  </Link>
+                ) : (
                   'No CV uploaded'
-              )}
-            </Typography>
+                )}
+              </Typography>
             </Box>
           </Grid>
         </Grid>
@@ -133,6 +133,7 @@ const TraineeProfile = () => {
             Edit Profile
           </Button>
         </Grid>
+
         {/* Change Email/Password Section */}
         <Box sx={{ mt: 6 }}>
           <Grid container spacing={3}>
@@ -152,7 +153,7 @@ const TraineeProfile = () => {
             </Grid>
           </Grid>
         </Box>
-    </Card>
+      </Card>
     </Box>
   );
 };
@@ -191,13 +192,16 @@ function ChangeEmailForm({ onSuccess }) {
       setLoading(false);
     }
   };
+
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400 }}>
       {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 1 }}>{success}</Alert>}
       <TextField label="New Email" type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} fullWidth required sx={{ mb: 2 }} />
       <TextField label="Confirm Email" type="email" value={confirmEmail} onChange={e => setConfirmEmail(e.target.value)} fullWidth required sx={{ mb: 2 }} />
-      <Button type="submit" variant="contained" color="primary" disabled={loading} fullWidth>Change Email</Button>
+      <Button type="submit" variant="contained" color="primary" disabled={loading} fullWidth>
+        Change Email
+      </Button>
     </Box>
   );
 }
@@ -237,6 +241,7 @@ function ChangePasswordForm({ onSuccess }) {
       setLoading(false);
     }
   };
+
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400 }}>
       {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
@@ -244,7 +249,9 @@ function ChangePasswordForm({ onSuccess }) {
       <TextField label="Old Password" type="password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} fullWidth required sx={{ mb: 2 }} />
       <TextField label="New Password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} fullWidth required sx={{ mb: 2 }} />
       <TextField label="Confirm Password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} fullWidth required sx={{ mb: 2 }} />
-      <Button type="submit" variant="contained" color="primary" disabled={loading} fullWidth>Change Password</Button>
+      <Button type="submit" variant="contained" color="primary" disabled={loading} fullWidth>
+        Change Password
+      </Button>
     </Box>
   );
 }

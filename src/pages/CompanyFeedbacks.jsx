@@ -70,9 +70,37 @@ export default function CompanyFeedbacks() {
     });
   };
 
+  const handleDeleteClick = async (feedbackId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the feedback.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/Feedbacks/${feedbackId}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) {
+          throw new Error(await response.text());
+        }
+
+        // Remove from UI
+        setCompanyFeedbacks((prev) => prev.filter((f) => f.feedbackId !== feedbackId));
+        Swal.fire("Deleted!", "The feedback has been deleted.", "success");
+      } catch (error) {
+        Swal.fire("Error", error.message || "Failed to delete feedback.", "error");
+      }
+    }
+  };
+
   const handleEditSave = async (updatedItem) => {
     try {
-      // Assume the save function returns a promise and throws on error
       setCompanyFeedbacks((prev) =>
         prev.map((f) => (f.feedbackId === updatedItem.feedbackId ? updatedItem : f))
       );
@@ -131,10 +159,18 @@ export default function CompanyFeedbacks() {
                     <Button
                       variant="outlined"
                       color="primary"
-                      sx={{ borderRadius: 2, fontWeight: 700, ml: 2 }}
+                      sx={{ borderRadius: 2, fontWeight: 700 }}
                       onClick={() => handleEditClick(f)}
                     >
                       Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      sx={{ borderRadius: 2, fontWeight: 700, ml: 1 }}
+                      onClick={() => handleDeleteClick(f.feedbackId)}
+                    >
+                      Delete
                     </Button>
                   </Stack>
                   <Typography variant="body1" sx={{ fontSize: 18, mb: 1, color: "#333" }}>

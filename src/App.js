@@ -43,7 +43,6 @@ import CategoryTProgramsW from "./pages/CategoryTProgramsW";
 import Guest from "./pages/Guest";
 import ForgetPassword from "./pages/ForgetPassword";
 import EditProfile from "./pages/EditProfile";
-
 import TMyFeedbacks from "./pages/TMyFeedbacks";
 
 import "./styles/Dashboard.css";
@@ -52,7 +51,7 @@ function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<Guest  />} />
+        <Route path="/" element={<Guest />} />
 
         {/* Trainee Layout with nested routes */}
         <Route path="/trainee" element={<TraineeLayout />}>
@@ -64,63 +63,50 @@ function App() {
           <Route path="TraineeFeedback" element={<TraineeFeedback />} />
           <Route path="TMyFeedbacks" element={<TMyFeedbacks />} />
         </Route>
+
         <Route path="CategoryTPrograms" element={<CategoryTPrograms />} />
 
         {/* Company */}
         <Route path="/company" element={<CompanyLayout />}>
-<Route index element={<CompanyDashboard />} />
-<Route path="CompanyProfile" element={<CompanyProfile />} />
-<Route path="CompanySupervisors" element={<CompanySupervisors />} />
-<Route path="TraineesList" element={<TraineesList />} />
-<Route path="AddTrainingProgram" element={<AddTrainingProgram />} />
-<Route path="CompanyApplications" element={<CompanyApplications />} />
-<Route path="CompanyTrainingPrograms" element={<CompanyTrainingPrograms />} />
-<Route path="CompanyFeedback" element={<CompanyFeedback />} />
-<Route path="CompanyFeedbacks" element={<CompanyFeedbacks />} />
+          <Route index element={<CompanyDashboard />} />
+          <Route path="CompanyProfile" element={<CompanyProfile />} />
+          <Route path="CompanySupervisors" element={<CompanySupervisors />} />
+          <Route path="TraineesList" element={<TraineesList />} />
+          <Route path="AddTrainingProgram" element={<AddTrainingProgram />} />
+          <Route path="CompanyApplications" element={<CompanyApplications />} />
+          <Route path="CompanyTrainingPrograms" element={<CompanyTrainingPrograms />} />
+          <Route path="CompanyFeedback" element={<CompanyFeedback />} />
+          <Route path="CompanyFeedbacks" element={<CompanyFeedbacks />} />
+        </Route>
 
-</Route>
-<Route path="/CategoryTProgramsW/:categoryId" element={<CategoryTProgramsW />} />
-<Route path="/CategoryTPrograms/:categoryId" element={<CategoryTPrograms />} />
-
+        <Route path="/CategoryTProgramsW/:categoryId" element={<CategoryTProgramsW />} />
+        <Route path="/CategoryTPrograms/:categoryId" element={<CategoryTPrograms />} />
 
         {/* Supervisor */}
-       
+        <Route path="/supervisor" element={<SupervisorLayout />}>
+          <Route index element={<SupervisorDashboard />} />
+          <Route path="SupervisorProfile" element={<SupervisorProfile />} />
+          <Route path="SupervisorPrograms" element={<SupervisorPrograms />} />
+          <Route path="STraineesList" element={<STraineesList />} />
+          <Route path="SupervisorFeedback" element={<SupervisorFeedback />} />
+          <Route path="SupervisorFeedbacks" element={<SupervisorFeedbacks />} />
+        </Route>
 
-<Route path="/supervisor" element={<SupervisorLayout />}>
-<Route index element={<SupervisorDashboard />} />
-<Route path="SupervisorProfile" element={<SupervisorProfile />} />
-<Route path="SupervisorPrograms" element={<SupervisorPrograms />} />
-<Route path="STraineesList" element={<STraineesList />} />
-<Route path="SupervisorFeedback" element={<SupervisorFeedback />} />
-<Route path="SupervisorFeedbacks" element={<SupervisorFeedbacks />} />
+        {/* Profile Edit */}
+        <Route path="/profile/edit" element={<EditProfile />} />
 
-</Route>
-
-<Route path="/profile/edit" element={<EditProfile />} />
-
-
-
-
-
-
-
-
-        {/* Admin*/}
-
-<Route path="/admin" element={<AdminLayout />}>
-<Route index element={<AdminDashboard />} />
-<Route path="users" element={<UserManagement />} />
-<Route path="categories" element={<AdminCategories />} />
-<Route path="pendingTrainingPro" element={<PendingTrainingPro />} />
-</Route>
-
-
+        {/* Admin */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="categories" element={<AdminCategories />} />
+          <Route path="pendingTrainingPro" element={<PendingTrainingPro />} />
+        </Route>
 
         {/* Auth */}
         <Route path="/Login" element={<Login />} />
-        <Route path="/Register" element={<Register />} /> 
+        <Route path="/Register" element={<Register />} />
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
-
       </Routes>
     </Router>
   );
