@@ -21,6 +21,8 @@
   padding: 20px;
   transition: margin-left 0.3s ease, width 0.3s ease;
   width: calc(100% - 250px);
+  box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+  overflow-y: auto; /* Ensure content scrolls if it overflows vertically */
 }
 
 .trainee-layout.collapsed .main-content {
