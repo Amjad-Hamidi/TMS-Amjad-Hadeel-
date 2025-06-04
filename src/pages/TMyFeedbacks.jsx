@@ -1,5 +1,5 @@
 // TMyFeedbacks.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import EditModal from "./EditModal";
 import Swal from "sweetalert2";
 import {
@@ -14,7 +14,11 @@ import {
   Pagination,
   Avatar,
   Fade,
+  TextField,
 } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
+import debounce from 'lodash/debounce';
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const feedbackTypeLabels = {
@@ -26,6 +30,40 @@ const feedbackTypeLabels = {
 
 const LIMIT = 6;
 
+const StyledCard = styled(Card)(({ theme }) => ({
+  transition: theme.transitions.create(['transform', 'box-shadow'], {
+    duration: theme.transitions.duration.short,
+  }),
+  '&:hover': {
+    transform: 'scale(1.02)',
+    boxShadow: theme.shadows[8],
+  },
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%', 
+  // background: "linear-gradient(120deg, #fff 80%, #e3f2fd 100%)", // Retain or remove based on consistency decision
+  // boxShadow: "0 8px 32px 0 #00000011" // Retain or remove
+}));
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  width: theme.spacing(10),
+  height: theme.spacing(10),
+  border: `2px solid ${theme.palette.grey[300]}`,
+  transition: theme.transitions.create(['transform', 'box-shadow'], {
+    duration: theme.transitions.duration.short,
+  }),
+  '&:hover': {
+    transform: 'scale(1.12)',
+    boxShadow: theme.shadows[6],
+  },
+  '& .MuiAvatar-img': {
+    objectFit: 'cover',
+    width: '100%',
+    height: '100%',
+    borderRadius: '50%'
+  }
+}));
+
 export default function TMyFeedbacks() {
   const [myFeedbacks, setMyFeedbacks] = useState([]);
   const [editItem, setEditItem] = useState(null);
@@ -33,12 +71,21 @@ export default function TMyFeedbacks() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  const fetchMyFeedbacks = async (pageNum = 1) => {
+  const fetchMyFeedbacks = useCallback(async (pageNum = 1, currentSearchTerm = '') => {
     setLoading(true);
     try {
+      const params = new URLSearchParams({
+        page: pageNum,
+        limit: LIMIT,
+      });
+      if (currentSearchTerm) {
+        params.append('search', currentSearchTerm);
+      }
       const response = await fetchWithAuth(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/sent?page=${pageNum}&limit=${LIMIT}`
+        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/sent?${params.toString()}`
       );
       if (!response.ok) {
         const errorText = await response.text();
@@ -55,12 +102,26 @@ export default function TMyFeedbacks() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  const debouncedFetch = useCallback(
+    debounce((newSearchTerm) => {
+      setDebouncedSearchTerm(newSearchTerm);
+      setPage(1); // Reset to first page on new search
+    }, 500),
+    []
+  );
 
   useEffect(() => {
-    fetchMyFeedbacks(page);
-    // eslint-disable-next-line
-  }, [page]);
+    debouncedFetch(searchTerm);
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [searchTerm, debouncedFetch]);
+
+  useEffect(() => {
+    fetchMyFeedbacks(page, debouncedSearchTerm);
+  }, [page, debouncedSearchTerm, fetchMyFeedbacks]);
 
   const handleEditClick = (f) => {
     setEditItem({
@@ -117,6 +178,21 @@ export default function TMyFeedbacks() {
       <Typography variant="h3" sx={{ fontWeight: 700, mb: 3, color: "#1e3c72", letterSpacing: 1, textAlign: "center" }}>
         My Sent Feedback
       </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+        <TextField
+          label="Search My Feedbacks"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <SearchIcon sx={{ mr: 1, color: 'action.active' }} />
+            ),
+          }}
+          sx={{ width: '100%', maxWidth: '500px'}}
+        />
+      </Box>
       <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2, justifyContent: "center" }}>
         <Chip label={`Total: ${totalCount}`} color="primary" />
         <Chip label={`Page: ${page} / ${totalPages}`} color="secondary" />
@@ -124,20 +200,22 @@ export default function TMyFeedbacks() {
       </Stack>
       {loading ? (
         <Stack alignItems="center" sx={{ my: 6 }}>
-          <CircularProgress size={44} color="primary" />
+          <CircularProgress size={60} color="primary" />
         </Stack>
       ) : myFeedbacks.length === 0 ? (
         <Typography align="center" color="text.secondary" sx={{ mt: 6, fontSize: 22 }}>
-          You haven't sent any feedback yet.
+          {debouncedSearchTerm ? `No feedbacks found for "${debouncedSearchTerm}".` : "You haven't sent any feedback yet."}
         </Typography>
       ) : (
         <Stack spacing={3} sx={{ mb: 4 }}>
           {myFeedbacks.map((f, idx) => (
             <Fade in timeout={400 + idx * 80} key={f.feedbackId}>
-              <Card elevation={5} sx={{ borderRadius: 4, background: "linear-gradient(120deg, #fff 80%, #e3f2fd 100%)", boxShadow: "0 8px 32px 0 #00000011" }}>
+              <StyledCard elevation={5} sx={{ borderRadius: 4 /* Consider if this conflicts with StyledCard's own styling */ }}>
                 <CardContent>
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 1 }}>
-                    <Avatar src={f.toImageUrl} alt={f.toFullName} sx={{ width: 48, height: 48, border: "2px solid #1976d2" }} />
+                    <StyledAvatar src={f.toImageUrl || undefined} alt={f.toFullName || 'Recipient Avatar'}>
+                      {f.toFullName ? f.toFullName.charAt(0).toUpperCase() : 'R'}
+                    </StyledAvatar>
                     <Typography variant="h6" sx={{ fontWeight: 700, flex: 1 }}>
                       To: {f.toFullName}
                     </Typography>
@@ -186,7 +264,7 @@ export default function TMyFeedbacks() {
                     </Button>
                   )}
                 </CardContent>
-              </Card>
+              </StyledCard>
             </Fade>
           ))}
         </Stack>

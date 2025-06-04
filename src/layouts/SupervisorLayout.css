@@ -9,3 +9,25 @@
 .supervisor-layout.collapsed .sidebar-header h2 {
   font-size: 16px;
 }
+
+/* Main Content Area */
+.supervisor-layout .main-content {
+  flex-grow: 1;
+  /* background-color: #f9f9f9; /* Assuming a default background */
+  padding: 20px;
+  overflow-y: auto;
+  transition: margin-left 0.3s, width 0.3s;
+  box-sizing: border-box;
+}
+
+/* Default state (sidebar open for supervisor-layout, unless explicitly collapsed) */
+/* Assuming open width is 220px and closed is 60px */
+.supervisor-layout:not(.collapsed) .main-content {
+  margin-left: 220px; /* Default open state */
+  width: calc(100% - 220px);
+}
+
+.supervisor-layout.collapsed .main-content {
+  margin-left: 60px;
+  width: calc(100% - 60px);
+}

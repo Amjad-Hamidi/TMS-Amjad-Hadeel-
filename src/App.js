@@ -19,6 +19,11 @@ import TraineePrograms from "./pages/TraineePrograms";
 import ApplyModal from "./pages/ApplyModal";
 import TraineeProfile from "./pages/TraineeProfile";
 import CompanyApplications from './pages/CompanyApplications';
+
+import CompanyProfiles from "./pages/CompanyProfiles";
+import TraineeProfiles from "./pages/TraineeProfiles";
+import SupervisorProfiles from "./pages/SupervisorProfiles";
+
 import SupervisorPrograms from './pages/SupervisorPrograms';
 import CompanyTrainingPrograms from './pages/CompanyTrainingPrograms';
 import Login from "./pages/Login";
@@ -73,8 +78,11 @@ function App() {
           <Route path="CompanySupervisors" element={<CompanySupervisors />} />
           <Route path="TraineesList" element={<TraineesList />} />
           <Route path="AddTrainingProgram" element={<AddTrainingProgram />} />
-          <Route path="CompanyApplications" element={<CompanyApplications />} />
           <Route path="CompanyTrainingPrograms" element={<CompanyTrainingPrograms />} />
+          <Route path="CompanyApplications" element={<CompanyApplications />} />
+          <Route path="CompanyProfiles" element={<CompanyProfiles />} />
+          <Route path="SupervisorProfiles" element={<SupervisorProfiles />} />
+          <Route path="TraineeProfiles" element={<TraineeProfiles />} />
           <Route path="CompanyFeedback" element={<CompanyFeedback />} />
           <Route path="CompanyFeedbacks" element={<CompanyFeedbacks />} />
         </Route>

@@ -121,15 +121,16 @@
   flex-shrink: 0; /* حتى لا ينضغط */
 }
 
-.main-content {
-  margin-left: 60px; /* نفس عرض الـ sidebar المصغر */
-  padding: 20px;
-  background-color: #f9f9f9;
-  overflow-y: auto;
-  flex-grow: 1;
-  transition: margin-left 0.3s;
+.company-layout .sidebar.collapsed ~ .main-content {
+  /* This rule might be redundant if .main-content.collapsed is reliably applied */
+  /* Keeping it for now as a fallback or if the JS class toggle is on main-content itself */
+  margin-left: 60px;
+  width: calc(100% - 60px);
 }
 
-.sidebar-open + .main-content {
-  margin-left: 220px; /* نفس عرض الـ sidebar الموسع */
+/* Sidebar open state */
+.company-layout.sidebar-open .main-content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
 }
+

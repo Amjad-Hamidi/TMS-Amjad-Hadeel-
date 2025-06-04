@@ -73,9 +73,9 @@ const CompanyLayout = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/company/TraineeSupervisor">
+            <NavLink to="/company/CompanyProfiles">
               <i className="fas fa-user-tie"></i>
-              {isSidebarOpen && <span>Trainee&Supervisors</span>}
+              {isSidebarOpen && <span>All Profiles</span>}
             </NavLink>
           </li>
           <li>

@@ -79,6 +79,20 @@
   background-color: #f9f9f9;
   padding: 20px;
   overflow-y: auto;
+  transition: margin-left 0.3s, width 0.3s;
+  box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+/* Default state (sidebar closed) */
+.admin-layout.sidebar-closed .main-content {
+  margin-left: 60px;
+  width: calc(100% - 60px);
+}
+
+/* Sidebar open state */
+.admin-layout.sidebar-open .main-content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
 }
 
 /* زر تسجيل الخروج */
