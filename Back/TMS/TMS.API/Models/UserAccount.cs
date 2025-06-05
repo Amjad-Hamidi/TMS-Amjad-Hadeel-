@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace TMS.API.Models
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum UserRole // اسهل وافضل للقراءة string الى OnModelCreating بتبلش من 0 لاخر عنصر, لكن انا رح احولها في int على شكل DB السلوك الافتراضي الها تتخزن في C# في 
     {
         Admin, // = 0 (in Tooltip in C#) "Admin" in DB

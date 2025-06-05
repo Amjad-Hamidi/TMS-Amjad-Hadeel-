@@ -19,7 +19,10 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
         }
 
         // just for Trainee (request to join this TP)
-        public async Task<(bool Success, string Message)> EnrollAsync(int traineeId, EnrollmentRequestDto request, HttpContext httpContext)
+        public async Task<(bool Success, string Message)> EnrollAsync(
+            int traineeId,
+            EnrollmentRequestDto request,
+            HttpContext httpContext)
         {
             var program = await _context.TrainingPrograms
                .FirstOrDefaultAsync(p => p.TrainingProgramId == request.TrainingProgramId &&
@@ -60,7 +63,11 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
         }
 
         // just for Comapny (review specific applicant requests for specific TP, not to others) and determinate approve/reject
-        public async Task<(bool Success, string Message)> ReviewApplicationAsync(int traineeId, int programId, bool accept, int companyId)
+        public async Task<(bool Success, string Message)> ReviewApplicationAsync(
+            int traineeId, 
+            int programId,
+            bool accept,
+            int companyId)
         {
             var enrollment = await _context.ProgramTrainees
                 .Include(pt => pt.TrainingProgram)
@@ -91,13 +98,34 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
         }
 
         // just for Company (get all aplicants/some applicants just to it, not to others)
-        public async Task<PagedResult<ApplicantDto>> GetAllCompanyApplicantsAsync(int companyId, EnrollmentStatus? status, int page, int limit)
+        public async Task<PagedResult<ApplicantDto>> GetAllCompanyApplicantsAsync
+            (int companyId, 
+            string? search, 
+            EnrollmentStatus? status,
+            int page, int limit)
         {   
             var query = _context.ProgramTrainees
                 .Where(pt => pt.TrainingProgram.CompanyId == companyId)
                 .Include(pt => pt.Trainee).ThenInclude(t => t.ApplicationUser)
                 .Include(pt => pt.TrainingProgram)
+                .AsNoTracking()
                 .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+                query = query.Where(pt =>
+                    // match by trainee’s full name or supervisor name or email or program title or program id
+                    (pt.Trainee.ApplicationUser.FirstName + " " + pt.Trainee.ApplicationUser.LastName).ToLower().Contains(search) ||
+                    (pt.TrainingProgram.Supervisor.ApplicationUser.FirstName + " " + pt.TrainingProgram.Supervisor.ApplicationUser.LastName).ToLower().Contains(search) ||
+                    pt.Trainee.ApplicationUser.Email.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Title.ToLower().Contains(search) ||
+                    pt.TrainingProgram.TrainingProgramId.ToString().Contains(search) ||
+                    pt.TrainingProgram.Description.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Category.Name.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Location.ToLower().Contains(search)
+                    );
+            }
 
             if (status.HasValue) // not null
             {
@@ -129,7 +157,12 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
         }
 
         // just for Company (get all aplicants for a specific TP just to it, not to others)
-        public async Task<(bool Exists, bool BelongsToCompany, PagedResult<ApplicantDto>?)> GetProgramApplicantsAsync(int programId, int companyId, EnrollmentStatus? status, int page, int limit)
+        public async Task<(bool Exists, bool BelongsToCompany, PagedResult<ApplicantDto>?)> GetProgramApplicantsAsync(
+            int programId,
+            string? search,
+            int companyId, 
+            EnrollmentStatus? status, 
+            int page, int limit)
         {
             var program = await _context.TrainingPrograms
                 .FirstOrDefaultAsync(p => p.TrainingProgramId == programId);
@@ -143,7 +176,24 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
             var query = _context.ProgramTrainees
               .Where(pt => pt.TrainingProgramId == programId)
               .Include(pt => pt.Trainee).ThenInclude(t => t.ApplicationUser)
+              .AsNoTracking()
               .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+                query = query.Where(pt =>
+                    // match by trainee’s full name or supervisor name or email or program title or program id
+                    (pt.Trainee.ApplicationUser.FirstName + " " + pt.Trainee.ApplicationUser.LastName).ToLower().Contains(search) ||
+                    (pt.TrainingProgram.Supervisor.ApplicationUser.FirstName + " " + pt.TrainingProgram.Supervisor.ApplicationUser.LastName).ToLower().Contains(search) ||
+                    pt.Trainee.ApplicationUser.Email.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Title.ToLower().Contains(search) ||
+                    pt.TrainingProgram.TrainingProgramId.ToString().Contains(search) ||
+                    pt.TrainingProgram.Description.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Category.Name.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Location.ToLower().Contains(search)
+                    );
+            }
 
             if (status.HasValue) // not null
             {
@@ -185,6 +235,7 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
         // just for Trainee (get all applicants that he submitted to all companies), (Pending/Accepted/Rejected)
         public async Task<PagedResult<TraineeEnrollmentDto>> GetTraineeEnrollmentsAsync(
             int traineeId,
+            string? search,
             EnrollmentStatus? status = null,
             int page = 1,
             int limit = 10)
@@ -192,7 +243,24 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
             var query = _context.ProgramTrainees
                    .Where(pt => pt.TraineeId == traineeId)
                    .Include(pt => pt.TrainingProgram).ThenInclude(tp => tp.Category)
+                   .AsNoTracking()
                    .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+                query = query.Where(pt =>
+                    // match by trainee’s full name or supervisor name or email or program title or program id
+                    (pt.Trainee.ApplicationUser.FirstName + " " + pt.Trainee.ApplicationUser.LastName).ToLower().Contains(search) ||
+                    (pt.TrainingProgram.Supervisor.ApplicationUser.FirstName + " " + pt.TrainingProgram.Supervisor.ApplicationUser.LastName).ToLower().Contains(search) ||
+                    pt.Trainee.ApplicationUser.Email.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Title.ToLower().Contains(search) ||
+                    pt.TrainingProgram.TrainingProgramId.ToString().Contains(search) ||
+                    pt.TrainingProgram.Description.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Category.Name.ToLower().Contains(search) ||
+                    pt.TrainingProgram.Location.ToLower().Contains(search)
+                    );
+            }
 
             if (status.HasValue)
                 query = query.Where(pt => pt.Status == status.Value);
@@ -207,9 +275,15 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
                 {
                     TrainingProgramId = pt.TrainingProgramId,
                     Title = pt.TrainingProgram.Title,
+                    ImagePath = pt.TrainingProgram.ImagePath,
+                    Description = pt.TrainingProgram.Description,
                     CategoryName = pt.TrainingProgram.Category.Name,
                     StartDate = pt.TrainingProgram.StartDate,
                     EndDate = pt.TrainingProgram.EndDate,
+                    Location = pt.TrainingProgram.Location,
+                    ContentUrl = pt.TrainingProgram.ContentUrl,
+                    ClassroomUrl = pt.TrainingProgram.ClassroomUrl,
+                    SupervisorName = $"{pt.TrainingProgram.Supervisor.ApplicationUser.FirstName} {pt.TrainingProgram.Supervisor.ApplicationUser.LastName}",
                     Status = pt.Status
                 })
                 .ToListAsync();

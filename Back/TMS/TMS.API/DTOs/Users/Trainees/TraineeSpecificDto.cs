@@ -1,6 +1,6 @@
 ﻿namespace TMS.API.DTOs.Users.Trainees
 {
-    public class TraineeDto
+    public class TraineeSpecificDto
     {
         public int Id { get; set; }
         public string FullName { get; set; }

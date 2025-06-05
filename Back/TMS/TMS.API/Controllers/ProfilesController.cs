@@ -23,6 +23,72 @@ namespace TMS.API.Controllers
             this.profileService = profileService;
         }
 
+
+
+        [HttpGet("all-profiles")]
+        [Authorize(Roles = $"{StaticData.Company}, {StaticData.Supervisor}, {StaticData.Trainee}")]
+        public async Task<IActionResult> GetAllProfiles(
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10,
+            [FromQuery] string? search = null)
+        {
+            var userIdClaim = User.FindFirst("UserAccountId");
+            if (userIdClaim is null || !int.TryParse(userIdClaim.Value, out var userId))
+                return Unauthorized("Invalid or missing UserAccountId.");
+
+            var result = await profileService.GetAllAsync(userId, page, limit, search);
+            return Ok(result);
+        }
+
+
+        [HttpGet("company-profiles")]
+        [Authorize(Roles = $"{StaticData.Company}, {StaticData.Supervisor}, {StaticData.Trainee}")]
+        public async Task<IActionResult> GetCompanyProfiles(
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 10,
+        [FromQuery] string? search = null)
+        {
+            var userIdClaim = User.FindFirst("UserAccountId");
+            if (userIdClaim is null || !int.TryParse(userIdClaim.Value, out var userId))
+                return Unauthorized("Invalid or missing UserAccountId.");
+
+            var result = await profileService.GetCompaniesAsync(userId, page, limit, search);
+            return Ok(result);
+        }
+
+
+        [HttpGet("supervisor-profiles")]
+        [Authorize(Roles = $"{StaticData.Company}, {StaticData.Supervisor}, {StaticData.Trainee}")]
+        public async Task<IActionResult> GetSupervisorProfiles(
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 10,
+        [FromQuery] string? search = null)
+        {
+            var userIdClaim = User.FindFirst("UserAccountId");
+            if (userIdClaim is null || !int.TryParse(userIdClaim.Value, out var userId))
+                return Unauthorized("Invalid or missing UserAccountId.");
+
+            var result = await profileService.GetSupervisorsAsync(userId, page, limit, search);
+            return Ok(result);
+        }
+
+
+        [HttpGet("trainee-profiles")]
+        [Authorize(Roles = $"{StaticData.Company}, {StaticData.Supervisor}, {StaticData.Trainee}")]
+        public async Task<IActionResult> GetTraineeProfiles(
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 10,
+        [FromQuery] string? search = null)
+        {
+            var userIdClaim = User.FindFirst("UserAccountId");
+            if (userIdClaim is null || !int.TryParse(userIdClaim.Value, out var userId))
+                return Unauthorized("Invalid or missing UserAccountId.");
+
+            var result = await profileService.GetTraineesAsync(userId, page, limit, search);
+            return Ok(result);
+        }
+
+
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> GetMyProfile()
@@ -34,8 +100,20 @@ namespace TMS.API.Controllers
                 ? NotFound("User not found.")
                 : Ok(profile);
         }
+        
+        [HttpGet("form-edit-profile")]
+        [Authorize]
+        public async Task<IActionResult> GetFormEditProfile()
+        {
+            var userId = int.Parse(User.FindFirst(CustomClaimNames.UserAccountId)!.Value);
+            var profile = await profileService.GetEditMyProfileAsync(userId);
 
-        [HttpGet("{userId}")]
+            return profile == null
+                ? NotFound("User not found.")
+                : Ok(profile);
+        }
+
+        [HttpGet("{userId:int}")]
         [Authorize]
         public async Task<IActionResult> GetProfileById(int userId)
         {
@@ -107,7 +185,6 @@ namespace TMS.API.Controllers
 
             return File(stream, contentType, fileName);
         }
-
 
 
 

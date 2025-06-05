@@ -6,6 +6,7 @@ using System.Data;
 using TMS.API.ConstantClaims;
 using TMS.API.DTOs.Pages;
 using TMS.API.DTOs.Users;
+using TMS.API.DTOs.Users.Trainees;
 using TMS.API.Helpers;
 using TMS.API.Models;
 using TMS.API.Models.AuthenticationModels;
@@ -41,7 +42,7 @@ namespace TMS.API.Controllers
         // عرض جميع اليوزرز
         [HttpGet("search")]
         [Authorize(Roles = $"{StaticData.Admin}")]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers(
+        public async Task<ActionResult<IReadOnlyList<ApplicationUser>>> GetAllUsers(
             [FromQuery] string? search,
             UserRole? role,
             [FromQuery] int page = 1, 
@@ -58,6 +59,16 @@ namespace TMS.API.Controllers
                 Limit = result.Limit
             });
         }
+
+        [HttpGet("statistics")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
+        public async Task<ActionResult<IReadOnlyList<ApplicationUser>>> GetStatistics()
+        {
+            var result = await userService.GetStatisticsAboutUsers();
+            return Ok(result);      
+        }
+
+
 
         // UserAccountId احضار اليوزر بناء على ال
         [HttpGet("{id}")]
@@ -76,7 +87,7 @@ namespace TMS.API.Controllers
         }
 
         
-        [HttpGet("supervisors")]
+        [HttpGet("all-supervisors")]
         [Authorize(Roles = $"{StaticData.Admin}, {StaticData.Company}")]
         public async Task<IActionResult> GetAllSupervisors(
             [FromQuery] string? search,
@@ -90,7 +101,73 @@ namespace TMS.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("my-trainees")]
+
+        [HttpGet("supervisors-company")]
+        [Authorize(Roles = StaticData.Company)]
+        public async Task<IActionResult> GetSupervisorsWithProgramsByCompany(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var companyIdClaim = User.FindFirst(CustomClaimNames.UserAccountId);
+            if (companyIdClaim == null)
+                return Unauthorized("UserAccountId claim not found.");
+
+            if (!int.TryParse(companyIdClaim.Value, out int companyId))
+                return BadRequest("Invalid UserAccountId claim.");
+
+            var result = await userService.GetSupervisorsWithProgramsByCompanyAsync(companyId, search, page, limit);
+            return Ok(result);
+        }
+
+        [HttpGet("all-trainees")]
+        [Authorize(Roles = $"{StaticData.Admin}, {StaticData.Company}, {StaticData.Supervisor}")]
+        public async Task<IActionResult> GetAllTrainees(
+        [FromQuery] string? search,
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var result = await userService.GetAllTraineesAsync(search, page, limit);
+
+            return Ok(result);
+        }
+
+
+
+        [HttpGet("trainees-company")]
+        [Authorize(Roles = $"{StaticData.Company}")]
+        public async Task<IActionResult> GetTraineesByCompany(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var claim = User.FindFirst("UserAccountId");
+            if (claim == null)
+                return Unauthorized("UserAccountId claim is missing.");
+
+            int companyId = int.Parse(claim.Value);
+
+            // استدعاء السيرفس لتنفيذ الاستعلام
+            var result = await userService.GetTraineesByCompanyAsync(companyId, search, page, limit);
+
+            // إرجاع النتيجة بشكل PagedResult من النوع TraineeDto
+            return Ok(new PagedResult<TraineeSpecificDto>
+            {
+                Items = result.Items,
+                TotalCount = result.TotalCount,
+                Page = result.Page,
+                Limit = result.Limit
+            });
+        }
+
+
+        [HttpGet("trainees-supervisor")]
         [Authorize(Roles = StaticData.Supervisor)]
         public async Task<IActionResult> GetMyTrainees(
             [FromQuery] string? search,
@@ -105,6 +182,27 @@ namespace TMS.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("supervisors-trainee")]
+        [Authorize(Roles = StaticData.Trainee)]
+        public async Task<IActionResult> GetMySupervisors(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var traineeIdClaim = User.FindFirst(CustomClaimNames.UserAccountId);
+            if (traineeIdClaim == null)
+                return Unauthorized("UserAccountId claim not found.");
+
+            if (!int.TryParse(traineeIdClaim.Value, out int traineeId))
+                return BadRequest("Invalid UserAccountId claim.");
+
+            var result = await userService.GetSupervisorsForTraineeAsync(traineeId, search, page, limit);
+            return Ok(result);
+        }
+
 
 
         [HttpPost("Add-User")]

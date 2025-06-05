@@ -85,9 +85,9 @@ namespace TMS.API.Controllers
 
         [HttpPatch("receiver-user/{receiverId}/feedback/{feedbackId}")]
         [Authorize]
-        public async Task<IActionResult> EditFeedback([FromRoute] int reciverId, [FromRoute] int feedbackId, [FromForm] EditFeedbackDto dto)
+        public async Task<IActionResult> EditFeedback([FromRoute] int receiverId, [FromRoute] int feedbackId, [FromForm] EditFeedbackDto dto)
         {
-            var updated = await feedbackService.EditAsync(reciverId, feedbackId, dto, User, HttpContext);
+            var updated = await feedbackService.EditAsync(receiverId, feedbackId, dto, User, HttpContext);
             if (!updated)
                 return NotFound("Feedback not found or unauthorized.");
             return Ok("✅ Feedback updated.");

@@ -10,8 +10,8 @@ namespace TMS.API.Services.TrainingPrograms.Trainee
     {
         Task<(bool Success, string Message)> EnrollAsync(int traineeId, EnrollmentRequestDto request, HttpContext httpContext);
         Task<(bool Success, string Message)> ReviewApplicationAsync(int traineeId, int programId, bool accept, int companyId);
-        Task<PagedResult<ApplicantDto>> GetAllCompanyApplicantsAsync(int companyId, EnrollmentStatus? status, int page, int limit);
-        Task<(bool Exists, bool BelongsToCompany, PagedResult<ApplicantDto>?)> GetProgramApplicantsAsync(int programId, int companyId, EnrollmentStatus? status, int page, int limit);
-        Task<PagedResult<TraineeEnrollmentDto>> GetTraineeEnrollmentsAsync(int traineeId, EnrollmentStatus? status, int page, int limit);
+        Task<PagedResult<ApplicantDto>> GetAllCompanyApplicantsAsync(int companyId, string? search, EnrollmentStatus? status, int page, int limit);
+        Task<(bool Exists, bool BelongsToCompany, PagedResult<ApplicantDto>?)> GetProgramApplicantsAsync(int programId, string? search, int companyId, EnrollmentStatus? status, int page, int limit);
+        Task<PagedResult<TraineeEnrollmentDto>> GetTraineeEnrollmentsAsync(int traineeId, string? search, EnrollmentStatus? status, int page, int limit);
     }
 }

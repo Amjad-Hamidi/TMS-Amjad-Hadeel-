@@ -50,6 +50,7 @@ namespace TMS.API.Controllers
         [HttpGet("all-applicants")]
         [Authorize(Roles = StaticData.Company)]
         public async Task<IActionResult> GetAllApplicantsForMyCompany(
+            [FromQuery] string? search,
             [FromQuery] EnrollmentStatus? status = null,
             [FromQuery] int page = 1,
             [FromQuery] int limit = 10)
@@ -60,7 +61,7 @@ namespace TMS.API.Controllers
             if (companyIdClaim == null || !int.TryParse(companyIdClaim.Value, out int companyId))
                 return Unauthorized("Invalid company ID");
 
-            var applicants = await programEnrollmentService.GetAllCompanyApplicantsAsync(companyId, status, page, limit);
+            var applicants = await programEnrollmentService.GetAllCompanyApplicantsAsync(companyId, search, status, page, limit);
             return Ok(applicants);
         }
 
@@ -69,6 +70,7 @@ namespace TMS.API.Controllers
         [Authorize(Roles = StaticData.Company)]
         public async Task<IActionResult> GetApplicants(
             [FromRoute] int programId,
+            [FromQuery] string? search,
             [FromQuery] EnrollmentStatus? status = null,
             [FromQuery] int page = 1,
             [FromQuery] int limit = 10)
@@ -77,7 +79,7 @@ namespace TMS.API.Controllers
 
             var companyId = int.Parse(User.FindFirst("UserAccountId")!.Value);
 
-            var (exists, belongsToCompany, pagedResult) = await programEnrollmentService.GetProgramApplicantsAsync(programId, companyId, status, page, limit);
+            var (exists, belongsToCompany, pagedResult) = await programEnrollmentService.GetProgramApplicantsAsync(programId, search, companyId, status, page, limit);
 
             if (!exists)
                 return NotFound("❌ Training program not found.");
@@ -92,6 +94,7 @@ namespace TMS.API.Controllers
         [HttpGet("my-enrollments")]
         [Authorize(Roles = StaticData.Trainee)]
         public async Task<IActionResult> GetMyEnrollments(
+            [FromQuery] string? search,
             [FromQuery] EnrollmentStatus? status,
             [FromQuery] int page = 1,
             [FromQuery] int limit = 10)
@@ -100,7 +103,7 @@ namespace TMS.API.Controllers
 
             var traineeId = int.Parse(User.FindFirst("UserAccountId")!.Value);
             var pagedResult = await programEnrollmentService
-                .GetTraineeEnrollmentsAsync(traineeId, status, page, limit);
+                .GetTraineeEnrollmentsAsync(traineeId, search, status, page, limit);
 
             return Ok(pagedResult);
         }

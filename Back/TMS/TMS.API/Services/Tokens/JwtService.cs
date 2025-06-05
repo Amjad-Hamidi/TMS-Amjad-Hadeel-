@@ -43,8 +43,8 @@ namespace TMS.API.Services.Tokens
             // SignInManager استخدام 
             var signInResult = await signInManager.PasswordSignInAsync(user.UserName,
                 request.Password,
-                request.RememberMe,
-                lockoutOnFailure: false);
+                request.RememberMe,// isPersistent = RememberMe => sign-in cookie (not) persist after the browser is closed. (فما بتفيد باشي JWT لانا منستخدم ال)
+                lockoutOnFailure: true); // lock the account 5 min temporarily after 5 faliure attempts
 
             if (signInResult.IsLockedOut) // true بتكون IsNotAllowed وبنفذ false رح تكون ConfirmEmail لو عملناله بلوك وهو بالاصل مش عامل
                 throw new InvalidOperationException("Your account is locked out, please try again later.");

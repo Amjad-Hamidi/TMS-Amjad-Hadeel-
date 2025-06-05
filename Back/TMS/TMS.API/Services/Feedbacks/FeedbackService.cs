@@ -120,6 +120,8 @@ namespace TMS.API.Services.Feedbacks
 
             var dtoItems = items.Select(f => new SentFeedbackDto
             {
+                FeedbackId = f.Id,
+                ToUserAccountId = f.ToUserAccountId,
                 ToFullName = $"{f.ToUserAccount.ApplicationUser.FirstName} {f.ToUserAccount.ApplicationUser.LastName}",
                 ToImageUrl = f.ToUserAccount.ApplicationUser.ProfileImageUrl,
                 Message = f.Message,

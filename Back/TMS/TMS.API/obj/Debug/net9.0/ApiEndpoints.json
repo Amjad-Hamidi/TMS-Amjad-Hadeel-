@@ -3,7 +3,7 @@
     "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "ChangeEmail",
     "RelativePath": "api/Account/ChangeEmail",
-    "HttpMethod": "POST",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -19,7 +19,7 @@
     "ContainingType": "TMS.API.Controllers.AccountController",
     "Method": "ChangePassword",
     "RelativePath": "api/Account/ChangePassword",
-    "HttpMethod": "POST",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -82,16 +82,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.AccountController",
-    "Method": "GetProtectedData",
-    "RelativePath": "api/Account/protected-endpoint",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -413,9 +403,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "reciverId",
+        "Name": "receiverId",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "feedbackId",
@@ -441,11 +431,6 @@
         "Name": "Attachment",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
-      },
-      {
-        "Name": "receiverId",
-        "Type": "",
-        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -550,6 +535,58 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "GetAllProfiles",
+    "RelativePath": "api/Profiles/all-profiles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "GetCompanyProfiles",
+    "RelativePath": "api/Profiles/company-profiles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
     "Method": "DeleteCV",
     "RelativePath": "api/Profiles/delete-cv",
     "HttpMethod": "DELETE",
@@ -586,12 +623,74 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "GetFormEditProfile",
+    "RelativePath": "api/Profiles/form-edit-profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
     "Method": "GetMyProfile",
     "RelativePath": "api/Profiles/me",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "GetSupervisorProfiles",
+    "RelativePath": "api/Profiles/supervisor-profiles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.ProfilesController",
+    "Method": "GetTraineeProfiles",
+    "RelativePath": "api/Profiles/trainee-profiles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -1008,6 +1107,27 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
+    "Method": "GetApprovedPrograms",
+    "RelativePath": "api/TrainingPrograms/all-approved",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
     "Method": "GetPendingPrograms",
     "RelativePath": "api/TrainingPrograms/all-pending",
     "HttpMethod": "GET",
@@ -1060,6 +1180,32 @@
         "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.TrainingProgramsController",
+    "Method": "GetByCategory",
+    "RelativePath": "api/TrainingPrograms/by-category/{categoryId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1289,6 +1435,58 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetAllSupervisors",
+    "RelativePath": "api/Users/all-supervisors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetAllTrainees",
+    "RelativePath": "api/Users/all-trainees",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
     "Method": "ChangeRole",
     "RelativePath": "api/Users/ChangeRole/{userId}",
     "HttpMethod": "PATCH",
@@ -1336,32 +1534,6 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.UsersController",
-    "Method": "GetMyTrainees",
-    "RelativePath": "api/Users/my-trainees",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "search",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "page",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "limit",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TMS.API.Controllers.UsersController",
     "Method": "GetAllUsers",
     "RelativePath": "api/Users/search",
     "HttpMethod": "GET",
@@ -1391,7 +1563,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[TMS.API.Models.ApplicationUser, TMS.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IReadOnlyList\u00601[[TMS.API.Models.ApplicationUser, TMS.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1403,8 +1575,28 @@
   },
   {
     "ContainingType": "TMS.API.Controllers.UsersController",
-    "Method": "GetAllSupervisors",
-    "RelativePath": "api/Users/supervisors",
+    "Method": "GetStatistics",
+    "RelativePath": "api/Users/statistics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IReadOnlyList\u00601[[TMS.API.Models.ApplicationUser, TMS.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetSupervisorsWithProgramsByCompany",
+    "RelativePath": "api/Users/supervisors-company",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1428,24 +1620,81 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "TMS.API.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetMySupervisors",
+    "RelativePath": "api/Users/supervisors-trainee",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[TMS.API.WeatherForecast, TMS.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetTraineesByCompany",
+    "RelativePath": "api/Users/trainees-company",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TMS.API.Controllers.UsersController",
+    "Method": "GetMyTrainees",
+    "RelativePath": "api/Users/trainees-supervisor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

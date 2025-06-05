@@ -39,7 +39,7 @@ namespace TMS.API.Services.Categories
 
             return new PagedResult<CategoryResponse>
             {
-                Items = pagedItems.Adapt<IEnumerable<CategoryResponse>>(),
+                Items = pagedItems.Adapt<IReadOnlyList<CategoryResponse>>(),
                 TotalCount = totalCount,
                 Page = page,
                 Limit = limit

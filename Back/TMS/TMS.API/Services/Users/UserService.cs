@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TMS.API.Data;
+using TMS.API.DTOs.Categories.Responses;
 using TMS.API.DTOs.Pages;
+using TMS.API.DTOs.TrainingPrograms.Responses;
 using TMS.API.DTOs.Users;
+using TMS.API.DTOs.Users.Admin;
 using TMS.API.DTOs.Users.Supervisors;
 using TMS.API.DTOs.Users.Trainees;
 using TMS.API.Helpers;
@@ -87,6 +90,58 @@ namespace TMS.API.Services.Users
         }
 
 
+        public async Task<GetStatisticsDto> GetStatisticsAboutUsers()
+        {
+            // Count all users
+            var usersCount = await _context.Users.CountAsync();
+
+            // Count all companies
+            var companiesCount = await _context.UserAccounts
+                .Where(userAcc => userAcc.Role == UserRole.Company)
+                .CountAsync();
+
+            // Count all supervisors
+            var supervisorsCount = await _context.UserAccounts
+                .Where(userAcc => userAcc.Role == UserRole.Supervisor)
+                .CountAsync();
+
+            // Count all trainees
+            var traineesCount = await _context.UserAccounts
+                .Where(userAcc => userAcc.Role == UserRole.Trainee)
+                .CountAsync();
+
+            // Count all categories
+            var categoriesCount = await _context.Categories.CountAsync();
+
+            // Count all training programs
+            var totalTrainingProgramsCount = await _context.TrainingPrograms.CountAsync();
+
+            // Count training programs by status
+            var approvedTrainingProgramsCount = await _context.TrainingPrograms
+                .CountAsync(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved);
+
+            var rejectedTrainingProgramsCount = await _context.TrainingPrograms
+                .CountAsync(tp => tp.ApprovalStatus == TrainingProgramStatus.Rejected);
+
+            var pendingTrainingProgramsCount = await _context.TrainingPrograms
+                .CountAsync(tp => tp.ApprovalStatus == TrainingProgramStatus.Pending);
+
+            return new GetStatisticsDto
+            {
+                UsersCount = usersCount,
+                CompainesCount = companiesCount,
+                SupervisorsCount = supervisorsCount,
+                TraineesCount = traineesCount,
+                CategoriesCount = categoriesCount,
+                TotalTrainingProgramsCount = totalTrainingProgramsCount,
+                ApprovedTrainingProgramsCount = approvedTrainingProgramsCount,
+                RejectedTrainingProgramsCount = rejectedTrainingProgramsCount,
+                PendingTrainingProgramsCount = pendingTrainingProgramsCount
+            };
+
+        }
+
+
         public async Task<GetUsersDto> GetById(int id)
         {
             var user = await GetOneAsync(
@@ -124,6 +179,7 @@ namespace TMS.API.Services.Users
             var query = _context.UserAccounts
                 .Where(u => u.Role == UserRole.Supervisor)
                 .Include(u => u.ApplicationUser)
+                .AsNoTracking()
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -137,7 +193,7 @@ namespace TMS.API.Services.Users
             var totalCount = await query.CountAsync();
 
             var items = await query
-                .OrderBy(u => u.ApplicationUser.FirstName)
+                .OrderBy(u => u.Id) // Order By SupervisorId ascending (1,2,3....)
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .Select(u => new SupervisorDto
@@ -160,7 +216,199 @@ namespace TMS.API.Services.Users
             };
         }
 
-        public async Task<PagedResult<TraineeDto>> GetTraineesForSupervisorAsync(int supervisorId, string? search, int page, int limit)
+
+        public async Task<PagedResult<CompanySupervisorWithProgramsDto>> GetSupervisorsWithProgramsByCompanyAsync(int companyId, string? search, int page, int limit)
+        {
+            var supervisorsQuery = _context.UserAccounts
+                .Where(u => u.Role == UserRole.Supervisor &&
+                             _context.TrainingPrograms.Any(tp => tp.SupervisorId == u.Id && tp.CompanyId == companyId))
+                .Include(u => u.ApplicationUser)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var normalizedSearch = search.Trim().ToLower();
+                supervisorsQuery = supervisorsQuery.Where(s =>
+                    (s.ApplicationUser.FirstName + " " + s.ApplicationUser.LastName).ToLower().Contains(normalizedSearch) ||
+                    s.ApplicationUser.Email.ToLower().Contains(normalizedSearch));
+            }
+
+            var total = await supervisorsQuery.CountAsync();
+
+            var supervisors = await supervisorsQuery
+                .OrderBy(s => s.Id) // Order By SupervisorId ascending (1,2,3....)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            var result = new List<CompanySupervisorWithProgramsDto>();
+
+            foreach (var supervisor in supervisors)
+            {
+                var programs = await _context.TrainingPrograms
+                    .Where(tp => tp.SupervisorId == supervisor.Id && tp.CompanyId == companyId)
+                    .Select(tp => new SimpleProgramDto
+                    {
+                        ProgramId = tp.TrainingProgramId,
+                        Title = tp.Title,
+                        Description = tp.Description,
+                        StartDate = tp.StartDate,
+                        EndDate = tp.EndDate
+                    })
+                    .ToListAsync();
+
+                result.Add(new CompanySupervisorWithProgramsDto
+                {
+                    SupervisorId = supervisor.Id,
+                    FullName = $"{supervisor.ApplicationUser.FirstName} {supervisor.ApplicationUser.LastName}",
+                    Email = supervisor.ApplicationUser.Email,
+                    PhoneNumber = supervisor.ApplicationUser.PhoneNumber ?? "",
+                    ProfileImageUrl = supervisor.ApplicationUser.ProfileImageUrl,
+                    CVPath = supervisor.CVPath,
+                    Programs = programs
+                });
+            }
+
+            return new PagedResult<CompanySupervisorWithProgramsDto>
+            {
+                Items = result,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
+        }
+
+        public async Task<PagedResult<TraineeGeneralDto>> GetAllTraineesAsync(string? search, int page, int limit)
+        {
+            var query = _context.UserAccounts
+               .Where(u => u.Role == UserRole.Trainee)
+               .Include(u => u.ApplicationUser)
+               .Include(u => u.EnrolledPrograms)
+                   .ThenInclude(ep => ep.TrainingProgram)
+                       .ThenInclude(tp => tp.Category)
+               .AsNoTracking()
+               .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(u =>
+                    u.ApplicationUser.FirstName.Contains(search) ||
+                    u.ApplicationUser.LastName.Contains(search) ||
+                    u.ApplicationUser.Email.Contains(search) ||
+                    u.ApplicationUser.PhoneNumber.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var pagedUsers = await query
+                .OrderBy(u => u.Id)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            var items = pagedUsers
+                .Select(u => new TraineeGeneralDto
+                {
+                    Id = u.Id,
+                    FullName = u.ApplicationUser.FirstName + " " + u.ApplicationUser.LastName,
+                    Email = u.ApplicationUser.Email,
+                    PhoneNumber = u.ApplicationUser.PhoneNumber,
+                    ProfileImageUrl = u.ApplicationUser.ProfileImageUrl,
+                    CVPath = u.CVPath,
+
+                    TrainingPrograms = u.EnrolledPrograms   
+                        .Where(ep => ep.TrainingProgram != null)
+                        .Select(ep => new TrainingProgramSummaryDto
+                        {
+                            TrainingProgramId = ep.TrainingProgram.TrainingProgramId,
+                            Title = ep.TrainingProgram.Title
+                        })
+                        .ToList(),
+
+                    Categories = u.EnrolledPrograms
+                        .Where(ep => ep.TrainingProgram != null && ep.TrainingProgram.Category != null)
+                        .Select(ep => ep.TrainingProgram.Category)
+                        .GroupBy(cat => cat.Id)
+                        .Select(g => new CategorySummaryDto
+                        {
+                            Id = g.Key,
+                            Name = g.First().Name
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            return new PagedResult<TraineeGeneralDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                Limit = limit
+            };
+        }
+
+
+        public async Task<PagedResult<TraineeSpecificDto>> GetTraineesByCompanyAsync(int companyId, string? search, int page, int limit)
+        {
+            var query = _context.ProgramTrainees
+               .Where(pt =>
+                   pt.TrainingProgram.CompanyId == companyId &&
+                   pt.TrainingProgram.ApprovalStatus == TrainingProgramStatus.Approved)
+               .Include(pt => pt.Trainee)
+                   .ThenInclude(t => t.ApplicationUser)
+               .Include(pt => pt.TrainingProgram)
+                   .ThenInclude(tp => tp.Category)
+               .AsQueryable();
+
+            // Check how many before search
+            var countBeforeSearch = await query.CountAsync();
+            Console.WriteLine($"Before search - Total matching ProgramTrainees: {countBeforeSearch}");
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var normalizedSearch = search.Trim().ToLower();
+                query = query.Where(pt =>
+                    pt.Trainee.ApplicationUser.FirstName.ToLower().Contains(normalizedSearch) ||
+                    pt.Trainee.ApplicationUser.LastName.ToLower().Contains(normalizedSearch) ||
+                    pt.Trainee.ApplicationUser.Email.ToLower().Contains(normalizedSearch));
+            }
+
+            var totalCount = await query.CountAsync();
+            Console.WriteLine($"After search - Total matching ProgramTrainees: {totalCount}");
+
+            var items = await query
+                .OrderBy(pt => pt.TraineeId)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Select(pt => new TraineeSpecificDto
+                {
+                    Id = pt.Trainee.Id,
+                    FullName = pt.Trainee.ApplicationUser.FirstName + " " + pt.Trainee.ApplicationUser.LastName,
+                    Email = pt.Trainee.ApplicationUser.Email,
+                    PhoneNumber = pt.Trainee.ApplicationUser.PhoneNumber,
+                    ProfileImageUrl = pt.Trainee.ApplicationUser.ProfileImageUrl,
+                    CVPath = pt.CVPath,
+                    TrainingProgramId = pt.TrainingProgram.TrainingProgramId,
+                    TrainingProgramName = pt.TrainingProgram.Title,
+                    CategoryId = pt.TrainingProgram.Category.Id,
+                    CategoryName = pt.TrainingProgram.Category.Name
+                })
+                .ToListAsync();
+
+            return new PagedResult<TraineeSpecificDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                Limit = limit
+            };
+            
+        }
+
+
+
+        public async Task<PagedResult<TraineeSpecificDto>> GetTraineesForSupervisorAsync(int supervisorId, string? search, int page, int limit)
         {
             var query = _context.ProgramTrainees
                 .Where(pt => pt.TrainingProgram.SupervisorId == supervisorId)
@@ -179,10 +427,10 @@ namespace TMS.API.Services.Users
             var totalCount = await query.CountAsync();
 
             var trainees = await query
-                .OrderBy(pt => pt.TraineeId)
+                .OrderBy(pt => pt.TraineeId) 
                 .Skip((page - 1) * limit)
                 .Take(limit)
-                .Select(pt => new TraineeDto
+                .Select(pt => new TraineeSpecificDto
                 {
                     Id = pt.Trainee.Id,
                     FullName = pt.Trainee.ApplicationUser.FirstName + " " + pt.Trainee.ApplicationUser.LastName,
@@ -197,7 +445,7 @@ namespace TMS.API.Services.Users
                 })
                 .ToListAsync();
 
-            return new PagedResult<TraineeDto>
+            return new PagedResult<TraineeSpecificDto>
             {
                 Items = trainees,
                 TotalCount = totalCount,
@@ -205,6 +453,54 @@ namespace TMS.API.Services.Users
                 Limit = limit
             };
         }
+
+
+        public async Task<PagedResult<SupervisorDto>> GetSupervisorsForTraineeAsync(int traineeId, string? search, int page, int limit)
+        {
+            // Get Supervisors for approved training programs of the trainee with included ApplicationUser
+            var supervisorQuery = _context.ProgramTrainees
+                .Where(pt => pt.TraineeId == traineeId && pt.TrainingProgram.ApprovalStatus == TrainingProgramStatus.Approved)
+                .Select(pt => pt.TrainingProgram.Supervisor)
+                .Distinct()
+                .Include(s => s.ApplicationUser) // Include before any projection
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var normalizedSearch = search.Trim().ToLower();
+                supervisorQuery = supervisorQuery.Where(s =>
+                    (s.ApplicationUser.FirstName + " " + s.ApplicationUser.LastName).ToLower().Contains(normalizedSearch) ||
+                    s.ApplicationUser.Email.ToLower().Contains(normalizedSearch));
+            }
+
+            var total = await supervisorQuery.CountAsync();
+
+            var supervisors = await supervisorQuery
+                .OrderBy(s => s.Id) // Order By SupervisorId ascending (1,2,3....)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            var result = supervisors.Select(s => new SupervisorDto
+            {
+                Id = s.Id,
+                FullName = $"{s.ApplicationUser.FirstName} {s.ApplicationUser.LastName}",
+                Email = s.ApplicationUser.Email,
+                PhoneNumber = s.ApplicationUser.PhoneNumber,
+                ProfileImageUrl = s.ApplicationUser.ProfileImageUrl,
+                CVPath = s.CVPath
+            }).ToList();
+
+            return new PagedResult<SupervisorDto>
+            {
+                Items = result,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
+        }
+
+
 
 
         public async Task<IdentityResult> Add(RegisterRequestModel registerRequestModel)

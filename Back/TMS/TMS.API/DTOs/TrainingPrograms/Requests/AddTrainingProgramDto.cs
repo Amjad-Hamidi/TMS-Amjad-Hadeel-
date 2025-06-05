@@ -7,7 +7,8 @@ namespace TMS.API.DTOs.TrainingPrograms.Requests
         [MinLength(2, ErrorMessage = "Training Program name must be at least 2 characters long.")]
         [MaxLength(30, ErrorMessage = "Training Program name must not exceed 30 characters.")]
         public string Title { get; set; }
-        [MaxLength(200, ErrorMessage = "Description must not exceed 200 characters.")]
+        [MinLength(20, ErrorMessage = "Description must not less than 20 characters.")]
+        [MaxLength(250, ErrorMessage = "Description must not exceed 250 characters.")]
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -16,9 +17,9 @@ namespace TMS.API.DTOs.TrainingPrograms.Requests
         public string Location { get; set; }
         public bool Status { get; set; } // true = Active, false = Inactive
         public IFormFile ImageFile { get; set; }
-        [Range(0,50)]
+        [Range(1,50)]
         public int SeatsAvailable { get; set; }
-        [Range(0,5)]
+        [Range(1,5)]
         public decimal Rating { get; set; }
 
         [Url(ErrorMessage = "Invalid content URL.")]

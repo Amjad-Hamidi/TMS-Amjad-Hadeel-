@@ -5,6 +5,7 @@ using TMS.API.ConstantClaims;
 using TMS.API.Data;
 using TMS.API.DTOs.Pages;
 using TMS.API.DTOs.TrainingPrograms.Requests;
+using TMS.API.DTOs.TrainingPrograms.Responses;
 using TMS.API.Helpers;
 using TMS.API.Models;
 using TMS.API.Services.IService;
@@ -53,7 +54,8 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             {
                 query = query.Where(tp =>
                     tp.Title.Contains(search) ||
-                    tp.Description.Contains(search));
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
             }
 
             var total = await query.CountAsync();
@@ -66,7 +68,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             //return await trainingPrograms.ToListAsync();
             return new PagedResult<TrainingProgram>
             {
-                Items = items,
+                Items = (IReadOnlyList<TrainingProgram>)items,
                 TotalCount = total,
                 Page = page,
                 Limit = limit
@@ -86,6 +88,45 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
                 && tp.ApprovalStatus == TrainingProgramStatus.Approved);
 
             return trainingProgram;
+        }
+
+
+        // For all roles (except guest): Get all approved training programs by specific CategoryId
+        public async Task<PagedResult<TrainingProgram>> GetByCategoryAsync(int categoryId, string? search, int page, int limit)
+        {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
+            var query = tMSDbContext.TrainingPrograms
+                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved && tp.CategoryId == categoryId)
+                .Include(tp => tp.Category)
+                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser)
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser)
+                .AsNoTracking();
+
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
+
+            var total = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            return new PagedResult<TrainingProgram>
+            {
+                Items = items,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
         }
 
 
@@ -299,13 +340,26 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
         // just for Admin (Pending TP)
-        public async Task<PagedResult<TrainingProgram>> GetPendingAsync(int page, int limit)
+        public async Task<PagedResult<TrainingProgram>> GetPendingAsync(string? search, int page, int limit)
         {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
             var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Pending)
                 .Include(tp => tp.Category)
                 .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser) // CompanyName from ApplicationUser
-                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser); // SupervisorName from ApplicationUser
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser) // SupervisorName from ApplicationUser
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
 
             var total = await query.CountAsync();
 
@@ -324,13 +378,26 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
         // just for Company (Pending TP), note that TP is tailored for that Company, not to others
-        public async Task<PagedResult<TrainingProgram>> GetPendingByCompanyAsync(int companyId, int page, int limit)
+        public async Task<PagedResult<TrainingProgram>> GetPendingByCompanyAsync(int companyId, string? search, int page, int limit)
         {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
             var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Pending && tp.CompanyId == companyId)
                 .Include(tp => tp.Category)
                 .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser) // CompanyName from ApplicationUser
-                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser); // SupervisorName from ApplicationUser
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser) // SupervisorName from ApplicationUser
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
 
             var total = await query.CountAsync();
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
@@ -367,12 +434,26 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
         // just for Admin (display all rejected requests for varient Companies)
-        public async Task<PagedResult<TrainingProgram>> GetRejectedAsync(int page, int limit)
+        public async Task<PagedResult<TrainingProgram>> GetRejectedAsync(string? search, int page, int limit)
         {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
             var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Rejected)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser); // CompanyName from AoolicationUser
+                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser) // CompanyName from AoolicationUser
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
+
 
             var total = await query.CountAsync();
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
@@ -388,12 +469,24 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
         // just for Company, (this TP is for specific Company, others no)
-        public async Task<PagedResult<TrainingProgram>> GetRejectedByCompanyAsync(int companyId, int page, int limit)
+        public async Task<PagedResult<TrainingProgram>> GetRejectedByCompanyAsync(int companyId, string? search, int page, int limit)
         {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
             var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Rejected && tp.CompanyId == companyId)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Supervisor).ThenInclude(c => c.ApplicationUser); // SupervisorName from ApplicationUser
+                .Include(tp => tp.Supervisor).ThenInclude(c => c.ApplicationUser) // SupervisorName from ApplicationUser
+                .AsNoTracking(); 
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
 
             var total = await query.CountAsync();
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
@@ -405,17 +498,94 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
                 Page = page,
                 Limit = limit
             };
-
-
         }
 
-        // just for Company, (this TP is for specific Company, others no)
-        public async Task<PagedResult<TrainingProgram>> GetApprovedByCompanyAsync(int companyId, int page, int limit)
+        public async Task<PagedResult<ApprovedAdminProgramDto>> GetApprovedAsync(string? search, int page, int limit)
         {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
+            var query = tMSDbContext.TrainingPrograms
+                .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved)
+                .Include(tp => tp.Category)
+                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser)
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
+
+            var total = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            var dtoItems = items.Select(tp => new ApprovedAdminProgramDto
+            {
+                TrainingProgramId = tp.TrainingProgramId,
+                Title = tp.Title,
+                Description = tp.Description,
+                DurationInDays = tp.DurationInDays,
+                StartDate = tp.StartDate,
+                EndDate = tp.EndDate,
+                Location = tp.Location,
+                Status = tp.Status,
+                ImagePath = tp.ImagePath,
+                SeatsAvailable = tp.SeatsAvailable,
+                Rating = tp.Rating,
+                ContentUrl = tp.ContentUrl,
+                ClassroomUrl = tp.ClassroomUrl,
+                CreatedAt = tp.CreatedAt,
+
+                CategoryId = tp.CategoryId,
+                CategoryName = tp.Category?.Name ?? "N/A",
+
+                SupervisorId = (int)tp.SupervisorId!,
+                SupervisorName = $"{tp.Supervisor.ApplicationUser.FirstName} {tp.Supervisor.ApplicationUser.LastName}",
+
+                CompanyId = tp.CompanyId,
+                CompanyName = $"{tp.Company.ApplicationUser.FirstName} {tp.Company.ApplicationUser.LastName}",
+
+                ApprovalStatus = tp.ApprovalStatus
+            }).ToList();
+
+            return new PagedResult<ApprovedAdminProgramDto>
+            {
+                Items = dtoItems,
+                TotalCount = total,
+                Page = page,
+                Limit = limit
+            };
+        }
+
+
+        // just for Company, (this TP is for specific Company, others no)
+        public async Task<PagedResult<TrainingProgram>> GetApprovedByCompanyAsync(int companyId, string? search, int page, int limit)
+        {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
             var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved && tp.CompanyId == companyId)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser);
+                .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
 
             var total = await query.CountAsync();
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
@@ -430,12 +600,25 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
         // just for Supervisor, (this TP is for specific Supervisor, others no)
-        public async Task<PagedResult<TrainingProgram>> GetBySupervisorAsync(int supervisorId, int page, int limit)
+        public async Task<PagedResult<TrainingProgram>> GetBySupervisorAsync(int supervisorId, string? search, int page, int limit)
         {
+            if (page < 1) page = 1;
+            if (limit < 1) limit = 10;
+
             var query = tMSDbContext.TrainingPrograms
                 .Where(tp => tp.ApprovalStatus == TrainingProgramStatus.Approved && tp.SupervisorId == supervisorId)
                 .Include(tp => tp.Category)
-                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser);
+                .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(tp =>
+                    tp.Title.Contains(search) ||
+                    tp.Description.Contains(search) ||
+                    tp.Location.Contains(search));
+            }
 
             var total = await query.CountAsync();
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();

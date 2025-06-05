@@ -27,7 +27,7 @@ namespace TMS.API.Controllers
 
             return Ok(new PagedResult<ResponseProgramDto>
             {
-                Items = result.Items.Adapt<IEnumerable<ResponseProgramDto>>(),
+                Items = result.Items.Adapt<IReadOnlyList<ResponseProgramDto>>(),
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 Limit = result.Limit
@@ -66,6 +66,27 @@ namespace TMS.API.Controllers
 
         }
 
+
+        [HttpGet("by-category/{categoryId}")]
+        [Authorize]
+        public async Task<IActionResult> GetByCategory(
+            [FromRoute] int categoryId,
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var result = await trainingProgramService.GetByCategoryAsync(categoryId, search, page, limit);
+
+            return Ok(new PagedResult<ResponseProgramDto>
+            {
+                Items = result.Items.Adapt<IReadOnlyList<ResponseProgramDto>>(),
+                TotalCount = result.TotalCount,
+                Page = result.Page,
+                Limit = result.Limit
+            });
+        }
 
 
         [HttpPatch("{id}")]
@@ -136,15 +157,18 @@ namespace TMS.API.Controllers
 
         [HttpGet("all-pending")]
         [Authorize(Roles = StaticData.Admin)]
-        public async Task<IActionResult> GetPendingPrograms([FromQuery] int page = 1, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetPendingPrograms(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
         {
             (page, limit) = PaginationHelper.Normalize(page, limit);
 
-            var result = await trainingProgramService.GetPendingAsync(page, limit);
+            var result = await trainingProgramService.GetPendingAsync(search, page, limit);
 
             return Ok(new PagedResult<PendingProgramDto>
             {
-                Items = result.Items.Adapt<IEnumerable<PendingProgramDto>>(),
+                Items = result.Items.Adapt<IReadOnlyList<PendingProgramDto>>(),
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 Limit = result.Limit
@@ -153,7 +177,10 @@ namespace TMS.API.Controllers
 
         [HttpGet("my-pending")]
         [Authorize(Roles = StaticData.Company)]
-        public async Task<IActionResult> GetMyPendingPrograms([FromQuery] int page = 1, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetMyPendingPrograms(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
         {
             (page, limit) = PaginationHelper.Normalize(page, limit);
 
@@ -162,8 +189,20 @@ namespace TMS.API.Controllers
                 return Unauthorized("UserAccountId claim not found.");
 
             int companyId = int.Parse(companyIdClaim.Value);
-            var pendingPrograms = await trainingProgramService.GetPendingByCompanyAsync(companyId, page, limit);
-            return Ok(pendingPrograms.Adapt<IEnumerable<PendingProgramDto>>());
+            var pendingPrograms = await trainingProgramService.GetPendingByCompanyAsync(companyId, search, page, limit);
+
+            var dtoResult = new PagedResult<PendingProgramDto>
+            {
+                Items = pendingPrograms.Items.Adapt<List<PendingProgramDto>>(),
+                TotalCount = pendingPrograms.TotalCount,
+                Page = pendingPrograms.Page,
+                Limit = pendingPrograms.Limit
+            };
+
+            return Ok(dtoResult);
+
+
+            //return Ok(pendingPrograms.Adapt<IEnumerable<PagedResult<PendingProgramDto>>>());
         }
 
 
@@ -188,24 +227,31 @@ namespace TMS.API.Controllers
 
         [HttpGet("all-rejected")]
         [Authorize(Roles = $"{StaticData.Admin}")]
-        public async Task<IActionResult> GetRejectedPrograms([FromQuery] int page = 1, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetRejectedPrograms(
+            [FromQuery] string? search,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
         {
             (page, limit) = PaginationHelper.Normalize(page, limit);
 
-            var result = await trainingProgramService.GetRejectedAsync(page, limit);
+            var result = await trainingProgramService.GetRejectedAsync(search, page, limit);
 
             return Ok(new PagedResult<RejectedAdminProgramDto>
             {
-                Items = result.Items.Adapt<IEnumerable<RejectedAdminProgramDto>>(),
+                Items = result.Items.Adapt<IReadOnlyList<RejectedAdminProgramDto>>(),
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 Limit = result.Limit
             });
         }
 
+
         [HttpGet("my-rejected")]
         [Authorize(Roles = StaticData.Company)]
-        public async Task<IActionResult> GetMyRejectedPrograms([FromQuery] int page = 1, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetMyRejectedPrograms(
+            [FromQuery] string? search, 
+            [FromQuery] int page = 1, 
+            [FromQuery] int limit = 10)
         {
             (page, limit) = PaginationHelper.Normalize(page, limit);
 
@@ -216,20 +262,44 @@ namespace TMS.API.Controllers
             if (!int.TryParse(companyIdClaim.Value, out int companyId))
                 return BadRequest("Invalid UserAccountId claim.");
 
-            var result = await trainingProgramService.GetRejectedByCompanyAsync(companyId, page, limit);
+            var result = await trainingProgramService.GetRejectedByCompanyAsync(companyId, search, page, limit);
 
             return Ok(new PagedResult<RejectedCompanyProgramDto>
             {
-                Items = result.Items.Adapt<IEnumerable<RejectedCompanyProgramDto>>(),
+                Items = result.Items.Adapt<IReadOnlyList<RejectedCompanyProgramDto>>(),
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 Limit = result.Limit
             });
         }
 
+
+        [HttpGet("all-approved")]
+        [Authorize(Roles = $"{StaticData.Admin}")]
+        public async Task<IActionResult> GetApprovedPrograms(
+            [FromQuery] string? search, 
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
+        {
+            (page, limit) = PaginationHelper.Normalize(page, limit);
+
+            var result = await trainingProgramService.GetApprovedAsync(search, page, limit);
+
+            return Ok(new PagedResult<ApprovedAdminProgramDto>
+            {
+                Items = result.Items.Adapt<IReadOnlyList<ApprovedAdminProgramDto>>(),
+                TotalCount = result.TotalCount,
+                Page = result.Page,
+                Limit = result.Limit
+            });
+        }
+
+
         [HttpGet("my-approved")]
         [Authorize(Roles = StaticData.Company)]
-        public async Task<IActionResult> GetMyApprovedPrograms([FromQuery] int page = 1, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetMyApprovedPrograms([FromQuery] string? search, 
+            [FromQuery] int page = 1, 
+            [FromQuery] int limit = 10)
         {
             (page, limit) = PaginationHelper.Normalize(page, limit);
 
@@ -238,11 +308,11 @@ namespace TMS.API.Controllers
                 return Unauthorized("UserAccountId claim not found.");
 
             int companyId = int.Parse(companyIdClaim.Value);
-            var result = await trainingProgramService.GetApprovedByCompanyAsync(companyId, page, limit);
+            var result = await trainingProgramService.GetApprovedByCompanyAsync(companyId, search, page, limit);
 
             return Ok(new PagedResult<ApprovedProgramDto>
             {
-                Items = result.Items.Adapt<IEnumerable<ApprovedProgramDto>>(),
+                Items = result.Items.Adapt<IReadOnlyList<ApprovedProgramDto>>(),
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 Limit = result.Limit
@@ -251,7 +321,10 @@ namespace TMS.API.Controllers
 
         [HttpGet("my-supervised")]
         [Authorize(Roles = StaticData.Supervisor)]
-        public async Task<IActionResult> GetMySupervisedPrograms([FromQuery] int page = 1, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetMySupervisedPrograms(
+            [FromQuery] string? search, 
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
         {
             (page, limit) = PaginationHelper.Normalize(page, limit); // Separation of Concerns (SoC) & Single of Responsibility (SoR)
 
@@ -260,11 +333,11 @@ namespace TMS.API.Controllers
                 return Unauthorized("UserAccountId claim not found.");
 
             int supervisorId = int.Parse(supervisorIdClaim.Value);
-            var result = await trainingProgramService.GetBySupervisorAsync(supervisorId, page, limit);
+            var result = await trainingProgramService.GetBySupervisorAsync(supervisorId, search, page, limit);
 
             return Ok(new PagedResult<SupervisedProgramDto>
             {
-                Items = result.Items.Adapt<IEnumerable<SupervisedProgramDto>>(),
+                Items = result.Items.Adapt<IReadOnlyList<SupervisedProgramDto>>(),
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 Limit = result.Limit
