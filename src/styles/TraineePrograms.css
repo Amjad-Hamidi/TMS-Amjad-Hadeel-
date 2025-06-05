@@ -1,0 +1,110 @@
+/* src/styles/TraineePrograms.css */
+
+/* ───────────────────────────────────────────────────────────────────────────────
+   1. Container + Heading
+   ───────────────────────────────────────────────────────────────────────────── */
+   .tp-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  /* العنوان الرئيسي */
+  .tp-container > .MuiTypography-root {
+    margin-bottom: 16px;
+  }
+  
+  /* ───────────────────────────────────────────────────────────────────────────────
+     2. Search Field + Chips
+     ───────────────────────────────────────────────────────────────────────────── */
+  .MuiTextField-root {
+    margin-bottom: 24px !important;
+  }
+  
+  /* أزرار الـ Chip للإحصائيات */
+  .MuiChip-root {
+    font-weight: 500;
+  }
+  
+  /* ───────────────────────────────────────────────────────────────────────────────
+     3. Cards Grid
+     ───────────────────────────────────────────────────────────────────────────── */
+  .tp-cards-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  
+  /* أسلوب عام للبطاقات */
+  .MuiCard-root {
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .MuiCard-root:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* صورة البطاقة: تأكيد أنها تغطي العرض كاملاً بدون قص */
+  .MuiCardMedia-root {
+    object-fit: cover;
+  }
+  
+  /* محتوى البطاقة */
+  .MuiCardContent-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* العنوان */
+  .MuiCardContent-root .MuiTypography-h6 {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  /* وصف البرنامج */
+  .MuiCardContent-root .MuiTypography-body2 {
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  
+  /* روابط Content و Classroom */
+  .MuiButton-root {
+    text-transform: none;
+  }
+  
+  /* زر Content */
+  .MuiButton-containedPrimary {
+    background-color: #1976d2;
+  }
+  
+  .MuiButton-containedPrimary:hover {
+    background-color: #1565c0;
+  }
+  
+  /* زر Classroom */
+  .MuiButton-outlinedPrimary {
+    border-color: #1976d2;
+    color: #1976d2;
+  }
+  
+  .MuiButton-outlinedPrimary:hover {
+    background-color: rgba(25, 118, 210, 0.08);
+    border-color: #1565c0;
+    color: #1565c0;
+  }
+  
+  /* ───────────────────────────────────────────────────────────────────────────────
+     4. Tooltip on Icons (لا تحتاج أسلوب إضافي، MUI يتولّى ذلك)
+     ───────────────────────────────────────────────────────────────────────────── */
+  
+  /* ───────────────────────────────────────────────────────────────────────────────
+     5. Pagination Custom (إن أردت تخصيصًا إضافيًا)
+     ───────────────────────────────────────────────────────────────────────────── */
+  /* حدد تنسيق Pagination إذا لزم */
+  
