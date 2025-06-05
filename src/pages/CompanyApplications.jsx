@@ -271,19 +271,19 @@ const CompanyApplications = () => {
                     <Fade in={true} timeout={600 + idx * 100}>
                       <Chip
                         label={
-                          app.status === 0 ? "Pending" :
-                          app.status === 1 ? "Accepted" :
-                          app.status === 2 ? "Rejected" : ""
+                          app.status === "pending" ? "Pending" :
+                          app.status === "accepted" ? "Accepted" :
+                          app.status === "rejected" ? "Rejected" : app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : "Unknown"
                         }
                         icon={
-                          app.status === 1 ? <CheckCircle sx={{ fontSize: 20, color: 'success.main' }} /> :
-                          app.status === 2 ? <Cancel sx={{ fontSize: 20, color: 'error.main' }} /> :
-                          <HourglassEmpty sx={{ fontSize: 20, color: 'warning.main' }} />
+                          app.status === "accepted" ? <CheckCircle sx={{ fontSize: 20, color: 'success.main' }} /> :
+                          app.status === "rejected" ? <Cancel sx={{ fontSize: 20, color: 'error.main' }} /> :
+                          app.status === "pending" ? <HourglassEmpty sx={{ fontSize: 20, color: 'warning.main' }} /> : null
                         }
                         color={
-                          app.status === 1 ? "success" :
-                          app.status === 2 ? "error" :
-                          app.status === 0 ? "warning" : "default"
+                          app.status === "accepted" ? "success" :
+                          app.status === "rejected" ? "error" :
+                          app.status === "pending" ? "warning" : "default"
                         }
                         sx={{ fontSize: 18, height: 40, minWidth: 120, fontWeight: 700, letterSpacing: 1, ml: 2, transition: 'all 0.3s' }}
                       />

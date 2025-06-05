@@ -24,7 +24,7 @@ const CompanyLayout = () => {
     <div className={`company-layout ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
       <nav className="sidebar">
         <div className="sidebar-header">
-          <h2><i className="fas fa-building"></i> {isSidebarOpen && "Company"}</h2>
+          <h2><i className="fas fa-building"></i> <span>{isSidebarOpen ? "Company" : "Comp"}</span></h2>
           <button className="toggle-btn" onClick={toggleSidebar} aria-label="Toggle sidebar">
             <MenuIcon />
           </button>
@@ -33,13 +33,13 @@ const CompanyLayout = () => {
           <li>
             <NavLink to="/company" end>
               <i className="fas fa-home"></i>
-              {isSidebarOpen && <span>Dashboard</span>}
+              {isSidebarOpen && <span>My Dashboard</span>}
             </NavLink>
           </li>
           <li>
             <NavLink to="/company/CompanyProfile">
               <i className="fas fa-user-tie"></i>
-              {isSidebarOpen && <span>Profile</span>}
+              {isSidebarOpen && <span>My Profile</span>}
             </NavLink>
           </li>
           <li>
@@ -63,13 +63,13 @@ const CompanyLayout = () => {
           <li>
             <NavLink to="/company/CompanyTrainingPrograms">
               <i className="fas fa-chalkboard-teacher"></i>
-              {isSidebarOpen && <span>Programs</span>}
+              {isSidebarOpen && <span>My Programs</span>}
             </NavLink>
           </li>
           <li>
             <NavLink to="/company/CompanyApplications">
               <i className="fas fa-file-alt"></i>
-              {isSidebarOpen && <span>Applications</span>}
+              {isSidebarOpen && <span>My Applications</span>}
             </NavLink>
           </li>
           <li>
@@ -81,13 +81,13 @@ const CompanyLayout = () => {
           <li>
             <NavLink to="/company/CompanyFeedback">
               <i className="fas fa-comments"></i>
-              {isSidebarOpen && <span>Feedback</span>}
+              {isSidebarOpen && <span>Received Feedbacks</span>}
             </NavLink>
           </li>
           <li>
             <NavLink to="/company/CompanyFeedbacks">
               <i className="fas fa-comments"></i>
-              {isSidebarOpen && <span>our Feedback</span>}
+              {isSidebarOpen && <span>Sent Feedbacks</span>}
             </NavLink>
           </li>
         </ul>

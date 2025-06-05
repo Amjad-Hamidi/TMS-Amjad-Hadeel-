@@ -22,7 +22,8 @@ import {
   Select,
   FormHelperText,
   Paper,
-  Pagination
+  Pagination,
+  Chip
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -455,61 +456,87 @@ const SupervisorFeedback = () => {
               </Typography>
             </Paper>
           ) : (
-            <Grid container spacing={3} sx={{ mt: 2 }}>
-              {feedbacks.map((fb) => (
-                <Grid item xs={12} sm={6} md={6} key={fb.id || `${fb.fromUserAccountId}-${fb.createdAt}-${fb.message?.substring(0,10)}`}>
-                  <StyledCard elevation={2}>
-                    <CardHeader
-                      avatar={
-                        <Tooltip title={fb.fromFullName || 'Anonymous User'} placement="top">
-                          <StyledAvatar src={fb.fromImageUrl || undefined} alt={fb.fromFullName || 'User Avatar'}>
-                            {fb.fromFullName ? fb.fromFullName.charAt(0).toUpperCase() : 'A'}
-                          </StyledAvatar>
-                        </Tooltip>
-                      }
-                      title={
-                        <Typography variant="h6" component="div" sx={{ fontWeight: 'medium', color: 'primary.dark' }}>
-                          {fb.fromFullName || 'Anonymous User'}
+            <>
+              {/* Display Total, Page, Limit info if feedbacks exist */}
+              {feedbacks.length > 0 && (
+                <Box sx={{ mt: 2, mb: 2, display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                  <Chip
+                    label={`Total Feedbacks: ${totalCount}`}
+                    color="primary"
+                    variant="outlined"
+                    sx={{ fontWeight: 'medium', cursor: 'default', '&:hover': { transform: 'scale(1.03)', transition: 'transform 0.15s ease-in-out' } }}
+                  />
+                  <Chip
+                    label={`Page: ${currentPage} / ${totalPages}`}
+                    color="secondary"
+                    variant="outlined"
+                    sx={{ fontWeight: 'medium', cursor: 'default', '&:hover': { transform: 'scale(1.03)', transition: 'transform 0.15s ease-in-out' } }}
+                  />
+                  <Chip
+                    label={`Per Page: ${ITEMS_PER_PAGE}`}
+                    color="primary"
+                    variant="outlined"
+                    sx={{ fontWeight: 'medium', cursor: 'default', '&:hover': { transform: 'scale(1.03)', transition: 'transform 0.15s ease-in-out' } }}
+                  />
+                </Box>
+              )}
+              {/* Grid for displaying feedback cards */}
+              <Grid container spacing={3}>
+                {feedbacks.map((fb) => (
+                  <Grid item xs={12} sm={6} md={6} key={fb.id || `${fb.fromUserAccountId}-${fb.createdAt}-${fb.message?.substring(0,10)}`}>
+                    <StyledCard elevation={2}>
+                      <CardHeader
+                        avatar={
+                          <Tooltip title={fb.fromFullName || 'Anonymous User'} placement="top">
+                            <StyledAvatar src={fb.fromImageUrl || undefined} alt={fb.fromFullName || 'User Avatar'} sx={{ width: 56, height: 56 }}>
+                              {fb.fromFullName ? fb.fromFullName.charAt(0).toUpperCase() : 'A'}
+                            </StyledAvatar>
+                          </Tooltip>
+                        }
+                        title={
+                          <Typography variant="h6" component="div" sx={{ fontWeight: 'medium', color: 'primary.dark' }}>
+                            {fb.fromFullName || 'Anonymous User'}
+                          </Typography>
+                        }
+                        subheader={
+                          <Typography variant="body2" color="text.secondary">
+                            {formatDate(fb.createdAt)}
+                          </Typography>
+                        }
+                        sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+                      />
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium' }}>
+                          Program: <Typography component="span" color="text.secondary" sx={{ fontWeight: 'normal' }}>{fb.programName || 'N/A'}</Typography>
                         </Typography>
-                      }
-                      subheader={
-                        <Typography variant="body2" color="text.secondary">
-                          {formatDate(fb.createdAt)}
-                        </Typography>
-                      }
-                      sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium' }}>
-                        Program: <Typography component="span" color="text.secondary" sx={{ fontWeight: 'normal' }}>{fb.programName || 'N/A'}</Typography>
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <Typography variant="subtitle1" component="span" sx={{ mr: 0.5, fontWeight: 'medium' }}>Type:</Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {typeof fb.type === 'number' ? feedbackTypes[fb.type] : fb.type || "Unknown"} 
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-                        <Typography variant="subtitle1" component="span" sx={{ mr: 0.5, fontWeight: 'medium' }}>Rating:</Typography>
-                        <Rating name={`rating-${fb.id}`} value={parseFloat(fb.rating) || 0} precision={0.5} readOnly size="small" />
-                      </Box>
-                      <Paper variant="outlined" sx={{ p: 1.5, backgroundColor: (theme) => theme.palette.grey[50], borderRadius: 1, mb: 1.5, maxHeight: '100px', overflowY: 'auto' }}>
-                        <Typography variant="body1" component="div" sx={{ fontStyle: 'italic', color: 'text.primary', whiteSpace: 'pre-wrap', margin:0, wordBreak: 'break-word' }}>
-                          {fb.message}
-                        </Typography>
-                      </Paper>
-                      {fb.attachmentUrl && (
-                        <Typography variant="body2">
-                          <Link href={fb.attachmentUrl} target="_blank" rel="noopener noreferrer" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
-                            <AttachmentIcon sx={{ fontSize: '1rem', mr: 0.5 }} /> View Attachment
-                          </Link>
-                        </Typography>
-                      )}
-                    </CardContent>
-                  </StyledCard>
-                </Grid>
-              ))}
-            </Grid>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                          <Typography variant="subtitle1" component="span" sx={{ mr: 0.5, fontWeight: 'medium' }}>Type:</Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {typeof fb.type === 'number' ? feedbackTypes[fb.type] : fb.type || "Unknown"} 
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                          <Typography variant="subtitle1" component="span" sx={{ mr: 0.5, fontWeight: 'medium' }}>Rating:</Typography>
+                          <Rating name={`rating-${fb.id}`} value={parseFloat(fb.rating) || 0} precision={0.5} readOnly size="small" />
+                        </Box>
+                        <Paper variant="outlined" sx={{ p: 1.5, backgroundColor: (theme) => theme.palette.grey[50], borderRadius: 1, mb: 1.5, maxHeight: '100px', overflowY: 'auto' }}>
+                          <Typography variant="body1" component="div" sx={{ fontStyle: 'italic', color: 'text.primary', whiteSpace: 'pre-wrap', margin:0, wordBreak: 'break-word' }}>
+                            {fb.message}
+                          </Typography>
+                        </Paper>
+                        {fb.attachmentUrl && (
+                          <Typography variant="body2">
+                            <Link href={fb.attachmentUrl} target="_blank" rel="noopener noreferrer" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
+                              <AttachmentIcon sx={{ fontSize: '1rem', mr: 0.5 }} /> View Attachment
+                            </Link>
+                          </Typography>
+                        )}
+                      </CardContent>
+                    </StyledCard>
+                  </Grid>
+                ))}
+              </Grid>
+            </>
           )}
 
           {totalPages > 0 && (
