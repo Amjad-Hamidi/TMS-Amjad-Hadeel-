@@ -1,0 +1,252 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px; /* تكبير حجم الخط العام */
+  background-color: #f5f5f5;
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background-color: #5e3b76;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  font-size: 22px; /* تكبير الخط في القائمة */
+}
+
+.sidebar h2 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-top: 18px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 22px; /* تكبير النص داخل القائمة */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover {
+  background: #7d5ba6;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 3rem; /* تكبير عنوان الصفحة */
+  color: #5e3b76;
+  font-weight: bold;
+}
+
+.overview {
+  display: flex;
+  gap: 20px;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.box {
+  padding: 25px;
+  text-align: center;
+  border-radius: 12px;
+  flex: 1;
+  color: white;
+  transition: 0.3s;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.box h2 {
+  font-size: 36px; /* تكبير الأرقام */
+  font-weight: bold;
+}
+
+.box p {
+  font-size: 22px; /* تكبير النصوص */
+}
+
+.box:hover {
+  transform: translateY(-5px);
+}
+
+.purple-light {
+  background: #a98ac7;
+}
+
+.purple-medium {
+  background: #7d5ba6;
+}
+
+.purple-dark {
+  background: #5e3b76;
+}
+
+button.btn {
+  background-color: #4b2f5c;
+  color: white;
+  border: none;
+  padding: 16px 26px; /* تكبير حجم الأزرار */
+  font-size: 20px; /* تكبير خط الأزرار */
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 12px;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+button.btn:hover {
+  background-color: #7d5ba6;
+}
+
+.additional-sections {
+  margin-top: 40px;
+}
+
+.section h2 {
+  color: #5e3b76;
+  font-size: 26px; /* تكبير العناوين */
+  font-weight: bold;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.action-btn {
+  background-color: #7d5ba6;
+  color: white;
+  border: none;
+  padding: 18px 32px; /* تكبير حجم الأزرار */
+  font-size: 22px; /* تكبير خط الأزرار */
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.action-btn:hover {
+  background-color: #5e3b76;
+}
+/* الصناديق الرئيسية */
+/* الصناديق الرئيسية */
+/* الصناديق الرئيسية */
+.box {
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* الصناديق في لوحة الـ Admin */
+.box.purple-light {
+  background: linear-gradient(135deg, #d1a7e2, #8e24aa); /* درجة بنفسجية فاتحة الى داكنة */
+}
+
+.box.purple-medium {
+  background: linear-gradient(135deg, #b47ac7, #6a1b9a); /* درجة بنفسجية متوسطة */
+}
+
+.box.purple-dark {
+  background: linear-gradient(135deg, #7b3f9a, #4a148c); /* درجة بنفسجية داكنة */
+}
+
+/* الصناديق في لوحة الـ Company */
+.box.purple-light {
+  background: linear-gradient(135deg, #9c4e97, #8e24aa); /* درجة بنفسجية فاتحة */
+}
+
+.box.purple-medium {
+  background: linear-gradient(135deg, #7b3f9a, #9c27b0); /* درجة بنفسجية متوسطة */
+}
+
+.box.purple-dark {
+  background: linear-gradient(135deg, #5e2a8c, #4a148c); /* درجة بنفسجية داكنة */
+}
+
+/* الصناديق في لوحة الـ Trainee */
+.box.purple-light {
+  background: linear-gradient(135deg, #bb66c6, #9c4e97); /* درجة بنفسجية فاتحة */
+}
+
+.box.purple-medium {
+  background: linear-gradient(135deg, #9b4bb3, #7b3f9a); /* درجة بنفسجية متوسطة */
+}
+
+.box.purple-dark {
+  background: linear-gradient(135deg, #732382, #6a1b9a); /* درجة بنفسجية داكنة */
+}
+
+/* الصناديق في لوحة الـ Supervisor */
+.box.purple-light {
+  background: linear-gradient(135deg, #a64db5, #9c4e97); /* درجة بنفسجية فاتحة */
+}
+
+.box.purple-medium {
+  background: linear-gradient(135deg, #8e24aa, #7b3f9a); /* درجة بنفسجية متوسطة */
+}
+
+.box.purple-dark {
+  background: linear-gradient(135deg, #732382, #6a1b9a); /* درجة بنفسجية داكنة */
+}
+
+/* أزرار */
+.btn, .action-btn {
+  background-color: #8e24aa; /* بنفسجي */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover, .action-btn:hover {
+  background-color: #6a1b9a; }/* تغير اللون عند التمرير */ 
+  /* تخصيص الألوان للمربعات في لوحة Supervisor */
+/* تخصيص الألوان للمربعات في لوحة Supervisor */
+.dashboard-container .overview .box.light {
+  background: linear-gradient(135deg, #D6A3E0, #9C1D9E); /* تدرج بنفسجي فاتح إلى متوسط */
+}
+
+.dashboard-container .overview .box:nth-child(2) {
+  background: linear-gradient(135deg, #8E2CA1, #5C0D73); /* تدرج بنفسجي متوسط إلى داكن */
+}
+
+.dashboard-container .overview .box:nth-child(3) {
+  background: linear-gradient(135deg, #5E1B88, #3C0A52); /* تدرج بنفسجي داكن إلى داكن جدًا */
+}
+

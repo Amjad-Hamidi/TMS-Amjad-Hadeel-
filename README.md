@@ -1,1 +1,1 @@
-# Training-Management-System (Front+Back)
+# Training-Management-System (FullStack work)

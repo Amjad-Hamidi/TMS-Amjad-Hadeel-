@@ -1,0 +1,111 @@
+/* بعد التنظيف */
+.company-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* الحالة المغلقة */
+.company-layout.sidebar-closed .sidebar {
+  width: fit-content;
+}
+
+.company-layout.sidebar-open .sidebar{
+  width: 260px;
+}
+
+.company-layout.sidebar-open .main-content{
+  padding-left: 68px;
+}
+
+/* الأساسيات المشتركة للـ sidebar */
+.sidebar {
+  background-color: #1a1a1a;
+  color: white;
+  transition: width 0.3s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+/* عناوين الـ sidebar (Header) */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  flex-shrink: 0;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* روابط التنقل مع التمرير */
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  flex-grow: 1;       /* ليمتدّ في المساحة المتبقية */
+  overflow-y: auto;   /* يسمح بالتمرير لو زاد المحتوى */
+}
+
+.nav-links li {
+  margin: 15px 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  transition: background 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background-color: #333;
+}
+
+.nav-links i {
+  margin-right: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* المحتوى الرئيسي – نضيف لنا margin-left بناءً على الحالة */
+.company-layout.sidebar-closed .main-content {
+  margin-left: 105px;
+  width: calc(100% - 105px);
+  transition: margin-left 0.3s, width 0.3s;
+}
+
+.company-layout.sidebar-open .main-content {
+  transition: margin-left 0.3s, width 0.3s;
+}
+
+
+.company-layout.sidebar-open .toggle-btn{
+  position: absolute;
+  width: fit-content;
+  top: 8px;
+  right: 20px;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  margin-left: 192px; 
+  transition: margin-left 0.3s, width 0.3s;
+}
