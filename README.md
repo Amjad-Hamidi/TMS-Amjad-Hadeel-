@@ -1,1 +1,1 @@
-# Training-Management-System (Backend work)
+# Training-Management-System (Fullstack work)
