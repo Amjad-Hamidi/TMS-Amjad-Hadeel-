@@ -1,0 +1,45 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
+
+/* خلفية شفافة */
+.apply-back{
+  position:fixed;inset:0;background:rgba(0,0,0,.4);
+  display:flex;justify-content:center;align-items:center;z-index:1000;
+  animation:fade .25s
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* البطاقة */
+.apply-card{
+  background:#fff;width:420px;max-width:90%;border-radius:16px;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);padding:28px;
+  display:flex;flex-direction:column;gap:14px;position:relative;
+  animation:pop .25s
+}
+@keyframes pop{from{transform:scale(.8)}to{transform:scale(1)}}
+
+.close{
+  position:absolute;top:10px;right:14px;border:none;background:none;
+  font-size:22px;color:#666;cursor:pointer
+}
+.co{font-weight:600;color:#7b2cbf;margin-top:-6px}
+
+textarea{
+  resize:none;height:110px;padding:10px;border:1px solid #ccc;
+  border-radius:10px;font-family:inherit;font-size:14px
+}
+
+.send{
+  align-self:flex-end;background:#7b2cbf;color:#fff;border:none;
+  padding:10px 18px;border-radius:8px;font-weight:600;cursor:pointer;
+  transition:.3s
+}
+.send:hover:not(:disabled){background:#5e3b76}
+.send:disabled{background:#bdbdbd;cursor:default}
+
+/* شاشة التأكيد */
+.done{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.done i{font-size:48px;color:#4caf50}
+.done button{
+  background:#7b2cbf;color:#fff;border:none;border-radius:8px;
+  padding:8px 20px;cursor:pointer
+}
