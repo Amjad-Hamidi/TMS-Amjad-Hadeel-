@@ -16,6 +16,7 @@ import {
   Fade,
   IconButton,
   Link as MuiLink, // Alias to avoid conflict if HTML link is used
+  Tooltip,
 } from "@mui/material";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 import EmailIcon from '@mui/icons-material/Email';
@@ -249,29 +250,69 @@ Best regards,
                             </Stack>
                           )}
                         </CardContent>
-                        <Box sx={{ p: 2, pt: 0, display: 'flex', gap: 1, justifyContent: 'space-between' }}>
-                          {trainee.cvPath && (
-                            <Button
-                              href={trainee.cvPath}
-                              target="_blank"
-                              rel="noreferrer"
-                              variant="outlined"
-                              size="small"
-                              startIcon={<DescriptionIcon />}
-                              sx={{ flexGrow: 1, borderRadius: 2 }}
-                            >
-                              View CV
-                            </Button>
+                        <Box sx={{ p: 2, pt: 0, display: 'flex', gap: 1, alignItems: 'center' }}>
+                          {trainee.cvPath ? (
+                            <Tooltip title="View Trainee's CV" placement="top">
+                              <Button
+                                href={trainee.cvPath}
+                                target="_blank"
+                                rel="noreferrer"
+                                variant="outlined"
+                                size="small"
+                                startIcon={<DescriptionIcon />}
+                                sx={{
+                                  flexGrow: 1,
+                                  borderRadius: 2,
+                                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                                  '&:hover': {
+                                    transform: 'scale(1.03)',
+                                    boxShadow: (theme) => theme.shadows[4],
+                                  }
+                                }}
+                              >
+                                View CV
+                              </Button>
+                            </Tooltip>
+                          ) : (
+                            <Tooltip title="This trainee has not uploaded a CV yet." placement="top">
+                              <Chip
+                                icon={<DescriptionIcon fontSize="small" />}
+                                label="No CV Provided"
+                                variant="outlined"
+                                size="small"
+                                color="default"
+                                sx={{
+                                  flexGrow: 1,
+                                  borderRadius: 2,
+                                  cursor: 'default',
+                                  height: '31px', // Match button size small approx height
+                                  '.MuiChip-label': { fontSize: '0.8125rem' }, // Match button font size
+                                  justifyContent: 'center',
+                                  paddingLeft: '12px', // Adjust for icon
+                                  paddingRight: '12px',
+                                }}
+                              />
+                            </Tooltip>
                           )}
-                           <Button 
-                              variant="contained" 
-                              size="small" 
-                              onClick={() => handleInvite(trainee.email, trainee.fullName)}
-                              startIcon={<EmailIcon />}
-                              sx={{ flexGrow: 1, borderRadius: 2 }}
-                            >
-                              Invite
-                            </Button>
+                          <Tooltip title={`Send an invitation email to ${trainee.fullName}`} placement="top">
+                            <Button 
+                                variant="contained" 
+                                size="small" 
+                                onClick={() => handleInvite(trainee.email, trainee.fullName)}
+                                startIcon={<EmailIcon />}
+                                sx={{
+                                  flexGrow: 1,
+                                  borderRadius: 2,
+                                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                                  '&:hover': {
+                                    transform: 'scale(1.03)',
+                                    boxShadow: (theme) => theme.shadows[4],
+                                  }
+                                }}
+                              >
+                                Invite
+                              </Button>
+                            </Tooltip>
                         </Box>
                       </Card>
                     </Grid>

@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate
 } from "react-router-dom";
 
 import AdminDashboard from "./pages/AdminDashboard";
@@ -20,9 +19,21 @@ import ApplyModal from "./pages/ApplyModal";
 import TraineeProfile from "./pages/TraineeProfile";
 import CompanyApplications from './pages/CompanyApplications';
 
-import CompanyProfiles from "./pages/CompanyProfiles";
-import TraineeProfiles from "./pages/TraineeProfiles";
-import SupervisorProfiles from "./pages/SupervisorProfiles";
+
+
+import CCompanyProfiles from "./pages/CCompanyProfiles";
+import CSupervisorProfiles from "./pages/CSupervisorProfiles";
+import CTraineeProfiles from "./pages/CTraineeProfiles";
+
+import SSupervisorProfiles from "./pages/SSupervisorProfiles"; 
+import STraineeProfiles from "./pages/STraineeProfiles"; 
+import SCompanyProfiles from "./pages/SCompanyProfiles"; 
+
+import TTraineeProfiles from "./pages/TTraineeProfiles"; 
+import TSupervisorProfiles from "./pages/TSupervisorProfiles"; 
+import TCompanyProfiles from "./pages/TCompanyProfiles"; 
+
+
 
 import SupervisorPrograms from './pages/SupervisorPrograms';
 import CompanyTrainingPrograms from './pages/CompanyTrainingPrograms';
@@ -39,7 +50,7 @@ import SupervisorFeedbacks from "./pages/SupervisorFeedbacks";
 import CategoryTPrograms from "./pages/CategoryTPrograms";
 import AddTrainingProgram from "./pages/AddTrainingProgram";
 import TraineesList from "./pages/TraineesList";
-import STraineesList from "./pages/STraineesList";
+import SupervisorTraineesList from "./pages/SupervisorTraineesList";
 import TraineeLayout from "./layouts/TraineeLayout";
 import CompanyLayout from "./layouts/CompanyLayout";
 import SupervisorLayout from "./layouts/SupervisorLayout";
@@ -49,7 +60,6 @@ import Guest from "./pages/Guest";
 import ForgetPassword from "./pages/ForgetPassword";
 import EditProfile from "./pages/EditProfile";
 import TMyFeedbacks from "./pages/TMyFeedbacks";
-
 import "./styles/Dashboard.css";
 
 function App() {
@@ -58,18 +68,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Guest />} />
 
-        {/* Trainee Layout with nested routes */}
-        <Route path="/trainee" element={<TraineeLayout />}>
-          <Route index element={<TraineeDashboard />} />
-          <Route path="ApplyModal" element={<ApplyModal />} />
-          <Route path="TraineeProfile" element={<TraineeProfile />} />
-          <Route path="TraineePrograms" element={<TraineePrograms />} />
-          <Route path="TraineeApplications" element={<TraineeApplications />} />
-          <Route path="TraineeFeedback" element={<TraineeFeedback />} />
-          <Route path="TMyFeedbacks" element={<TMyFeedbacks />} />
-        </Route>
-
-        <Route path="CategoryTPrograms" element={<CategoryTPrograms />} />
 
         {/* Company */}
         <Route path="/company" element={<CompanyLayout />}>
@@ -80,9 +78,11 @@ function App() {
           <Route path="AddTrainingProgram" element={<AddTrainingProgram />} />
           <Route path="CompanyTrainingPrograms" element={<CompanyTrainingPrograms />} />
           <Route path="CompanyApplications" element={<CompanyApplications />} />
-          <Route path="CompanyProfiles" element={<CompanyProfiles />} />
-          <Route path="SupervisorProfiles" element={<SupervisorProfiles />} />
-          <Route path="TraineeProfiles" element={<TraineeProfiles />} />
+
+          <Route path="CompanyProfiles" element={<CCompanyProfiles />} />
+          <Route path="SupervisorProfiles" element={<CSupervisorProfiles />} />
+          <Route path="TraineeProfiles" element={<CTraineeProfiles />} />
+
           <Route path="CompanyFeedback" element={<CompanyFeedback />} />
           <Route path="CompanyFeedbacks" element={<CompanyFeedbacks />} />
         </Route>
@@ -95,10 +95,31 @@ function App() {
           <Route index element={<SupervisorDashboard />} />
           <Route path="SupervisorProfile" element={<SupervisorProfile />} />
           <Route path="SupervisorPrograms" element={<SupervisorPrograms />} />
-          <Route path="STraineesList" element={<STraineesList />} />
+          <Route path="SupervisorTraineesList" element={<SupervisorTraineesList />} />
+          <Route path="CompanyProfiles" element={<SCompanyProfiles />} />
+          <Route path="SupervisorProfiles" element={<SSupervisorProfiles />} />
+          <Route path="TraineeProfiles" element={<STraineeProfiles />} />
           <Route path="SupervisorFeedback" element={<SupervisorFeedback />} />
           <Route path="SupervisorFeedbacks" element={<SupervisorFeedbacks />} />
         </Route>
+
+        {/* Trainee Layout with nested routes */}
+        <Route path="/trainee" element={<TraineeLayout />}>
+          <Route index element={<TraineeDashboard />} />
+          <Route path="CategoryTPrograms/:categoryId" element={<CategoryTPrograms />} />
+          <Route path="ApplyModal" element={<ApplyModal />} />
+          <Route path="TraineeProfile" element={<TraineeProfile />} />
+          <Route path="TraineePrograms" element={<TraineePrograms />} />
+          <Route path="TraineeApplications" element={<TraineeApplications />} />
+          <Route path="CompanyProfiles" element={<TCompanyProfiles />} />
+          <Route path="SupervisorProfiles" element={<TSupervisorProfiles />} />
+          <Route path="TraineeProfiles" element={<TTraineeProfiles />} />
+          <Route path="TraineeFeedback" element={<TraineeFeedback />} />
+          <Route path="TMyFeedbacks" element={<TMyFeedbacks />} />
+        </Route>
+
+        <Route path="CategoryTPrograms" element={<CategoryTPrograms />} />
+
 
         {/* Profile Edit */}
         <Route path="/profile/edit" element={<EditProfile />} />

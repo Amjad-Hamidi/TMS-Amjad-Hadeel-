@@ -20,9 +20,9 @@ body {
 
 .sidebar h2 {
   text-align: center;
-  font-size: 26px; /* تكبير عنوان القائمة */
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  padding-top: 18px;
 }
 
 .sidebar ul {

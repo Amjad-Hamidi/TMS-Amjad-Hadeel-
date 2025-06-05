@@ -1,5 +1,10 @@
+.supervisor-layout{
+  display: flex;
+  height: 100vh;
+}
+
 .supervisor-layout.collapsed .sidebar {
-  width: 60px;
+  width: 125px;
 }
 
 .supervisor-layout.collapsed .nav-links span {
@@ -8,6 +13,21 @@
 
 .supervisor-layout.collapsed .sidebar-header h2 {
   font-size: 16px;
+  position: relative;
+  right: 26px;
+  top: 5px;
+}
+
+.togg-btn{
+  left: 80px;
+}
+.collapsed .togg-btn{
+  left: 2px;
+}
+
+.supervisor-layout.collapsed .sidebar-header h2{
+  font-size: large;
+  left: -25px;
 }
 
 /* Main Content Area */

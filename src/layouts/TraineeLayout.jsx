@@ -48,14 +48,11 @@ const TraineeLayout = () => {
               <span>Applications</span>
             </NavLink>
           </li>
-          <li>
             <li>
-            <NavLink to="/trainee/CompaniesSupervisors" activeclassname="active">
+            <NavLink to="/trainee/TraineeProfiles" activeclassname="active">
               <i className="fas fa-user"></i>
-              <span>Companies&Supervisors</span>
+              <span>All Profiles</span>
             </NavLink>
-          </li>
-          <li></li>
             <NavLink to="/trainee/TraineeFeedback" activeclassname="active">
               <i className="fas fa-comments"></i>
               <span>Feedback</span>

@@ -10,7 +10,8 @@ import {
   CircularProgress,
   TextField,
   IconButton,
-  Slide
+  Slide,
+  Chip
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -24,9 +25,9 @@ import SchoolIcon from "@mui/icons-material/School";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const LIMIT = 8;
+const LIMIT = 3;
 
-export default function CompanyProfiles() {
+export default function TCompanyProfiles() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -90,14 +91,11 @@ export default function CompanyProfiles() {
         <Box display="flex" justifyContent="center" gap={2} mb={3}>
           <Button
             component={Link}
-            to="/company/CompanyProfiles"
+            to="/trainee/CompanyProfiles"
             variant="contained"
             startIcon={<BusinessIcon />}
             sx={{
-              bgcolor:
-                location.pathname === "/company/CompanyProfiles"
-                  ? "#2a3eb1"
-                  : "#3f51b5",
+              bgcolor: location.pathname === "/trainee/CompanyProfiles" ? "#2a3eb1" : "#3f51b5",
               "&:hover": { bgcolor: "#6573c3" },
               color: "white",
             }}
@@ -106,14 +104,11 @@ export default function CompanyProfiles() {
           </Button>
           <Button
             component={Link}
-            to="/company/SupervisorProfiles"
+            to="/trainee/SupervisorProfiles"
             variant="contained"
             startIcon={<SupervisorAccountIcon />}
             sx={{
-              bgcolor:
-                location.pathname === "/company/SupervisorProfiles"
-                  ? "#2e7d32"
-                  : "#388e3c",
+              bgcolor: location.pathname === "/trainee/SupervisorProfiles" ? "#2e7d32" : "#388e3c",
               "&:hover": { bgcolor: "#4caf50" },
               color: "white",
             }}
@@ -122,14 +117,11 @@ export default function CompanyProfiles() {
           </Button>
           <Button
             component={Link}
-            to="/company/TraineeProfiles"
+            to="/trainee/TraineeProfiles"
             variant="contained"
             startIcon={<SchoolIcon />}
             sx={{
-              bgcolor:
-                location.pathname === "/company/TraineeProfiles"
-                  ? "#f57c00"
-                  : "#fb8c00",
+              bgcolor: location.pathname === "/trainee/TraineeProfiles" ? "#f57c00" : "#fb8c00",
               "&:hover": { bgcolor: "#ffb74d" },
               color: "white",
             }}
@@ -149,6 +141,12 @@ export default function CompanyProfiles() {
           onChange={handleSearchChange}
           sx={{ mb: 3, width: 350 }}
         />
+        <Stack direction="row" spacing={1} mb={3}>
+          <Chip label={`Total: ${meta.totalCount}`} color="primary" />
+          <Chip label={`Page: ${meta.page} / ${meta.totalPages}`} color="secondary" />
+          <Chip label={`Limit: ${meta.limit}`} color="primary" />
+        </Stack>
+
         {loading ? (
           <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
             <CircularProgress />
@@ -200,51 +198,43 @@ export default function CompanyProfiles() {
                         </Typography>
                       </Stack>
                       <Stack direction="row" alignItems="center" spacing={0.5}>
-                        <ConfirmationNumberIcon fontSize="small" sx={{ mr: 0.5 }} color="action" />
-                        <Typography variant="body2" color="text.secondary">
-                          ID: {company.id}
-                        </Typography>
-                      </Stack>
-                      <Stack direction="row" alignItems="center" spacing={0.5}>
-                        <VerifiedUserIcon fontSize="small" sx={{ mr: 0.5 }} color="action" />
-                        <Typography variant="body2" color="secondary">
-                          {company.role || "Company"}
-                        </Typography>
-                      </Stack>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <IconButton
-                          component="a"
-                          href={`mailto:${company.email}`}
-                          target="_blank"
-                          rel="noopener"
-                          color="primary"
-                        >
-                          <EmailIcon />
-                        </IconButton>
-                        <Typography variant="body2" color="text.primary">
+                        <EmailIcon fontSize="small" color="action" />
+                        <Typography variant="body2" color="textSecondary">
                           {company.email}
                         </Typography>
                       </Stack>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <PhoneIcon color="action" fontSize="small" />
-                        <Typography variant="body2" color="text.primary">
-                          {company.phoneNumber || "N/A"}
+                      <Stack direction="row" alignItems="center" spacing={0.5}>
+                        <PhoneIcon fontSize="small" color="action" />
+                        <Typography variant="body2" color="textSecondary">
+                          {company.phoneNumber}
                         </Typography>
                       </Stack>
+                      <Stack direction="row" alignItems="center" spacing={0.5}>
+                        <ConfirmationNumberIcon fontSize="small" color="action" />
+                        <Typography variant="body2" color="textSecondary">
+                          CRN: {company.companyCRN}
+                        </Typography>
+                      </Stack>
+                      {company.isVerified && (
+                        <Stack direction="row" alignItems="center" spacing={0.5} color="success.main">
+                          <VerifiedUserIcon fontSize="small" />
+                          <Typography variant="body2">Verified</Typography>
+                        </Stack>
+                      )}
                     </Stack>
                   </Card>
                 ))
               )}
             </Stack>
-            <Box mt={4} display="flex" justifyContent="center">
+            {meta.totalPages > 1 && (
               <Pagination
                 count={meta.totalPages}
                 page={meta.page}
                 onChange={handlePageChange}
                 color="primary"
-                shape="rounded"
+                sx={{ mt: 4, display: "flex", justifyContent: "center" }}
               />
-            </Box>
+            )}
           </>
         )}
       </Box>

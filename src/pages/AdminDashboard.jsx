@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  Grid,
   Card,
   CardContent,
   Typography,
@@ -16,6 +15,7 @@ import {
   Grow,
   Paper,
 } from "@mui/material";
+import { Grid } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
 import GroupIcon from "@mui/icons-material/Group";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
@@ -25,6 +25,13 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useNavigate } from "react-router-dom";
+
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Keyboard, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
 
 const statCards = [
   { key: "usersCount", label: "Users", icon: <GroupIcon color="primary" /> },
@@ -51,7 +58,6 @@ export default function AdminDashboard() {
 
   const navigate = useNavigate();
 
-  // Fetch statistics
   useEffect(() => {
     const fetchStats = async () => {
       setLoadingStats(true);
@@ -73,7 +79,6 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  // Fetch categories (with pagination and search)
   const fetchCategories = async (page = 1, limit = 10, search = "") => {
     setLoadingCategories(true);
     setErrorCategories(null);
@@ -99,13 +104,11 @@ export default function AdminDashboard() {
     }
   };
 
-  // Initial and paginated fetch
   useEffect(() => {
     fetchCategories(categoriesMeta.page, categoriesMeta.limit, query);
     // eslint-disable-next-line
   }, [categoriesMeta.page, categoriesMeta.limit]);
 
-  // Debounced search
   useEffect(() => {
     if (searchTimeout) clearTimeout(searchTimeout);
     setSearchTimeout(
@@ -116,12 +119,10 @@ export default function AdminDashboard() {
     // eslint-disable-next-line
   }, [query]);
 
-  // Pagination handler
   const handlePageChange = (event, value) => {
     setCategoriesMeta((prev) => ({ ...prev, page: value }));
   };
 
-  // Card click
   const handleViewProgramClick = (categoryId) => {
     navigate(`/CategoryTProgramsW/${categoryId}`);
   };
@@ -132,47 +133,61 @@ export default function AdminDashboard() {
         System Overview
       </Typography>
 
-      {/* Stats Section */}
-      <Grid container spacing={3} sx={{ mb: 5 }}>
+      {/* Stats Section with Swiper */}
+      <Box sx={{ mb: 5 }}>
         {loadingStats ? (
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 120 }}>
+          <Stack alignItems="center" justifyContent="center" sx={{ minHeight: 120 }}>
             <CircularProgress size={48} color="primary" />
-          </Grid>
+          </Stack>
         ) : errorStats ? (
-          <Grid item xs={12}><Typography color="error">{errorStats}</Typography></Grid>
+          <Typography color="error">{errorStats}</Typography>
         ) : (
-          statCards.map((stat, idx) => (
-            <Grow in={!loadingStats} style={{ transformOrigin: "0 0 0" }} timeout={500 + idx * 150} key={stat.key}>
-              <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Card
-                  elevation={6}
-                  sx={{
-                    borderRadius: 4,
-                    background: "linear-gradient(120deg, #1e3c72 60%, #f5a623 100%)",
-                    color: "#fff",
-                    boxShadow: "0 8px 32px 0 #00000022",
-                    minHeight: 120,
-                    transition: "transform 0.2s",
-                    "&:hover": { transform: "scale(1.04)" },
-                  }}
-                >
-                  <CardContent>
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                      {stat.icon}
-                      <Typography variant="h6" sx={{ fontWeight: 700, flex: 1 }}>
-                        {stat.label}
+          <Swiper
+            slidesPerView={3}
+            spaceBetween={20}
+            navigation={true}
+            keyboard={{ enabled: true }}
+            loop={true}
+            autoplay={{
+              delay: 1000, // 👈 يتحرك كل 3 ثواني
+              disableOnInteraction: false, // إذا تفاعل المستخدم مع السلايدر (مثل التمرير اليدوي) السوايبر يواصل العمل بعد التفاعل
+            }}
+            modules={[Navigation, Keyboard, Autoplay]}
+          >
+            {statCards.map((stat, idx) => (
+              <SwiperSlide key={stat.key}>
+                <Grow in={!loadingStats} style={{ transformOrigin: "0 0 0" }} timeout={500 + idx * 150}>
+                  <Card
+                    elevation={6}
+                    sx={{
+                      borderRadius: 4,
+                      background: "linear-gradient(120deg, #1e3c72 60%, #f5a623 100%)",
+                      color: "#fff",
+                      boxShadow: "0 8px 32px 0 #00000022",
+                      minHeight: 120,
+                      transition: "transform 0.2s",
+                      "&:hover": { transform: "scale(1.04)" },
+                      m: 1,
+                    }}
+                  >
+                    <CardContent>
+                      <Stack direction="row" alignItems="center" spacing={2}>
+                        {stat.icon}
+                        <Typography variant="h6" sx={{ fontWeight: 700, flex: 1 }}>
+                          {stat.label}
+                        </Typography>
+                      </Stack>
+                      <Typography variant="h4" sx={{ mt: 2, fontWeight: 900, letterSpacing: 1 }}>
+                        {stats ? stats[stat.key] : 0}
                       </Typography>
-                    </Stack>
-                    <Typography variant="h4" sx={{ mt: 2, fontWeight: 900, letterSpacing: 1 }}>
-                      {stats ? stats[stat.key] : 0}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grow>
-          ))
+                    </CardContent>
+                  </Card>
+                </Grow>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         )}
-      </Grid>
+      </Box>
 
       {/* Categories Section */}
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}>

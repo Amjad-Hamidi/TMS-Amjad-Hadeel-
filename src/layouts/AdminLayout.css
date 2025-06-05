@@ -5,7 +5,7 @@
 
 /* Sidebar مصغر */
 .sidebar-closed .sidebar {
-  width: 60px;
+  width: fit-content;
 }
 
 .sidebar-closed .sidebar .sidebar-header h2,
@@ -15,7 +15,13 @@
 
 /* Sidebar موسع */
 .sidebar-open .sidebar {
-  width: 220px;
+  width: 225px;
+}
+
+.admin-layout.sidebar-closed .sidebar{
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
 }
 
 /* Sidebar أساسي */
@@ -35,12 +41,22 @@
   padding: 10px 15px;
 }
 
+.collapsed .sidebar-header h2 {
+  font-size: 22px;
+  position: relative;
+  right: 22px;
+}
+
 .toggle-btn {
   background: none;
   border: none;
   color: white;
   cursor: pointer;
   font-size: 24px;
+  position: absolute;
+  width: fit-content;
+  top: 8px;
+  right: 20px;
 }
 
 .nav-links {
@@ -85,7 +101,6 @@
 
 /* Default state (sidebar closed) */
 .admin-layout.sidebar-closed .main-content {
-  margin-left: 60px;
   width: calc(100% - 60px);
 }
 

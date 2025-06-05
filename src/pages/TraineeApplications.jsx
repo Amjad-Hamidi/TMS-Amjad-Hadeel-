@@ -1,4 +1,3 @@
-// src/pages/TraineeApplications.jsx
 import React, { useState, useEffect } from "react";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 import {
@@ -18,8 +17,10 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Paper,
-  Link as MuiLink,
-  Tooltip
+  Tooltip,
+  TextField,
+  Pagination,
+  Avatar
 } from "@mui/material";
 import {
   CheckCircleOutline as CheckCircleOutlineIcon,
@@ -27,14 +28,15 @@ import {
   HourglassTop as HourglassTopIcon,
   EventNote as EventNoteIcon,
   LocationOn as LocationOnIcon,
-  Category as CategoryIcon,
   SupervisorAccount as SupervisorAccountIcon,
   Link as LinkIcon,
   School as SchoolIcon,
-  Search as SearchIcon, // For 'Browse Similar Programs'
-  ErrorOutline as ErrorOutlineIcon
+  Search as SearchIcon,
+  ErrorOutline as ErrorOutlineIcon,
+  Category as CategoryIcon,
+  Image as ImageIcon
 } from '@mui/icons-material';
-import { styled, alpha } from '@mui/material/styles';
+import { styled, alpha, useTheme } from '@mui/material/styles';
 
 const statusMap = {
   0: "Pending",
@@ -78,10 +80,16 @@ const StatusBadge = styled(Box)(({ theme, status }) => ({
 }));
 
 export default function TraineeApplications() {
+  const theme = useTheme();
   const [apps, setApps] = useState([]);
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     const fetchApps = async () => {
@@ -89,9 +97,8 @@ export default function TraineeApplications() {
       setError("");
 
       try {
-        const res = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments");
-        const text = await res.text();
-        const data = JSON.parse(text);
+        const res = await fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments?page=${page}&limit=${limit}&search=${encodeURIComponent(searchTerm)}`);
+        const data = await res.json();
 
         const appsFormatted = data.items.map(app => ({
           id: app.trainingProgramId,
@@ -101,18 +108,23 @@ export default function TraineeApplications() {
           start: app.startDate?.split("T")[0] || "N/A",
           end: app.endDate?.split("T")[0] || "N/A",
           location: app.location || "TBD",
-          submitted: "—", // If your API supports it later, replace here.
+          supervisor: app.supervisorName || "N/A",
+          category: app.categoryName || "General",
+          contentUrl: app.contentUrl,
+          classroomUrl: app.classroomUrl,
           status: statusMap[app.status] || "Pending",
+          imagePath: app.imagePath,
           response: app.status === 1
             ? "You've been accepted! See you soon 🎉"
             : app.status === 2
             ? "Unfortunately, your application was rejected."
-            : "Application under review.",
-          supervisor: app.supervisorName || "N/A",
-          category: app.categoryName || "General"
+            : "Application under review."
         }));
 
         setApps(appsFormatted);
+        setTotalCount(data.totalCount || 0);
+        setTotalPages(data.totalPages || 1);
+
       } catch (err) {
         console.error(err);
         setError("Failed to load applications.");
@@ -122,15 +134,15 @@ export default function TraineeApplications() {
     };
 
     fetchApps();
-  }, []);
-
-  const shown = filter === "All" ? apps : apps.filter(a => a.status === filter);
+  }, [searchTerm, page]);
 
   const handleFilterChange = (event, newFilter) => {
     if (newFilter !== null) {
       setFilter(newFilter);
     }
   };
+
+  const shown = filter === "All" ? apps : apps.filter(a => a.status === filter);
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -147,6 +159,15 @@ export default function TraineeApplications() {
         <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main', textAlign: 'center' }}>
           My Training Program Applications
         </Typography>
+
+        <TextField
+          fullWidth
+          placeholder="Search programs..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ mb: 3, bgcolor: "background.paper", borderRadius: 1 }}
+        />
+
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
           <ToggleButtonGroup
             value={filter}
@@ -155,9 +176,19 @@ export default function TraineeApplications() {
             aria-label="Application status filter"
             color="primary"
           >
-            {["All", "Pending", "Accepted", "Rejected"].map(st => (
-              <ToggleButton key={st} value={st} aria-label={st.toLowerCase()} sx={{ px: 2, py: 1, fontWeight: 'medium' }}>
-                {st}
+            {[
+              { label: "All" },
+              { label: "Pending", color: "warning.main" },
+              { label: "Accepted", color: "success.main" },
+              { label: "Rejected" }
+            ].map(st => (
+              <ToggleButton 
+                key={st.label} 
+                value={st.label} 
+                aria-label={st.label.toLowerCase()} 
+                sx={{ px: 2, py: 1, fontWeight: 'medium', color: st.color ? theme.palette[st.color.split('.')[0]].main : undefined }}
+              >
+                {st.label}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
@@ -176,23 +207,27 @@ export default function TraineeApplications() {
             <Grid item xs={12} sm={6} md={4} key={app.id}>
               <StyledCard status={app.status}>
                 <CardHeader
-                  avatar={getStatusIcon(app.status)}
-                  title={`#${app.id} - ${app.program}`}
-                  titleTypographyProps={{ variant: 'h6', fontWeight: 'medium', noWrap: true }}
-                  subheader={app.category}
-                  subheaderTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                  avatar={<Avatar src={app.imagePath} variant="rounded" sx={{ width: 56, height: 56 }} />}
+                  title={<Tooltip title="Program Title" arrow placement="right"><span>{`#${app.id} - ${app.program}`}</span></Tooltip>}
+                  subheader={
+                    <Tooltip title="Category" arrow placement="right">
+                      <Chip icon={<CategoryIcon />} label={app.category} size="small" variant="outlined" />
+                    </Tooltip>
+                  }
                   sx={{ borderBottom: '1px solid', borderColor: 'divider' }}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography variant="body2" color="text.secondary" paragraph sx={{ minHeight: '60px', maxHeight: '120px', overflowY: 'auto' }}>
-                    {app.description}
-                  </Typography>
-                  
+                  <Tooltip title="Description" arrow placement="right">
+                    <Typography variant="body2" color="text.secondary" paragraph sx={{ minHeight: '0', maxHeight: '120px', overflowY: 'auto' }}>
+                      {app.description}
+                    </Typography>
+                  </Tooltip>
+
                   <Stack spacing={1.5} my={2}>
-                    <Chip icon={<EventNoteIcon />} label={`Duration: ${app.duration}`} size="small" variant="outlined" />
-                    <Chip icon={<LocationOnIcon />} label={`Location: ${app.location}`} size="small" variant="outlined" />
-                    <Chip icon={<SupervisorAccountIcon />} label={`Supervisor: ${app.supervisor}`} size="small" variant="outlined" />
-                    <Chip icon={<EventNoteIcon />} label={`Start: ${app.start} | End: ${app.end}`} size="small" variant="outlined" />
+                    <Tooltip title="Duration" arrow placement="right"><Chip icon={<EventNoteIcon />} label={app.duration} size="small" variant="outlined" /></Tooltip>
+                    <Tooltip title="Location" arrow placement="right"><Chip icon={<LocationOnIcon />} label={app.location} size="small" variant="outlined" /></Tooltip>
+                    <Tooltip title="Supervisor" arrow placement="right"><Chip icon={<SupervisorAccountIcon />} label={app.supervisor} size="small" variant="outlined" /></Tooltip>
+                    <Tooltip title="Start & End Date" arrow placement="right"><Chip icon={<EventNoteIcon />} label={`Start: ${app.start} | End: ${app.end}`} size="small" variant="outlined" /></Tooltip>
                   </Stack>
 
                   <StatusBadge status={app.status}>
@@ -228,11 +263,6 @@ export default function TraineeApplications() {
                       Classroom
                     </Button>
                   )}
-                  {app.status === "Rejected" && (
-                    <Button size="small" startIcon={<SearchIcon />} color="secondary" variant="contained">
-                      Browse Similar
-                    </Button>
-                  )}
                 </CardActions>
               </StyledCard>
             </Grid>
@@ -245,6 +275,27 @@ export default function TraineeApplications() {
           )}
         </Grid>
       )}
+
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={(event, value) => setPage(value)}
+          color="primary"
+          showFirstButton
+          showLastButton
+          size="large"
+          sx={{
+            "& .MuiPaginationItem-root": {
+              fontWeight: "bold",
+            },
+            "& .Mui-selected": {
+              backgroundColor: theme.palette.secondary.main,
+              color: "#fff"
+            }
+          }}
+        />
+      </Box>
     </Container>
   );
 }

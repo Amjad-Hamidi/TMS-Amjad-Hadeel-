@@ -1,23 +1,23 @@
+/* بعد التنظيف */
 .company-layout {
   display: flex;
   height: 100vh;
 }
 
-/* Sidebar مصغر */
-.sidebar-closed .sidebar {
-  width: 60px;
+/* الحالة المغلقة */
+.company-layout.sidebar-closed .sidebar {
+  width: fit-content;
 }
 
-.sidebar-closed .sidebar .sidebar-header h2,
-.sidebar-closed .sidebar .nav-links span {
-  display: none; /* نخفي النص لما تكون مصغرة */
+.company-layout.sidebar-open .sidebar{
+  width: 260px;
 }
 
-/* Sidebar موسع */
-.sidebar-open .sidebar {
-  width: 220px;
+.company-layout.sidebar-open .main-content{
+  padding-left: 68px;
 }
 
+/* الأساسيات المشتركة للـ sidebar */
 .sidebar {
   background-color: #1a1a1a;
   color: white;
@@ -25,13 +25,20 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
 }
 
+/* عناوين الـ sidebar (Header) */
 .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 15px;
+  flex-shrink: 0;
 }
 
 .toggle-btn {
@@ -42,11 +49,13 @@
   font-size: 24px;
 }
 
-/* روابط التنقل */
+/* روابط التنقل مع التمرير */
 .nav-links {
   list-style: none;
   padding: 0;
   margin-top: 20px;
+  flex-grow: 1;       /* ليمتدّ في المساحة المتبقية */
+  overflow-y: auto;   /* يسمح بالتمرير لو زاد المحتوى */
 }
 
 .nav-links li {
@@ -73,64 +82,30 @@
   text-align: center;
 }
 
+/* المحتوى الرئيسي – نضيف لنا margin-left بناءً على الحالة */
+.company-layout.sidebar-closed .main-content {
+  margin-left: 105px;
+  width: calc(100% - 105px);
+  transition: margin-left 0.3s, width 0.3s;
+}
+
+.company-layout.sidebar-open .main-content {
+  transition: margin-left 0.3s, width 0.3s;
+}
+
+
+.company-layout.sidebar-open .toggle-btn{
+  position: absolute;
+  width: fit-content;
+  top: 8px;
+  right: 20px;
+}
+
 .main-content {
   flex-grow: 1;
   padding: 20px;
   background-color: #f9f9f9;
   overflow-y: auto;
+  margin-left: 192px; 
+  transition: margin-left 0.3s, width 0.3s;
 }
-.sidebar {
-  background-color: #1a1a1a;
-  color: white;
-  transition: width 0.3s;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  
-  height: 100vh;       /* تأخذ ارتفاع الشاشة كامل */
-  position: fixed;     /* ثابتة عالشاشة */
-  top: 0;
-  left: 0;
-  z-index: 999;       /* فوق المحتوى */
-}
-
-.sidebar-closed .sidebar {
-  width: 60px;
-}
-
-.sidebar-open .sidebar {
-  width: 220px;
-}
-
-/* خلي قائمة التنقل (ul) تأخذ المساحة المتبقية وتسمح بالتمرير */
-.nav-links {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-
-  flex-grow: 1;       /* تكبر وتشغل المساحة المتبقية */
-  overflow-y: auto;   /* ظهور scrollbar لو طويل */
-}
-
-/* باقي التنسيقات كما هي */
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 15px;
-  flex-shrink: 0; /* حتى لا ينضغط */
-}
-
-.company-layout .sidebar.collapsed ~ .main-content {
-  /* This rule might be redundant if .main-content.collapsed is reliably applied */
-  /* Keeping it for now as a fallback or if the JS class toggle is on main-content itself */
-  margin-left: 60px;
-  width: calc(100% - 60px);
-}
-
-/* Sidebar open state */
-.company-layout.sidebar-open .main-content {
-  margin-left: 220px;
-  width: calc(100% - 220px);
-}
-

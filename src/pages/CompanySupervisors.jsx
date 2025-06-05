@@ -14,10 +14,16 @@ import {
   Chip,
   Pagination,
   Fade,
+  Link as MuiLink, // Alias to avoid conflict with react-router Link
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../styles/CompanySupervisors.css";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DescriptionIcon from '@mui/icons-material/Description'; // For CV icon
 
 const LIMIT = 8;
 
@@ -152,42 +158,70 @@ const CompanySupervisors = () => {
                         flexDirection: "column",
                       }}
                     >
-                      <CardMedia
-                        component="img"
-                        height="180"
-                        image={sup.profileImageUrl || "https://via.placeholder.com/150?text=No+Image"}
-                        alt={sup.fullName}
-                        sx={{ objectFit: "cover" }}
-                      />
-                      <CardContent>
-                        <Typography variant="h6" sx={{ fontWeight: 600 }} gutterBottom>
+                      {sup.profileImageUrl ? (
+                        <CardMedia
+                          component="img"
+                          height="180"
+                          image={sup.profileImageUrl}
+                          alt={sup.fullName}
+                          sx={{ objectFit: "cover" }}
+                        />
+                      ) : (
+                        <Box sx={{ height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'grey.200' }}>
+                          <AccountCircleIcon sx={{ fontSize: 80, color: 'grey.500' }} />
+                        </Box>
+                      )}
+                      <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1, color: 'primary.dark' }} noWrap title={sup.fullName}>
                           {sup.fullName}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          <strong>ID:</strong> {sup.id || sup.supervisorId}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          <strong>Email:</strong> {sup.email}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          <strong>Phone:</strong> {sup.phoneNumber}
-                        </Typography>
-                        {sup.cvPath ? (
-                          <Button
-                            href={sup.cvPath}
-                            target="_blank"
-                            rel="noreferrer"
-                            variant="outlined"
-                            size="small"
-                            sx={{ mt: 1 }}
-                          >
-                            📄 View Resume
-                          </Button>
-                        ) : (
-                          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                            No resume available
-                          </Typography>
+                        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+                          <FingerprintIcon fontSize="small" color="action" />
+                          <Typography variant="body2" color="text.secondary">ID: {sup.id || sup.supervisorId}</Typography>
+                        </Stack>
+                        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
+                          <EmailIcon fontSize="small" color="action" />
+                          <MuiLink href={`mailto:${sup.email}`} variant="body2" color="text.secondary" sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline', color: 'primary.main' } }} noWrap title={sup.email}>
+                            {sup.email}
+                          </MuiLink>
+                        </Stack>
+                        {sup.phoneNumber && (
+                          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                            <PhoneIcon fontSize="small" color="action" />
+                            <Typography variant="body2" color="text.secondary">{sup.phoneNumber}</Typography>
+                          </Stack>
                         )}
+                        <Box sx={{ mt: 'auto', pt: 1 }}> {/* Push CV to bottom */} 
+                          {sup.cvPath ? (
+                            <Button
+                              href={sup.cvPath}
+                              target="_blank"
+                              rel="noreferrer"
+                              variant="outlined"
+                              size="small"
+                              startIcon={<DescriptionIcon />}
+                              sx={{ 
+                                width: '100%', 
+                                borderRadius: 2,
+                                transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                                '&:hover': {
+                                  transform: 'scale(1.02)',
+                                  boxShadow: (theme) => theme.shadows[2],
+                                }
+                              }}
+                            >
+                              View Resume
+                            </Button>
+                          ) : (
+                            <Chip 
+                              icon={<DescriptionIcon fontSize="small" />}
+                              label="No Resume Available"
+                              variant="outlined"
+                              size="small"
+                              sx={{ width: '100%', borderRadius: 2, justifyContent: 'flex-start', pl: 1 }} 
+                            />
+                          )}
+                        </Box>
                       </CardContent>
                     </Card>
                   </Grid>
