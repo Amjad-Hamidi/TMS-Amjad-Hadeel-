@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "Lax0TYnf7KQSVlirwAA9iMo7x11z//BVJOwhxGoITwY=",
+  "Source": "TMS.API",
+  "BasePath": "_content/TMS.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "TMS.API\\wwwroot",
+      "Source": "TMS.API",
+      "ContentRoot": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\wwwroot\\",
+      "BasePath": "_content/TMS.API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "SourceId": "TMS.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\wwwroot\\",
+      "BasePath": "_content/TMS.API",
+      "RelativePath": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yr24kthh0r",
+      "Integrity": "Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "AssetFile": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "80157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 05 Jun 2025 05:21:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.yr24kthh0r.jpg",
+      "AssetFile": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\wwwroot\\images\\profiles\\1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "80157"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 05 Jun 2025 05:21:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yr24kthh0r"
+        },
+        {
+          "Name": "label",
+          "Value": "images/profiles/1728d8c4-967b-47c0-93fd-97a8b05e7e87.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Dl826E+xgtRtbltutjblxtPNOE5o98UUGU7LFT4W2fM="
+        }
+      ]
+    }
+  ]
+}
