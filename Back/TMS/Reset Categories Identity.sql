@@ -1,1 +1,0 @@
-﻿DBCC CHECKIDENT ('Categories', RESEED, 0);
