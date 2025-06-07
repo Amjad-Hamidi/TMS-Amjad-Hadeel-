@@ -78,7 +78,7 @@ const RegisterForm = () => {
     });
 
     try {
-      const response = await fetch('http://amjad-hamidi-tms.runasp.net/api/Account/Register', {
+      const response = await fetch('https://amjad-hamidi-tms.runasp.net/api/Account/Register', {
         method: 'POST',
         body: data,
       });

@@ -39,19 +39,43 @@ const AdminLayout = () => {
           <li>
             <NavLink to="/admin/users">
               <i className="fas fa-users-cog"></i>
-              {isSidebarOpen && <span>User Management</span>}
+              {isSidebarOpen && <span>Users Management</span>}
             </NavLink>
-          </li>
+          </li>   
           <li>
             <NavLink to="/admin/categories">
-              <i className="fas fa-layer-group"></i>
-              {isSidebarOpen && <span>Categories</span>}
+              <i class="fa-solid fa-layer-group"></i>
+              {isSidebarOpen && <span>Categories Management</span>}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/pendingTrainingPro">
+            <NavLink to="/admin/programs">
+              <i class="fa-solid fa-table-cells-row-unlock"></i>
+              {isSidebarOpen && <span>Programs Management</span>}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/admin/add-user">
+              <i class="fa-solid fa-user-plus"></i>
+              {isSidebarOpen && <span>Add User</span>}
+            </NavLink>
+          </li>          
+          <li>
+            <NavLink to="/admin/add-category">
+              <i className="fas fa-layer-group"></i>
+              {isSidebarOpen && <span>Add Category</span>}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/admin/programs-overview">
               <i className="fas fa-clock"></i>
-              {isSidebarOpen && <span>Pending Programs</span>}
+              {isSidebarOpen && <span>Porgrams Overview</span>}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/admin/add-program">
+              <i class="fa-solid fa-fan"></i>
+              {isSidebarOpen && <span>Add Program</span>}
             </NavLink>
           </li>
         </ul>

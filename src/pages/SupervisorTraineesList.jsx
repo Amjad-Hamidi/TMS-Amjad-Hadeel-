@@ -18,6 +18,9 @@ import {
   Tooltip,
   Alert,
   Grow,
+  Dialog, // Import Dialog
+  DialogContent, // Import DialogContent
+  IconButton, // Import IconButton
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
@@ -32,6 +35,7 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import ListIcon from "@mui/icons-material/List";
+import CloseIcon from "@mui/icons-material/Close"; // Import a close icon for the dialog
 
 const LIMIT = 8;
 
@@ -62,6 +66,11 @@ export default function SupervisorTraineesList() {
     totalPages: 1,
   });
 
+  // New state for image preview modal
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
+  const [selectedImageAlt, setSelectedImageAlt] = useState("");
+
   // Debounce search input
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -80,16 +89,18 @@ export default function SupervisorTraineesList() {
     )}`;
 
     if (viewType === "supervisor") {
-      url = `http://amjad-hamidi-tms.runasp.net/api/Users/trainees-supervisor?${params}`;
+      url = `https://amjad-hamidi-tms.runasp.net/api/Users/trainees-supervisor?${params}`;
     } else {
-      url = `http://amjad-hamidi-tms.runasp.net/api/Users/all-trainees?${params}`;
+      url = `https://amjad-hamidi-tms.runasp.net/api/Users/all-trainees?${params}`;
     }
 
     try {
       const res = await fetchWithAuth(url);
       if (!res.ok) {
         const errorData = await res.text();
-        throw new Error(`Failed to fetch trainees: ${res.status} ${errorData || "Server error"}`);
+        throw new Error(
+          `Failed to fetch trainees: ${res.status} ${errorData || "Server error"}`
+        );
       }
       const data = await res.json();
       setTrainees(data.items || []);
@@ -135,6 +146,20 @@ export default function SupervisorTraineesList() {
       `Dear ${traineeName},\n\nI hope you're doing well. I would like to invite you to join my training program that I supervised on TMS platform. Please check the current programs and find my name to apply to it, you are very talanted in my opinion, and I recommend you to join the program: [Program Name].\n\nBest regards,\n[Your Supervisor]`
     );
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  };
+
+  // New handler for image click to open modal
+  const handleImageClick = (imageUrl, altText) => {
+    setSelectedImageUrl(imageUrl);
+    setSelectedImageAlt(altText);
+    setOpenImageModal(true);
+  };
+
+  // Handler to close the image modal
+  const handleCloseImageModal = () => {
+    setOpenImageModal(false);
+    setSelectedImageUrl("");
+    setSelectedImageAlt("");
   };
 
   return (
@@ -256,20 +281,31 @@ export default function SupervisorTraineesList() {
 
               const canInvite = viewType === "allPlatform";
 
+              const imageUrl = trainee.profileImageUrl || "https://via.placeholder.com/300x190.png?text=No+Image";
+              const imageAlt = trainee.fullName || "Trainee image";
+
               return (
                 <Fade in={!loading} timeout={500 + idx * 50} key={trainee.id || idx}>
                   <Grid item xs={12} sm={6} md={4} lg={3} sx={{ display: "flex" }}>
                     <StyledCard elevation={2}>
-                      <CardMedia
-                        component="img"
-                        height="190"
-                        image={
-                          trainee.profileImageUrl ||
-                          "https://via.placeholder.com/300x190.png?text=No+Image"
-                        }
-                        alt={trainee.fullName || "Trainee image"}
-                        sx={{ borderBottom: "1px solid #f0f0f0", objectFit: "cover" }}
-                      />
+                      {/* Clickable CardMedia */}
+                      <Tooltip title={`View ${trainee.fullName}'s Image`} placement="top">
+                        <CardMedia
+                          component="img"
+                          height="190"
+                          image={imageUrl}
+                          alt={imageAlt}
+                          sx={{
+                            borderBottom: "1px solid #f0f0f0",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                            "&:hover": {
+                              opacity: 0.8,
+                            },
+                          }}
+                          onClick={() => handleImageClick(imageUrl, imageAlt)} // Pass imageUrl and altText
+                        />
+                      </Tooltip>
                       <CardContent sx={{ flexGrow: 1, p: 2 }}>
                         <Tooltip title={trainee.fullName || "N/A"} placement="top">
                           <Typography
@@ -469,6 +505,37 @@ export default function SupervisorTraineesList() {
           )}
         </>
       )}
+
+      {/* Image Preview Dialog */}
+      <Dialog
+        open={openImageModal}
+        onClose={handleCloseImageModal}
+        maxWidth="md"
+        fullWidth
+        aria-labelledby="image-preview-dialog-title"
+      >
+        <DialogContent sx={{ p: 0, position: "relative" }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageModal}
+            sx={{
+              width: 'fit-content',
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 1, // Ensure close button is above the image
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <img
+            src={selectedImageUrl}
+            alt={selectedImageAlt}
+            style={{ width: "50%", height: "auto", display: "block", margin: "auto"}}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

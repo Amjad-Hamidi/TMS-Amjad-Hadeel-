@@ -39,7 +39,7 @@ export default function ForgetPassword() {
     }
 
     try {
-      const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/Account/forgot-password", {
+      const response = await fetch("https://amjad-hamidi-tms.runasp.net/api/Account/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function ForgetPassword() {
     }
 
     try {
-      const response = await fetch("http://amjad-hamidi-tms.runasp.net/api/Account/send-code", {
+      const response = await fetch("https://amjad-hamidi-tms.runasp.net/api/Account/send-code", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

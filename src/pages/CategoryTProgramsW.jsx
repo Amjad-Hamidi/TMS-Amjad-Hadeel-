@@ -41,7 +41,7 @@ import {
   Category as CategoryIcon,
 } from "@mui/icons-material";
 
-const BASE_URL = "http://amjad-hamidi-tms.runasp.net";
+const BASE_URL = "https://amjad-hamidi-tms.runasp.net";
 
 // ───────── STYLED COMPONENTS ──────────────────
 const StyledCard = styled(Card)(({ theme }) => ({

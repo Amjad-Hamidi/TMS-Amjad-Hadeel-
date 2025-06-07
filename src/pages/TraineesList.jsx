@@ -17,6 +17,8 @@ import {
   IconButton,
   Link as MuiLink, // Alias to avoid conflict if HTML link is used
   Tooltip,
+  Dialog, // Import Dialog
+  DialogContent, // Import DialogContent
 } from "@mui/material";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 import EmailIcon from '@mui/icons-material/Email';
@@ -25,6 +27,7 @@ import DescriptionIcon from '@mui/icons-material/Description'; // For CV
 import CategoryIcon from '@mui/icons-material/Category'; // For Category
 import SchoolIcon from '@mui/icons-material/School'; // For Training Program
 import FingerprintIcon from '@mui/icons-material/Fingerprint'; // For ID
+import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon for the dialog
 
 const LIMIT = 8; // Or whatever limit is preferred
 
@@ -41,6 +44,8 @@ const TraineesList = () => {
     limit: LIMIT,
     totalPages: 1,
   });
+  const [openImagePreview, setOpenImagePreview] = useState(false); // New state for image preview dialog
+  const [currentImageUrl, setCurrentImageUrl] = useState(null); // New state for current image URL
 
   // Debounce search input
   useEffect(() => {
@@ -57,10 +62,10 @@ const TraineesList = () => {
     let url;
     if (viewType === "company") {
       // Fetches trainees specifically associated with the company's programs
-      url = `http://amjad-hamidi-tms.runasp.net/api/Users/trainees-company?page=${meta.page}&limit=${meta.limit}&search=${encodeURIComponent(debouncedSearch)}`;
+      url = `https://amjad-hamidi-tms.runasp.net/api/Users/trainees-company?page=${meta.page}&limit=${meta.limit}&search=${encodeURIComponent(debouncedSearch)}`;
     } else { // 'allPlatform'
       // Fetches all trainees visible on the platform to this company
-      url = `http://amjad-hamidi-tms.runasp.net/api/Users/all-trainees?page=${meta.page}&limit=${meta.limit}&search=${encodeURIComponent(debouncedSearch)}`;
+      url = `https://amjad-hamidi-tms.runasp.net/api/Users/all-trainees?page=${meta.page}&limit=${meta.limit}&search=${encodeURIComponent(debouncedSearch)}`;
     }
 
     try {
@@ -102,7 +107,7 @@ const TraineesList = () => {
     setViewType(newViewType);
     setMeta(prev => ({ ...prev, page: 1 })); // Reset to page 1 on view type change
   };
-  
+
   const handleInvite = (email, traineeName) => {
     const subject = encodeURIComponent(`Invitation to Connect`);
     const body = encodeURIComponent(`Dear ${traineeName},
@@ -112,6 +117,18 @@ I came across your profile on the platform and would like to connect with you.
 Best regards,
 [Your Name/Company Name]`);
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  };
+
+  // Handler for opening the image preview dialog
+  const handleImageClick = (imageUrl) => {
+    setCurrentImageUrl(imageUrl);
+    setOpenImagePreview(true);
+  };
+
+  // Handler for closing the image preview dialog
+  const handleCloseImagePreview = () => {
+    setOpenImagePreview(false);
+    setCurrentImageUrl(null);
   };
 
 
@@ -214,13 +231,14 @@ Best regards,
                           height="180"
                           image={trainee.profileImageUrl || `https://source.unsplash.com/random/300x180?avatar,person,${idx}`}
                           alt={trainee.fullName}
-                          sx={{ objectFit: "cover" }}
+                          sx={{ objectFit: "cover", cursor: 'pointer' }} // Add cursor pointer
+                          onClick={() => handleImageClick(trainee.profileImageUrl || `https://source.unsplash.com/random/300x180?avatar,person,${idx}`)} // Handle click
                         />
                         <CardContent sx={{ flexGrow: 1, p: 2 }}>
                           <Typography variant="h6" sx={{ fontWeight: 'medium', mb: 0.5, color: "text.primary" }} noWrap>
                             {trainee.fullName}
                           </Typography>
-                          
+
                           <Stack direction="row" alignItems="center" spacing={0.5} sx={{mb: 0.5, color: "text.secondary"}}>
                               <FingerprintIcon fontSize="small" />
                               <Typography variant="body2">ID: {trainee.id}</Typography>
@@ -244,7 +262,7 @@ Best regards,
                             </Stack>
                           )}
                           {categoryNameDisplay !== "N/A" && (
-                             <Stack direction="row" alignItems="center" spacing={0.5} sx={{mb: 1, color: "text.secondary"}}>
+                              <Stack direction="row" alignItems="center" spacing={0.5} sx={{mb: 1, color: "text.secondary"}}>
                               <CategoryIcon fontSize="small" />
                               <Typography variant="body2">{categoryNameDisplay}</Typography>
                             </Stack>
@@ -295,9 +313,9 @@ Best regards,
                             </Tooltip>
                           )}
                           <Tooltip title={`Send an invitation email to ${trainee.fullName}`} placement="top">
-                            <Button 
-                                variant="contained" 
-                                size="small" 
+                            <Button
+                                variant="contained"
+                                size="small"
                                 onClick={() => handleInvite(trainee.email, trainee.fullName)}
                                 startIcon={<EmailIcon />}
                                 sx={{
@@ -336,6 +354,40 @@ Best regards,
           )}
         </>
       )}
+
+      {/* Image Preview Dialog */}
+      <Dialog open={openImagePreview} onClose={handleCloseImagePreview} maxWidth="md" fullWidth>
+        <DialogContent sx={{ p: 0, position: 'relative' }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImagePreview}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 1,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {currentImageUrl && (
+            <Box
+              component="img"
+              src={currentImageUrl}
+              alt="Trainee Profile"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                display: 'block',
+                borderRadius: 2,
+                margin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

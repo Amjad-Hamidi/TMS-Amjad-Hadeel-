@@ -15,9 +15,14 @@ import {
   Avatar,
   Fade,
   TextField,
+  Dialog, // Import Dialog for the image preview
+  DialogContent, // Import DialogContent for the image preview
+  IconButton // Import IconButton for the close button
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon for the close button
+import ImageIcon from '@mui/icons-material/Image'; // Import ImageIcon for fallback
 import debounce from 'lodash/debounce';
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 
@@ -40,7 +45,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
   display: 'flex',
   flexDirection: 'column',
-  height: '100%', 
+  height: '100%',
   // background: "linear-gradient(120deg, #fff 80%, #e3f2fd 100%)", // Retain or remove based on consistency decision
   // boxShadow: "0 8px 32px 0 #00000011" // Retain or remove
 }));
@@ -74,6 +79,8 @@ export default function TMyFeedbacks() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
+  const [selectedImage, setSelectedImage] = useState(null); // New state for image preview
+
   const fetchMyFeedbacks = useCallback(async (pageNum = 1, currentSearchTerm = '') => {
     setLoading(true);
     try {
@@ -85,7 +92,7 @@ export default function TMyFeedbacks() {
         params.append('search', currentSearchTerm);
       }
       const response = await fetchWithAuth(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/sent?${params.toString()}`
+        `https://amjad-hamidi-tms.runasp.net/api/Feedbacks/sent?${params.toString()}`
       );
       if (!response.ok) {
         const errorText = await response.text();
@@ -153,7 +160,7 @@ export default function TMyFeedbacks() {
     if (confirm.isConfirmed) {
       try {
         const response = await fetchWithAuth(
-          `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/${feedbackId}`,
+          `https://amjad-hamidi-tms.runasp.net/api/Feedbacks/${feedbackId}`,
           { method: "DELETE" }
         );
         if (!response.ok) {
@@ -171,6 +178,14 @@ export default function TMyFeedbacks() {
 
   const handlePageChange = (event, value) => {
     setPage(value);
+  };
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleCloseImageDialog = () => {
+    setSelectedImage(null);
   };
 
   return (
@@ -213,8 +228,13 @@ export default function TMyFeedbacks() {
               <StyledCard elevation={5} sx={{ borderRadius: 4 /* Consider if this conflicts with StyledCard's own styling */ }}>
                 <CardContent>
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 1 }}>
-                    <StyledAvatar src={f.toImageUrl || undefined} alt={f.toFullName || 'Recipient Avatar'}>
-                      {f.toFullName ? f.toFullName.charAt(0).toUpperCase() : 'R'}
+                    <StyledAvatar
+                      src={f.toImageUrl || undefined}
+                      alt={f.toFullName || 'Recipient Avatar'}
+                      sx={{ cursor: f.toImageUrl ? 'pointer' : 'default' }} // Add cursor pointer if image exists
+                      onClick={() => f.toImageUrl && handleImageClick(f.toImageUrl)} // Open dialog only if image exists
+                    >
+                      {f.toFullName ? f.toFullName.charAt(0).toUpperCase() : <ImageIcon />} {/* Use ImageIcon as fallback */}
                     </StyledAvatar>
                     <Typography variant="h6" sx={{ fontWeight: 700, flex: 1 }}>
                       To: {f.toFullName}
@@ -299,6 +319,55 @@ export default function TMyFeedbacks() {
           onClose={() => setEditItem(null)}
         />
       )}
+
+      {/* ─── نافذة معاينة الصورة فقط ────────────────────────────────────────────────── */}
+      <Dialog
+        open={Boolean(selectedImage)}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogContent
+          dividers
+          sx={{ position: 'relative', p: 0 }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 1,
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          {selectedImage && (
+            <Box
+              component="img"
+              src={selectedImage}
+              alt="User Image Preview"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                maxHeight: '80vh',
+                display: 'block',
+                mx: 'auto',
+                objectFit: 'contain',
+                p: 2,
+                margin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

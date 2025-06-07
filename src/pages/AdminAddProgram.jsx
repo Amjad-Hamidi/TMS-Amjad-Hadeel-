@@ -12,9 +12,9 @@ import {
   Alert,
   AlertTitle,
   CircularProgress,
-  Dialog, // Import Dialog for image preview
-  DialogContent, // Import DialogContent for image preview
-  IconButton, // Import IconButton for close button
+  Dialog,
+  DialogContent,
+  IconButton,
 } from "@mui/material";
 import {
   Title as TitleIcon,
@@ -30,7 +30,7 @@ import {
   CloudUpload as CloudUploadIcon,
   Send as SendIcon,
   RocketLaunch as RocketLaunchIcon,
-  Close as CloseIcon, // Import CloseIcon for the dialog
+  Close as CloseIcon,
 } from "@mui/icons-material";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
@@ -45,7 +45,7 @@ const formatDateForInput = (dateString) => {
   }
 };
 
-function AddTrainingProgram() {
+function AdminAddProgram() {
   const initialFormData = {
     title: "",
     description: "",
@@ -57,8 +57,8 @@ function AddTrainingProgram() {
     contentUrl: "",
     classroomUrl: "",
     categoryId: "",
-    companyId: "", // Made required
-    supervisorId: "", // Made required
+    companyId: "",
+    supervisorId: "",
     imageFile: null,
     status: true,
   };
@@ -67,10 +67,9 @@ function AddTrainingProgram() {
   const [errors, setErrors] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [openImageDialog, setOpenImageDialog] = useState(false); // State for image dialog
+  const [openImageDialog, setOpenImageDialog] = useState(false);
 
   useEffect(() => {
-    // Cleanup for imagePreview URL
     return () => {
       if (imagePreview) {
         URL.revokeObjectURL(imagePreview);
@@ -85,14 +84,14 @@ function AddTrainingProgram() {
       setFormData((prev) => ({ ...prev, [name]: file }));
       if (file) {
         if (imagePreview) {
-          URL.revokeObjectURL(imagePreview); // Revoke previous URL if any
+          URL.revokeObjectURL(imagePreview);
         }
         setImagePreview(URL.createObjectURL(file));
       } else {
         if (imagePreview) {
           URL.revokeObjectURL(imagePreview);
         }
-        setImagePreview(null); // Clear preview if file is removed
+        setImagePreview(null);
       }
     } else if (type === "checkbox") {
       setFormData((prev) => ({ ...prev, [name]: checked }));
@@ -112,7 +111,6 @@ function AddTrainingProgram() {
       if (key === "imageFile" && formData[key]) {
         data.append("ImageFile", formData.imageFile, formData.imageFile.name);
       } else if (formData[key] !== null && formData[key] !== "") {
-        // Convert boolean to string for FormData if backend expects string
         if (typeof formData[key] === "boolean") {
           data.append(key.charAt(0).toUpperCase() + key.slice(1), formData[key].toString());
         } else {
@@ -126,7 +124,7 @@ function AddTrainingProgram() {
         "https://amjad-hamidi-tms.runasp.net/api/TrainingPrograms",
         {
           method: "POST",
-          body: data, // FormData handles multipart/form-data header automatically
+          body: data,
         }
       );
 
@@ -136,7 +134,7 @@ function AddTrainingProgram() {
       if (contentType && contentType.includes("application/json")) {
         result = await res.json();
       } else {
-        result = await res.text(); // Fallback for non-JSON responses
+        result = await res.text();
       }
 
       if (!res.ok) {
@@ -148,7 +146,6 @@ function AddTrainingProgram() {
             formattedErrors[key.toLowerCase()] = result.errors[key].join(", ");
           }
         } else if (result && result.title && result.status) {
-          // ProblemDetails format
           formattedErrors.general = `${result.title} (Status: ${result.status})`;
           if (result.errors) {
             Object.entries(result.errors).forEach(([field, messages]) => {
@@ -164,7 +161,7 @@ function AddTrainingProgram() {
         setSuccessMessage(result.message || "Program submitted successfully!");
         setFormData(initialFormData);
         if (imagePreview) {
-          URL.revokeObjectURL(imagePreview); // Also revoke on successful submit
+          URL.revokeObjectURL(imagePreview);
         }
         setImagePreview(null);
         setErrors(null);
@@ -482,7 +479,7 @@ function AddTrainingProgram() {
               type="number"
               value={formData.companyId}
               onChange={handleChange}
-              required // Made required
+              required
               fullWidth
               variant="outlined"
               placeholder="Enter your Company ID"
@@ -506,7 +503,7 @@ function AddTrainingProgram() {
               type="number"
               value={formData.supervisorId}
               onChange={handleChange}
-              required // Made required
+              required
               fullWidth
               variant="outlined"
               placeholder="Enter Supervisor ID"
@@ -561,9 +558,9 @@ function AddTrainingProgram() {
                     borderRadius: "8px",
                     marginTop: "8px",
                     border: "1px solid #ddd",
-                    cursor: 'pointer', // Make image clickable
+                    cursor: 'pointer',
                   }}
-                  onClick={handleOpenImageDialog} // Open dialog on image click
+                  onClick={handleOpenImageDialog}
                 />
               </Box>
             )}
@@ -661,11 +658,11 @@ function AddTrainingProgram() {
               sx={{
                 width: '50%',
                 height: 'auto',
-                maxHeight: '80vh', // Limit height to avoid excessively tall images
+                maxHeight: '80vh',
                 display: 'block',
-                mx: 'auto', // Center the image
-                objectFit: 'contain', // Ensure the entire image is visible
-                p: 2, // Add some padding inside the dialog
+                mx: 'auto',
+                objectFit: 'contain',
+                p: 2,
                 margin: 'auto',
               }}
             />
@@ -676,4 +673,4 @@ function AddTrainingProgram() {
   );
 }
 
-export default AddTrainingProgram;
+export default AdminAddProgram;

@@ -11,7 +11,10 @@ import {
   TextField,
   IconButton,
   Slide,
-  Chip
+  Chip,
+  Dialog,          // Import Dialog
+  DialogContent,   // Import DialogContent
+  DialogTitle,     // Import DialogTitle
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -22,6 +25,8 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import BusinessIcon from "@mui/icons-material/Business";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import SchoolIcon from "@mui/icons-material/School";
+import CloseIcon from '@mui/icons-material/Close'; // Import Close icon for the dialog
+
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -42,11 +47,15 @@ export default function CCompanyProfiles() {
   const location = useLocation();
   const [searchTimeout, setSearchTimeout] = useState(null);
 
+  // State for image preview dialog
+  const [openImageDialog, setOpenImageDialog] = useState(false);
+  const [currentImageUrl, setCurrentImageUrl] = useState("");
+
   const fetchCompanies = async (page = 1, limit = LIMIT, searchTerm = "") => {
     setLoading(true);
     setError("");
     try {
-      let url = `http://amjad-hamidi-tms.runasp.net/api/Profiles/company-profiles?page=${page}&limit=${limit}`;
+      let url = `https://amjad-hamidi-tms.runasp.net/api/Profiles/company-profiles?page=${page}&limit=${limit}`;
       if (searchTerm) url += `&search=${encodeURIComponent(searchTerm)}`;
       const response = await fetchWithAuth(url, { headers: { Accept: "*/*" } });
       if (!response.ok) throw new Error("Failed to fetch company profiles.");
@@ -83,6 +92,18 @@ export default function CCompanyProfiles() {
 
   const handlePageChange = (event, value) => {
     setMeta((prev) => ({ ...prev, page: value }));
+  };
+
+  // Function to open image dialog
+  const handleOpenImageDialog = (imageUrl) => {
+    setCurrentImageUrl(imageUrl);
+    setOpenImageDialog(true);
+  };
+
+  // Function to close image dialog
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog(false);
+    setCurrentImageUrl("");
   };
 
   return (
@@ -177,6 +198,7 @@ export default function CCompanyProfiles() {
                     }}
                   >
                     <Stack alignItems="center" spacing={1}>
+                      {/* Avatar with onClick to open image dialog */}
                       <Avatar
                         src={company.profileImageUrl || undefined}
                         alt={company.fullName}
@@ -187,7 +209,9 @@ export default function CCompanyProfiles() {
                           mb: 2,
                           objectFit: "cover",
                           bgcolor: company.profileImageUrl ? "transparent" : "grey.300",
+                          cursor: company.profileImageUrl ? "pointer" : "default", // Add pointer cursor
                         }}
+                        onClick={() => company.profileImageUrl && handleOpenImageDialog(company.profileImageUrl)}
                       >
                         {!company.profileImageUrl && (
                           <PersonOutlineIcon sx={{ fontSize: 60, color: "grey.700" }} />
@@ -248,6 +272,45 @@ export default function CCompanyProfiles() {
           </>
         )}
       </Box>
+
+      {/* Image Preview Dialog */}
+      <Dialog open={openImageDialog} onClose={handleCloseImageDialog} maxWidth="md" fullWidth>
+        <DialogTitle sx={{ m: 0, p: 1 }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              bgcolor: 'primary.main', // Blue background
+              width: 32, // Set a specific width
+              height: 32, // Set an equal height
+              borderRadius: '50%', // Make it perfectly round
+              p: 0, // No extra padding, icon fills the 32x32 area
+              display: 'flex', // Ensures icon is centered
+              justifyContent: 'center', // Ensures icon is centered
+              alignItems: 'center', // Ensures icon is centered
+              '&:hover': {
+                bgcolor: 'primary.dark', // Darker blue on hover
+                transform: 'scale(1.1)', // Slight scale effect
+                transition: 'transform 0.3s ease-in-out, background-color 0.3s ease-in-out', // Smooth transition
+              },
+            }}
+          >
+            <CloseIcon sx={{ color: 'white', fontSize: 20 }} /> {/* White icon, adjust font size if needed */}
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 0 }}>
+          {currentImageUrl && (
+            <img
+              src={currentImageUrl}
+              alt="Company Profile Preview"
+              style={{ maxWidth: '100%', maxHeight: '80vh', objectFit: 'contain' }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

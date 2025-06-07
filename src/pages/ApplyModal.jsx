@@ -48,11 +48,11 @@ export default function ApplyModal({ program, onClose, onApplySuccess }) {
     console.log("Program ID:", program.trainingProgramId);
     console.log("Selected CV File:", cvFile);
     console.log("Access Token:", token);
-    console.log("API Endpoint:", "http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll");
+    console.log("API Endpoint:", "https://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll");
 
     try {
       const response = await fetchWithAuth(
-        `http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll`,
+        `https://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/enroll`,
         {
           method: "POST",
           body: formData,

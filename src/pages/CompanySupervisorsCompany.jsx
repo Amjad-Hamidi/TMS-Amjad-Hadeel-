@@ -37,7 +37,7 @@ const CompanySupervisorsCompany = () => {
   const fetchSupervisors = async (page = 1, limit = LIMIT, search = "") => {
     setLoading(true);
     setError(null);
-    let url = `http://amjad-hamidi-tms.runasp.net/api/Users/supervisors-company?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
+    let url = `https://amjad-hamidi-tms.runasp.net/api/Users/supervisors-company?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
     try {
       const res = await fetchWithAuth(url, {
         headers: { Accept: "*/*" },

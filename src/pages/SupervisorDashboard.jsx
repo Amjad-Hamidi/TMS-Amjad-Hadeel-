@@ -14,9 +14,13 @@ import {
   Chip,
   Pagination,
   Fade,
+  Dialog, // Import Dialog
+  DialogContent, // Import DialogContent
+  IconButton, // Import IconButton
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { fetchWithAuth } from '../utils/fetchWithAuth';
+import { fetchWithAuth } from "../utils/fetchWithAuth";
+import { Close as CloseIcon } from "@mui/icons-material"; // Import CloseIcon
 
 const SupervisorDashboard = () => {
   const navigate = useNavigate();
@@ -32,11 +36,18 @@ const SupervisorDashboard = () => {
     totalPages: 1,
   });
 
+  // New state for image preview modal
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
+  const [selectedImageAlt, setSelectedImageAlt] = useState("");
+
   const fetchCategories = async (page = 1, limit = 8, search = "") => {
     setLoading(true);
     setError(null);
     try {
-      const url = `http://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
+      const url = `https://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(
+        search
+      )}`;
       const res = await fetchWithAuth(url, {
         headers: { Accept: "*/*" },
       });
@@ -62,9 +73,11 @@ const SupervisorDashboard = () => {
 
   useEffect(() => {
     if (searchTimeout) clearTimeout(searchTimeout);
-    setSearchTimeout(setTimeout(() => {
-      fetchCategories(1, meta.limit, query);
-    }, 500));
+    setSearchTimeout(
+      setTimeout(() => {
+        fetchCategories(1, meta.limit, query);
+      }, 500)
+    );
   }, [query]);
 
   const handlePageChange = (e, value) => {
@@ -75,10 +88,38 @@ const SupervisorDashboard = () => {
     navigate(`/CategoryTProgramsW/${id}`);
   };
 
+  // Handler for image click to open modal
+  const handleImageClick = (imageUrl, altText) => {
+    setSelectedImageUrl(imageUrl);
+    setSelectedImageAlt(altText);
+    setOpenImageModal(true);
+  };
+
+  // Handler to close the image modal
+  const handleCloseImageModal = () => {
+    setOpenImageModal(false);
+    setSelectedImageUrl("");
+    setSelectedImageAlt("");
+  };
+
   return (
-    <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
+    <Box
+      sx={{
+        maxWidth: 1300,
+        mx: "auto",
+        p: { xs: 1, md: 4 },
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)",
+      }}
+    >
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}>
-        <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 3 }}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          alignItems="center"
+          justifyContent="space-between"
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
           <Typography variant="h4" sx={{ fontWeight: 700, color: "#1e3c72" }}>
             Explore Categories
           </Typography>
@@ -106,7 +147,9 @@ const SupervisorDashboard = () => {
         ) : (
           <Grid container spacing={4}>
             {categories.length === 0 ? (
-              <Grid item xs={12}><Typography>No categories found.</Typography></Grid>
+              <Grid item xs={12}>
+                <Typography>No categories found.</Typography>
+              </Grid>
             ) : (
               categories.map((c, idx) => (
                 <Fade in={!loading} timeout={600 + idx * 120} key={c.id}>
@@ -131,14 +174,30 @@ const SupervisorDashboard = () => {
                         <CardMedia
                           component="img"
                           height="170"
-                          image={c.categoryImage.startsWith("http") ? c.categoryImage : `http://amjad-hamidi-tms.runasp.net${c.categoryImage}`}
+                          image={
+                            c.categoryImage.startsWith("http")
+                              ? c.categoryImage
+                              : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`
+                          }
                           alt={c.name}
                           sx={{
                             objectFit: "cover",
                             borderTopLeftRadius: 16,
                             borderTopRightRadius: 16,
                             borderBottom: "2px solid #f0f0f0",
+                            cursor: "pointer", // Add cursor pointer
+                            "&:hover": {
+                              opacity: 0.8, // Slight dim on hover
+                            },
                           }}
+                          onClick={() =>
+                            handleImageClick(
+                              c.categoryImage.startsWith("http")
+                                ? c.categoryImage
+                                : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`,
+                              c.name
+                            )
+                          }
                         />
                       )}
                       <CardContent sx={{ flex: 1 }}>
@@ -151,7 +210,13 @@ const SupervisorDashboard = () => {
                         {c.generalSkills && c.generalSkills.length > 0 && (
                           <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1 }}>
                             {c.generalSkills.map((skill, idx) => (
-                              <Chip key={idx} label={skill} color="info" size="small" sx={{ fontWeight: 600 }} />
+                              <Chip
+                                key={idx}
+                                label={skill}
+                                color="info"
+                                size="small"
+                                sx={{ fontWeight: 600 }}
+                              />
                             ))}
                           </Stack>
                         )}
@@ -204,6 +269,37 @@ const SupervisorDashboard = () => {
           />
         </Stack>
       </Paper>
+
+      {/* Image Preview Dialog */}
+      <Dialog
+        open={openImageModal}
+        onClose={handleCloseImageModal}
+        maxWidth="md"
+        fullWidth
+        aria-labelledby="image-preview-dialog-title"
+      >
+        <DialogContent sx={{ p: 0, position: "relative" }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageModal}
+            sx={{
+              width: 'fit-content',
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 1, // Ensure close button is above the image
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <img
+            src={selectedImageUrl}
+            alt={selectedImageAlt}
+            style={{ width: "59%", height: "auto", display: "block", margin: 'auto' }}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

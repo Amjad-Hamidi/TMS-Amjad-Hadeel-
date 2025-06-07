@@ -43,21 +43,25 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import ClearIcon from '@mui/icons-material/Clear';
-import CategoryIcon from '@mui/icons-material/Category';
-import DescriptionIcon from '@mui/icons-material/Description';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import SearchIcon from '@mui/icons-material/Search'; // أيقونة البحث
+import TitleIcon from '@mui/icons-material/Title'; // For program title
+import DescriptionIcon from '@mui/icons-material/Description'; // For description
+import AccessTimeIcon from '@mui/icons-material/AccessTime'; // For duration
+import LocationOnIcon from '@mui/icons-material/LocationOn'; // For location
+import EventIcon from '@mui/icons-material/Event'; // For start/end date
+import CategoryIcon from '@mui/icons-material/Category'; // For category name
+import BusinessIcon from '@mui/icons-material/Business'; // For company name
+import PersonIcon from '@mui/icons-material/Person'; // For supervisor name
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; // For approval status
 
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 const API_BASE_URL = "https://amjad-hamidi-tms.runasp.net/api";
 
-const AdminCategories = () => {
+const AdminPrograms = () => {
   const navigate = useNavigate();
 
   // حالات البيانات والتحميل
-  const [categories, setCategories] = useState([]);
+  const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -66,7 +70,7 @@ const AdminCategories = () => {
   const [limit, setLimit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState(""); //  <<<--- حالة البحث الجديدة
+  const [searchQuery, setSearchQuery] = useState(""); // لحالة البحث
 
   // حالات الـ Snackbar لإشعارات النجاح/الخطأ
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -75,25 +79,31 @@ const AdminCategories = () => {
 
   // حالات الـ Modal للتعديل
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [currentCategoryToEdit, setCurrentCategoryToEdit] = useState(null);
+  const [currentProgramToEdit, setCurrentProgramToEdit] = useState(null);
   const [editForm, setEditForm] = useState({
-    name: "",
+    title: "",
     description: "",
-    categoryImage: null,
-    generalSkills: [],
+    durationInDays: "",
+    startDate: "",
+    endDate: "",
+    location: "",
+    seatsAvailable: 0,
+    contentUrl: "",
+    classroomUrl: "",
+    imagePath: null, // This will store the original URL
   });
-  const [newImageFile, setNewImageFile] = useState(null);
-  const [newImagePreview, setNewImagePreview] = useState(null);
+  const [newImageFile, setNewImageFile] = useState(null); // To store the new file object
+  const [newImagePreview, setNewImagePreview] = useState(null); // To store URL for preview
 
-  // دالة لجلب الفئات (Categories) من الـ API
-  const fetchCategories = useCallback(async () => {
+  // دالة لجلب برامج التدريب (Training Programs) من الـ API
+  const fetchPrograms = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const url = new URL(`${API_BASE_URL}/Categories`);
+      const url = new URL(`${API_BASE_URL}/TrainingPrograms`);
       url.searchParams.append("page", page);
       url.searchParams.append("limit", limit);
-      if (searchQuery) { // <<<--- إضافة نص البحث إلى الـ URL
+      if (searchQuery) {
         url.searchParams.append("search", searchQuery);
       }
 
@@ -101,23 +111,22 @@ const AdminCategories = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setCategories(data.items);
+        setPrograms(data.items);
         setTotalCount(data.totalCount);
         setTotalPages(data.totalPages);
-        // تأكد أن رقم الصفحة الحالية ضمن النطاق بعد الجلب
         if (page > data.totalPages && data.totalPages > 0) {
             setPage(data.totalPages);
         } else if (data.totalPages === 0) {
             setPage(1);
         }
       } else {
-        setError(data.message || "Failed to fetch categories.");
-        setSnackbarMessage(data.message || "Failed to fetch categories.");
+        setError(data.message || "Failed to fetch training programs.");
+        setSnackbarMessage(data.message || "Failed to fetch training programs.");
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       }
     } catch (err) {
-      console.error("Fetch categories error:", err);
+      console.error("Fetch programs error:", err);
       setError("Network error or server unavailable.");
       setSnackbarMessage("Network error or server unavailable.");
       setSnackbarSeverity("error");
@@ -125,12 +134,12 @@ const AdminCategories = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, searchQuery]); // <<<--- إضافة searchQuery كـ dependency
+  }, [page, limit, searchQuery]); // إضافة searchQuery كـ dependency
 
   // جلب البيانات عند تحميل المكون أو تغير Pagination أو البحث
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    fetchPrograms();
+  }, [fetchPrograms]);
 
   // Cleanup for image preview URL
   useEffect(() => {
@@ -154,16 +163,16 @@ const AdminCategories = () => {
     setPage(1); // Reset page to 1 when limit changes
   };
 
-  // <<<--- دالة جديدة لمعالجة تغيير نص البحث
+  // معالجة تغيير نص البحث
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
-    setPage(1); // إعادة تعيين الصفحة إلى 1 عند تغيير نص البحث
+    setPage(1); // Reset page to 1 when search query changes
   };
 
-  // دالة لحذف فئة واحدة
-  const handleDeleteCategory = async (id, name) => {
+  // دالة لحذف برنامج واحد
+  const handleDeleteProgram = async (id, title) => {
     Swal.fire({
-      title: `Are you sure you want to delete ${name}?`,
+      title: `Are you sure you want to delete "${title}"?`,
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
@@ -182,23 +191,23 @@ const AdminCategories = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetchWithAuth(`${API_BASE_URL}/Categories/${id}`, {
+          const response = await fetchWithAuth(`${API_BASE_URL}/TrainingPrograms/${id}`, {
             method: "DELETE",
           });
 
           if (response.status === 204) {
             Swal.fire(
               "Deleted!",
-              `Category "${name}" has been deleted.`,
+              `Program "${title}" has been deleted.`,
               "success"
             );
-            fetchCategories(); // إعادة جلب البيانات لتحديث الجدول
-            setSnackbarMessage(`Category "${name}" deleted successfully!`);
+            fetchPrograms(); // إعادة جلب البيانات لتحديث الجدول
+            setSnackbarMessage(`Program "${title}" deleted successfully!`);
             setSnackbarSeverity("success");
             setSnackbarOpen(true);
           } else {
             const errorData = await response.json();
-            const errorMessage = errorData.message || `Failed to delete category "${name}".`;
+            const errorMessage = errorData.message || `Failed to delete program "${title}".`;
             Swal.fire(
               "Error!",
               errorMessage,
@@ -209,7 +218,7 @@ const AdminCategories = () => {
             setSnackbarOpen(true);
           }
         } catch (err) {
-          console.error("Delete category error:", err);
+          console.error("Delete program error:", err);
           Swal.fire(
             "Error!",
             `Network error: ${err.message}`,
@@ -223,11 +232,11 @@ const AdminCategories = () => {
     });
   };
 
-  // دالة لحذف جميع الفئات
-  const handleDeleteAllCategories = async () => {
+  // دالة لحذف جميع برامج التدريب (تفترض وجود endpoint في الـ API)
+  const handleDeleteAllPrograms = async () => {
     Swal.fire({
       title: "Are you absolutely sure?",
-      html: "This action will delete <strong>ALL</strong> categories and cannot be undone!",
+      html: "This action will delete <strong>ALL</strong> training programs and cannot be undone!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -245,24 +254,25 @@ const AdminCategories = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetchWithAuth(`${API_BASE_URL}/Categories/delete-all`, {
+          // تأكد من أن الـ API الخاص بك يدعم هذا الـ endpoint
+          const response = await fetchWithAuth(`${API_BASE_URL}/TrainingPrograms/delete-all`, {
             method: "DELETE",
           });
 
           if (response.status === 204) {
             Swal.fire(
               "All Deleted!",
-              "All categories have been successfully deleted.",
+              "All training programs have been successfully deleted.",
               "success"
             );
             setPage(1);
-            fetchCategories();
-            setSnackbarMessage("All categories deleted successfully!");
+            fetchPrograms();
+            setSnackbarMessage("All programs deleted successfully!");
             setSnackbarSeverity("success");
             setSnackbarOpen(true);
           } else {
             const errorData = await response.json();
-            const errorMessage = errorData.message || "Failed to delete all categories.";
+            const errorMessage = errorData.message || "Failed to delete all training programs.";
             Swal.fire(
               "Error!",
               errorMessage,
@@ -273,7 +283,7 @@ const AdminCategories = () => {
             setSnackbarOpen(true);
           }
         } catch (err) {
-          console.error("Delete all categories error:", err);
+          console.error("Delete all programs error:", err);
           Swal.fire(
             "Error!",
             `Network error: ${err.message}`,
@@ -292,7 +302,7 @@ const AdminCategories = () => {
     if (imageUrl) {
       Swal.fire({
         imageUrl: imageUrl,
-        imageAlt: "Category Image Preview",
+        imageAlt: "Program Image Preview",
         showConfirmButton: false,
         showCloseButton: true,
         width: "auto",
@@ -328,13 +338,19 @@ const AdminCategories = () => {
   };
 
   // Functions for Edit Modal
-  const handleEditClick = (category) => {
-    setCurrentCategoryToEdit(category);
+  const handleEditClick = (program) => {
+    setCurrentProgramToEdit(program);
     setEditForm({
-      name: category.name,
-      description: category.description,
-      categoryImage: category.categoryImage,
-      generalSkills: category.generalSkills ? [...category.generalSkills] : [],
+      title: program.title,
+      description: program.description,
+      durationInDays: program.durationInDays,
+      startDate: program.startDate.split('T')[0], // لتنسيق التاريخ لـ input type="date"
+      endDate: program.endDate.split('T')[0],   // لتنسيق التاريخ لـ input type="date"
+      location: program.location,
+      seatsAvailable: program.seatsAvailable,
+      contentUrl: program.contentUrl,
+      classroomUrl: program.classroomUrl,
+      imagePath: program.imagePath, // Original image URL
     });
     setNewImageFile(null);
     setNewImagePreview(null);
@@ -343,7 +359,7 @@ const AdminCategories = () => {
 
   const handleEditModalClose = () => {
     setEditModalOpen(false);
-    setCurrentCategoryToEdit(null);
+    setCurrentProgramToEdit(null);
     setNewImageFile(null);
     if (newImagePreview) {
       URL.revokeObjectURL(newImagePreview);
@@ -352,8 +368,11 @@ const AdminCategories = () => {
   };
 
   const handleEditFormChange = (e) => {
-    const { name, value } = e.target;
-    setEditForm((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    setEditForm((prev) => ({
+      ...prev,
+      [name]: type === 'number' ? parseInt(value, 10) : value,
+    }));
   };
 
   const handleImageFileChange = (e) => {
@@ -379,56 +398,39 @@ const AdminCategories = () => {
       URL.revokeObjectURL(newImagePreview);
     }
     setNewImagePreview(null);
-    setEditForm((prev) => ({ ...prev, categoryImage: null }));
+    setEditForm((prev) => ({ ...prev, imagePath: null })); // Clear image URL if user wants to remove existing one
   };
 
-  const handleAddSkill = (event) => {
-    if (event.key === 'Enter' || event.type === 'click') {
-      event.preventDefault();
-      const skillInput = event.target.value || editForm.newSkillInput;
-      const skill = skillInput.trim();
-      if (skill && !editForm.generalSkills.includes(skill)) {
-        setEditForm((prev) => ({
-          ...prev,
-          generalSkills: [...prev.generalSkills, skill],
-          newSkillInput: ""
-        }));
-      }
-    }
-  };
-
-  const handleRemoveSkill = (skillToRemove) => {
-    setEditForm((prev) => ({
-      ...prev,
-      generalSkills: prev.generalSkills.filter((skill) => skill !== skillToRemove),
-    }));
-  };
-
-  const handleUpdateCategory = async () => {
-    if (!currentCategoryToEdit) return;
+  const handleUpdateProgram = async () => {
+    if (!currentProgramToEdit) return;
 
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("id", currentCategoryToEdit.id);
-      formData.append("name", editForm.name);
+      formData.append("id", currentProgramToEdit.trainingProgramId); // تأكد من استخدام ID الصحيح
+      formData.append("title", editForm.title);
       formData.append("description", editForm.description);
+      formData.append("durationInDays", editForm.durationInDays);
+      formData.append("startDate", editForm.startDate);
+      formData.append("endDate", editForm.endDate);
+      formData.append("location", editForm.location);
+      formData.append("seatsAvailable", editForm.seatsAvailable);
+      formData.append("contentUrl", editForm.contentUrl);
+      formData.append("classroomUrl", editForm.classroomUrl);
 
+      // إذا كان هناك ملف صورة جديد، قم بإضافته
       if (newImageFile) {
-        formData.append("categoryImageFile", newImageFile);
-      } else if (editForm.categoryImage && currentCategoryToEdit.categoryImage) {
-        // If no new file, but there was an existing image and it wasn't cleared,
-        // we might need to send a signal to the backend to keep the existing one.
-        // This depends on your API. If your API handles missing imageFile as "keep existing",
-        // then no need to append anything. If it needs the URL, append it.
+        formData.append("imageFile", newImageFile);
+      } else if (editForm.imagePath && currentProgramToEdit.imagePath) {
+        // إذا لم يكن هناك ملف جديد ولكن كانت هناك صورة سابقة ولم يتم مسحها،
+        // يجب أن يحدد API الخاص بك كيفية التعامل مع هذا.
+        // في معظم الحالات، إذا لم ترسل ملف صورة جديد، سيحتفظ الـ API بالصورة الموجودة.
+        // إذا كان الـ API يتوقع قيمة معينة للإشارة إلى الاحتفاظ بالصورة، أضفها هنا.
       }
 
-      editForm.generalSkills.forEach((skill, index) => {
-        formData.append(`generalSkills[${index}]`, skill);
-      });
 
       const response = await fetchWithAuth(
-        `${API_BASE_URL}/Categories/${currentCategoryToEdit.id}`,
+        `${API_BASE_URL}/TrainingPrograms/${currentProgramToEdit.trainingProgramId}`,
         {
           method: "PUT",
           body: formData,
@@ -439,7 +441,7 @@ const AdminCategories = () => {
         Swal.fire({
           icon: 'success',
           title: 'Updated!',
-          text: `Category "${editForm.name}" updated successfully!`,
+          text: `Program "${editForm.title}" updated successfully!`,
           timer: 3000,
           showConfirmButton: false,
           customClass: {
@@ -450,15 +452,15 @@ const AdminCategories = () => {
             content: 'swal-content'
           }
         }).then(() => {
-          fetchCategories();
+          fetchPrograms();
           handleEditModalClose();
-          setSnackbarMessage(`Category "${editForm.name}" updated successfully!`);
+          setSnackbarMessage(`Program "${editForm.title}" updated successfully!`);
           setSnackbarSeverity("success");
           setSnackbarOpen(true);
         });
       } else {
         const errorData = await response.json();
-        const errorMessage = errorData.message || "Failed to update category.";
+        const errorMessage = errorData.message || "Failed to update program.";
         Swal.fire({
           icon: 'error',
           title: 'Error!',
@@ -476,7 +478,7 @@ const AdminCategories = () => {
         setSnackbarOpen(true);
       }
     } catch (err) {
-      console.error("Update category error:", err);
+      console.error("Update program error:", err);
       Swal.fire({
         icon: 'error',
         title: 'Network Error!',
@@ -510,7 +512,7 @@ const AdminCategories = () => {
       >
         <CircularProgress size={60} />
         <Typography variant="h6" sx={{ ml: 2, color: "#1e3c72" }}>
-          Loading Categories...
+          Loading Training Programs...
         </Typography>
       </Box>
     );
@@ -529,7 +531,7 @@ const AdminCategories = () => {
         }}
       >
         <Typography variant="h5" color="error" gutterBottom>
-          Error Loading Categories
+          Error Loading Training Programs
         </Typography>
         <Typography variant="body1" color="text.secondary">
           {error}
@@ -537,7 +539,7 @@ const AdminCategories = () => {
         <Button
           variant="contained"
           sx={{ mt: 3, background: "linear-gradient(45deg, #1e3c72 30%, #2a5298 90%)" }}
-          onClick={fetchCategories}
+          onClick={fetchPrograms}
         >
           Retry
         </Button>
@@ -545,10 +547,24 @@ const AdminCategories = () => {
     );
   }
 
+  // دالة مساعدة لتحويل حالة الموافقة إلى نص ولون مناسب
+  const getApprovalStatusChip = (status) => {
+    switch (status) {
+      case 0: // Pending
+        return <Chip label="Pending" size="small" color="warning" sx={{ bgcolor: '#ffc10720', color: '#ffc107', fontWeight: 'bold' }} />;
+      case 1: // Approved
+        return <Chip label="Approved" size="small" color="success" sx={{ bgcolor: '#4caf5020', color: '#4caf50', fontWeight: 'bold' }} />;
+      case 2: // Rejected
+        return <Chip label="Rejected" size="small" color="error" sx={{ bgcolor: '#f4433620', color: '#f44336', fontWeight: 'bold' }} />;
+      default:
+        return <Chip label="Unknown" size="small" />;
+    }
+  };
+
   return (
     <Box
       sx={{
-        maxWidth: 1200,
+        maxWidth: 1400, // زيادة العرض قليلاً
         mx: "auto",
         p: { xs: 2, md: 4 },
         minHeight: "calc(100vh - 64px)",
@@ -574,7 +590,7 @@ const AdminCategories = () => {
               textAlign: { xs: "center", sm: "left" }
             }}
           >
-            Manage Categories
+            Manage Training Programs
           </Typography>
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <Button
@@ -589,9 +605,9 @@ const AdminCategories = () => {
                 transition: "transform 0.3s ease-in-out",
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
               }}
-              onClick={() => navigate("/admin/add-category")}
+              onClick={() => navigate("/admin/add-program")}
             >
-              Add New Category
+              Add New Program
             </Button>
             <Button
               variant="contained"
@@ -605,26 +621,26 @@ const AdminCategories = () => {
                 transition: "transform 0.3s ease-in-out",
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
               }}
-              onClick={handleDeleteAllCategories}
-              disabled={categories.length === 0 && totalCount === 0}
+              onClick={handleDeleteAllPrograms}
+              disabled={programs.length === 0 && totalCount === 0}
             >
-              Delete All Categories
+              Delete All Programs
             </Button>
           </Stack>
         </Stack>
 
-        {/* Search Bar <<<--- تمت إضافته هنا */}
+        {/* Search Bar */}
         <Box mb={3}>
           <TextField
             fullWidth
-            label="Search Categories (Name, Description)"
+            label="Search Programs (Title, Description, Location)"
             variant="outlined"
             size="small"
             value={searchQuery}
             onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
-                <SearchIcon sx={{ color: 'action.active', mr: 1 }} />
+                <LocationOnIcon sx={{ color: 'action.active', mr: 1 }} />
               ),
             }}
             sx={{
@@ -638,29 +654,36 @@ const AdminCategories = () => {
           />
         </Box>
 
-        {categories.length === 0 && !loading && !error ? (
+
+        {programs.length === 0 && !loading && !error ? (
           <Box sx={{ textAlign: "center", py: 5 }}>
             <Typography variant="h6" color="text.secondary">
-              No categories found. Start by adding a new one!
+              No training programs found. Start by adding a new one!
             </Typography>
           </Box>
         ) : (
           <TableContainer component={Paper} sx={{ borderRadius: 2, overflowX: 'auto', boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.05)" }}>
-            <Table sx={{ minWidth: 650 }} aria-label="categories table">
+            <Table sx={{ minWidth: 1000 }} aria-label="training programs table">
               <TableHead sx={{ bgcolor: "#e0e7ee" }}>
                 <TableRow>
                   <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>ID</TableCell>
                   <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Image</TableCell>
-                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Name</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Title</TableCell>
                   <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Description</TableCell>
-                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Skills</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Duration</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Location</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Seats</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Category</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Company</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Supervisor</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", color: "#1e3c72" }}>Status</TableCell>
                   <TableCell align="center" sx={{ fontWeight: "bold", color: "#1e3c72" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {categories.map((category) => (
+                {programs.map((program) => (
                   <TableRow
-                    key={category.id}
+                    key={program.trainingProgramId}
                     sx={{
                       "&:nth-of-type(odd)": { backgroundColor: "#f9fbfd" },
                       "&:hover": {
@@ -671,64 +694,40 @@ const AdminCategories = () => {
                       },
                     }}
                   >
-                    <TableCell>{category.id}</TableCell>
+                    <TableCell>{program.trainingProgramId}</TableCell>
                     <TableCell>
                       <Tooltip title="Click to view image" arrow>
                         <Avatar
-                          src={category.categoryImage || undefined}
-                          alt={category.name}
+                          src={program.imagePath || undefined}
+                          alt={program.title}
                           sx={{
                             width: 50,
                             height: 50,
-                            cursor: category.categoryImage ? "pointer" : "default",
+                            cursor: program.imagePath ? "pointer" : "default",
                             border: "1px solid #ddd",
-                            bgcolor: category.categoryImage ? "transparent" : "grey.300",
+                            bgcolor: program.imagePath ? "transparent" : "grey.300",
                           }}
-                          onClick={() => handleImageClick(category.categoryImage)}
+                          onClick={() => handleImageClick(program.imagePath)}
                         >
-                          {!category.categoryImage && <ImageSearchIcon />}
+                          {!program.imagePath && <ImageSearchIcon />}
                         </Avatar>
                       </Tooltip>
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "medium" }}>{category.name}</TableCell>
-                    <TableCell sx={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      <Tooltip title={category.description} arrow>
-                        <span>{category.description}</span>
+                    <TableCell sx={{ fontWeight: "medium" }}>{program.title}</TableCell>
+                    <TableCell sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <Tooltip title={program.description} arrow>
+                        <span>{program.description}</span>
                       </Tooltip>
                     </TableCell>
-                    <TableCell>
-                      <Stack direction="row" flexWrap="wrap" spacing={0.5}>
-                        {category.generalSkills && category.generalSkills.length > 0 ? (
-                          category.generalSkills.map((skill, index) => (
-                            <Chip
-                              key={index}
-                              label={skill}
-                              size="small"
-                              variant="outlined"
-                              color="primary"
-                              sx={{
-                                borderColor: "#2a5298",
-                                color: "#2a5298",
-                                fontWeight: "normal",
-                                ".MuiChip-label": {
-                                  fontSize: '0.75rem',
-                                },
-                                transition: 'background-color 0.2s ease-in-out',
-                                '&:hover': {
-                                    backgroundColor: '#e3f2fd',
-                                }
-                              }}
-                            />
-                          ))
-                        ) : (
-                          <Typography variant="body2" color="text.secondary" fontStyle="italic">
-                            No skills
-                          </Typography>
-                        )}
-                      </Stack>
-                    </TableCell>
+                    <TableCell>{program.durationInDays}</TableCell>
+                    <TableCell>{program.location}</TableCell>
+                    <TableCell>{program.seatsAvailable}</TableCell>
+                    <TableCell>{program.categoryName}</TableCell>
+                    <TableCell>{program.companyName}</TableCell>
+                    <TableCell>{program.supervisorName}</TableCell>
+                    <TableCell>{getApprovalStatusChip(program.approvalStatus)}</TableCell>
                     <TableCell align="center">
-                      <Tooltip title="Edit Category" arrow>
+                      <Tooltip title="Edit Program" arrow>
                         <IconButton
                           color="primary"
                           sx={{
@@ -738,12 +737,12 @@ const AdminCategories = () => {
                             },
                             transition: "transform 0.2s ease-in-out",
                           }}
-                          onClick={() => handleEditClick(category)}
+                          onClick={() => handleEditClick(program)}
                         >
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete Category" arrow>
+                      <Tooltip title="Delete Program" arrow>
                         <IconButton
                           color="error"
                           sx={{
@@ -753,7 +752,7 @@ const AdminCategories = () => {
                             },
                             transition: "transform 0.2s ease-in-out",
                           }}
-                          onClick={() => handleDeleteCategory(category.id, category.name)}
+                          onClick={() => handleDeleteProgram(program.trainingProgramId, program.title)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -784,7 +783,7 @@ const AdminCategories = () => {
           >
             {/* Pagination Info */}
             <Typography variant="body1" sx={{ color: "#1e3c72", fontWeight: "medium" }}>
-              Total Categories: <span style={{ fontWeight: 'bold' }}>{totalCount}</span>
+              Total Programs: <span style={{ fontWeight: 'bold' }}>{totalCount}</span>
               <br />
               Page <span style={{ fontWeight: 'bold' }}>{page}</span> of <span style={{ fontWeight: 'bold' }}>{totalPages}</span>
             </Typography>
@@ -861,12 +860,12 @@ const AdminCategories = () => {
         )}
       </Paper>
 
-      {/* Edit Category Modal */}
+      {/* Edit Program Modal */}
       <Dialog
         open={editModalOpen}
         onClose={handleEditModalClose}
         fullWidth
-        maxWidth="sm"
+        maxWidth="md" // زيادة عرض المودال ليناسب الحقول الإضافية
         PaperProps={{
           sx: {
             borderRadius: 3,
@@ -882,25 +881,25 @@ const AdminCategories = () => {
         }}
       >
         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: "#1e3c72", color: "white", px: 3, py: 2, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Edit Category</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Edit Training Program</Typography>
           <IconButton onClick={handleEditModalClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent dividers sx={{ p: 4 }}>
           <Stack spacing={3}>
-            {/* Category Name */}
+            {/* Title */}
             <TextField
-              label="Category Name"
-              name="name"
-              value={editForm.name}
+              label="Program Title"
+              name="title"
+              value={editForm.title}
               onChange={handleEditFormChange}
               fullWidth
               variant="outlined"
               size="small"
               InputProps={{
                 startAdornment: (
-                  <CategoryIcon sx={{ color: 'action.active', mr: 1 }} />
+                  <TitleIcon sx={{ color: 'action.active', mr: 1 }} />
                 ),
               }}
               sx={formFieldStyles}
@@ -925,17 +924,121 @@ const AdminCategories = () => {
               sx={formFieldStyles}
             />
 
+            {/* Duration & Seats */}
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextField
+                label="Duration (e.g., 60 days)"
+                name="durationInDays"
+                value={editForm.durationInDays}
+                onChange={handleEditFormChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                InputProps={{
+                  startAdornment: (
+                    <AccessTimeIcon sx={{ color: 'action.active', mr: 1 }} />
+                  ),
+                }}
+                sx={formFieldStyles}
+              />
+              <TextField
+                label="Seats Available"
+                name="seatsAvailable"
+                type="number"
+                value={editForm.seatsAvailable}
+                onChange={handleEditFormChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                InputProps={{
+                  startAdornment: (
+                    <EventIcon sx={{ color: 'action.active', mr: 1 }} />
+                  ),
+                }}
+                sx={formFieldStyles}
+              />
+            </Stack>
+
+            {/* Start Date & End Date */}
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextField
+                label="Start Date"
+                name="startDate"
+                type="date"
+                value={editForm.startDate}
+                onChange={handleEditFormChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                sx={formFieldStyles}
+              />
+              <TextField
+                label="End Date"
+                name="endDate"
+                type="date"
+                value={editForm.endDate}
+                onChange={handleEditFormChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                sx={formFieldStyles}
+              />
+            </Stack>
+
+            {/* Location */}
+            <TextField
+              label="Location"
+              name="location"
+              value={editForm.location}
+              onChange={handleEditFormChange}
+              fullWidth
+              variant="outlined"
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <LocationOnIcon sx={{ color: 'action.active', mr: 1 }} />
+                ),
+              }}
+              sx={formFieldStyles}
+            />
+
+            {/* Content URL & Classroom URL */}
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextField
+                label="Content URL"
+                name="contentUrl"
+                value={editForm.contentUrl}
+                onChange={handleEditFormChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                sx={formFieldStyles}
+              />
+              <TextField
+                label="Classroom URL"
+                name="classroomUrl"
+                value={editForm.classroomUrl}
+                onChange={handleEditFormChange}
+                fullWidth
+                variant="outlined"
+                size="small"
+                sx={formFieldStyles}
+              />
+            </Stack>
+
             {/* Image Upload and Preview */}
             <Box sx={{ border: '1px dashed #a5b4c4', p: 2, borderRadius: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, bgcolor: 'rgba(255,255,255,0.7)' }}>
-                <FormLabel component="legend" sx={{ color: '#1e3c72', fontWeight: 'bold', mb: 1 }}>Category Image</FormLabel>
+                <FormLabel component="legend" sx={{ color: '#1e3c72', fontWeight: 'bold', mb: 1 }}>Program Image</FormLabel>
                 <input
                     accept="image/*"
                     style={{ display: 'none' }}
-                    id="category-image-upload"
+                    id="program-image-upload"
                     type="file"
                     onChange={handleImageFileChange}
                 />
-                <label htmlFor="category-image-upload">
+                <label htmlFor="program-image-upload">
                     <Button
                         variant="outlined"
                         component="span"
@@ -952,7 +1055,7 @@ const AdminCategories = () => {
                         Upload Image
                     </Button>
                 </label>
-                {(newImagePreview || editForm.categoryImage) && (
+                {(newImagePreview || editForm.imagePath) && (
                     <Box
                         sx={{
                             position: 'relative',
@@ -963,11 +1066,11 @@ const AdminCategories = () => {
                             overflow: 'hidden',
                             cursor: 'pointer',
                         }}
-                        onClick={() => handleImageClick(newImagePreview || editForm.categoryImage)}
+                        onClick={() => handleImageClick(newImagePreview || editForm.imagePath)}
                     >
                         <img
-                            src={newImagePreview || editForm.categoryImage}
-                            alt="Category Preview"
+                            src={newImagePreview || editForm.imagePath}
+                            alt="Program Preview"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                         <IconButton
@@ -991,53 +1094,15 @@ const AdminCategories = () => {
                 )}
             </Box>
 
-            {/* General Skills */}
-            <Box>
-              <FormLabel component="legend" sx={{ color: '#1e3c72', fontWeight: 'bold', mb: 1 }}>General Skills</FormLabel>
-              <Stack direction="row" spacing={1} mb={2} flexWrap="wrap">
-                {editForm.generalSkills.map((skill, index) => (
-                  <Chip
-                    key={index}
-                    label={skill}
-                    onDelete={() => handleRemoveSkill(skill)}
-                    color="secondary"
-                    variant="outlined"
-                    deleteIcon={<RemoveCircleOutlineIcon />}
-                    sx={{
-                        borderColor: "#7b1fa2",
-                        color: "#7b1fa2",
-                        transition: 'background-color 0.2s ease-in-out',
-                        '&:hover': {
-                            backgroundColor: '#f3e5f5',
-                        },
-                        mb: { xs: 1, sm: 0 }
-                    }}
-                  />
-                ))}
-              </Stack>
-              <TextField
-                label="Add new skill"
-                name="newSkillInput"
-                value={editForm.newSkillInput || ""}
-                onChange={(e) => setEditForm((prev) => ({ ...prev, newSkillInput: e.target.value }))}
-                onKeyPress={handleAddSkill}
-                fullWidth
-                variant="outlined"
-                size="small"
-                InputProps={{
-                    endAdornment: (
-                        <IconButton
-                            onClick={handleAddSkill}
-                            disabled={!editForm.newSkillInput || editForm.generalSkills.includes(editForm.newSkillInput?.trim())}
-                            color="primary"
-                        >
-                            <AddCircleOutlineIcon />
-                        </IconButton>
-                    ),
-                }}
-                sx={formFieldStyles}
-              />
-            </Box>
+            {/* Displaying Read-Only Fields (Category, Company, Supervisor, ApprovalStatus) */}
+            <Typography variant="subtitle1" sx={{ color: '#1e3c72', fontWeight: 'bold', mt: 2 }}>Program Details (Read-Only)</Typography>
+            <Stack direction="row" spacing={2} flexWrap="wrap">
+                <Chip icon={<CategoryIcon />} label={`Category: ${currentProgramToEdit?.categoryName || 'N/A'}`} variant="outlined" sx={readOnlyChipStyles} />
+                <Chip icon={<BusinessIcon />} label={`Company: ${currentProgramToEdit?.companyName || 'N/A'}`} variant="outlined" sx={readOnlyChipStyles} />
+                <Chip icon={<PersonIcon />} label={`Supervisor: ${currentProgramToEdit?.supervisorName || 'N/A'}`} variant="outlined" sx={readOnlyChipStyles} />
+                <Chip icon={<CheckCircleOutlineIcon />} label={`Approval Status: ${currentProgramToEdit?.approvalStatus === 0 ? 'Pending' : currentProgramToEdit?.approvalStatus === 1 ? 'Approved' : currentProgramToEdit?.approvalStatus === 2 ? 'Rejected' : 'N/A'}`} variant="outlined" sx={readOnlyChipStyles} />
+            </Stack>
+
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 3, bgcolor: "#e0e7ee", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}>
@@ -1057,7 +1122,7 @@ const AdminCategories = () => {
             Cancel
           </Button>
           <Button
-            onClick={handleUpdateCategory}
+            onClick={handleUpdateProgram}
             variant="contained"
             startIcon={<SaveIcon />}
             sx={{
@@ -1071,7 +1136,7 @@ const AdminCategories = () => {
             }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Update Category"}
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Update Program"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -1095,6 +1160,7 @@ const AdminCategories = () => {
   );
 };
 
+// أنماط مشتركة لحقول النموذج لتقليل التكرار
 const formFieldStyles = {
     '& .MuiOutlinedInput-root': {
         backgroundColor: 'rgba(255,255,255,0.8)',
@@ -1104,4 +1170,18 @@ const formFieldStyles = {
     },
 };
 
-export default AdminCategories;
+// أنماط مشتركة لشرائح القراءة فقط
+const readOnlyChipStyles = {
+    fontSize: '0.8rem',
+    fontWeight: 'bold',
+    color: '#1e3c72',
+    borderColor: '#a5b4c4',
+    backgroundColor: '#e0e7ee',
+    p: 1,
+    height: 'auto', // لتناسب المحتوى إذا كان طويلاً
+    '& .MuiChip-icon': {
+        color: '#2a5298',
+    }
+};
+
+export default AdminPrograms;
