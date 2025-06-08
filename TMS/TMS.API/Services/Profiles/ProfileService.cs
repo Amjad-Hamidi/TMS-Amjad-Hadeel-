@@ -351,6 +351,50 @@ namespace TMS.API.Services.Profiles
         }
 
 
+        public async Task<(string? Path, string? ImageName)> GetImageDownloadInfoAsync(int userId)
+        {
+            var user = await _db.UserAccounts
+                .Include(userAccount => userAccount.ApplicationUser)
+                .FirstOrDefaultAsync(userAccount => userAccount.Id == userId);
+
+            if (user == null || string.IsNullOrEmpty(user.ApplicationUser.ProfileImageUrl))
+                return (null, null);
+
+            // نحاول استخراج المسار النسبي من الرابط الكامل
+            var uri = new Uri(user.ApplicationUser.ProfileImageUrl);
+            var relativePath = uri.AbsolutePath.TrimStart('/'); // "images/profiles/..."
+
+            // بناء المسار الفعلي للملف
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+
+            if (!System.IO.File.Exists(fullPath))
+                return (null, null);
+
+            var imageName = Path.GetFileName(fullPath);
+            return (fullPath, imageName);
+        }
+
+        public async Task<bool> DeleteImageAsync(int userId)
+        {
+            var user = await _db.UserAccounts
+                .Include(userAccount => userAccount.ApplicationUser)
+                .FirstOrDefaultAsync(userAccount => userAccount.Id == userId);
+
+            if (user == null ||
+                (user.Role != UserRole.Trainee && user.Role != UserRole.Supervisor))
+                return false;
+
+            if (string.IsNullOrEmpty(user.ApplicationUser.ProfileImageUrl))
+                return false;
+
+            FileHelper.DeleteFileFromUrl(user.ApplicationUser.ProfileImageUrl);
+            user.ApplicationUser.ProfileImageUrl = null;
+
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
+
 
     }
 }
