@@ -15,7 +15,13 @@
 
 /* Sidebar موسع */
 .sidebar-open .sidebar {
-  width: 225px;
+  width: 260px;
+}
+
+.logout-button-container{
+  position: sticky;
+  top: 20px;
+  z-index: 1000;
 }
 
 .admin-layout.sidebar-closed .sidebar{
@@ -106,8 +112,8 @@
 
 /* Sidebar open state */
 .admin-layout.sidebar-open .main-content {
-  margin-left: 220px;
-  width: calc(100% - 220px);
+  margin-left: 250px;
+  width: calc(100% - 250px);
 }
 
 /* زر تسجيل الخروج */

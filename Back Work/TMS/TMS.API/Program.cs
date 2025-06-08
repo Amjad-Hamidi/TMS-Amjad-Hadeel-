@@ -156,6 +156,7 @@ namespace TMS.API
             app.UseCors(policy =>
                 policy.AllowAnyOrigin()
                       .AllowAnyMethod()
+                      .WithExposedHeaders("Content-Disposition") // server تيجي من نفس الاسم الي بال cv, image عشان لما احمل
                       .AllowAnyHeader());
 
 

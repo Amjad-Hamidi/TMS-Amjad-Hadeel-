@@ -20,7 +20,10 @@ import {
   Tooltip,
   TextField,
   Pagination,
-  Avatar
+  Avatar,
+  Dialog, // Import Dialog for the image preview
+  DialogContent, // Import DialogContent for the image preview
+  IconButton // Import IconButton for the close button
 } from "@mui/material";
 import {
   CheckCircleOutline as CheckCircleOutlineIcon,
@@ -34,7 +37,8 @@ import {
   Search as SearchIcon,
   ErrorOutline as ErrorOutlineIcon,
   Category as CategoryIcon,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Close as CloseIcon // Import CloseIcon for the close button
 } from '@mui/icons-material';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 
@@ -72,7 +76,7 @@ const StatusBadge = styled(Box)(({ theme, status }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   gap: theme.spacing(0.5),
-  backgroundColor: 
+  backgroundColor:
     status === 'Accepted' ? theme.palette.success.main :
     status === 'Rejected' ? theme.palette.error.main :
     status === 'Pending' ? theme.palette.warning.main :
@@ -90,6 +94,7 @@ export default function TraineeApplications() {
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null); // New state for image preview
 
   useEffect(() => {
     const fetchApps = async () => {
@@ -97,7 +102,7 @@ export default function TraineeApplications() {
       setError("");
 
       try {
-        const res = await fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments?page=${page}&limit=${limit}&search=${encodeURIComponent(searchTerm)}`);
+        const res = await fetchWithAuth(`https://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/my-enrollments?page=${page}&limit=${limit}&search=${encodeURIComponent(searchTerm)}`);
         const data = await res.json();
 
         const appsFormatted = data.items.map(app => ({
@@ -142,13 +147,15 @@ export default function TraineeApplications() {
     }
   };
 
+  const handleCloseImageDialog = () => setSelectedImage(null); // Function to close image dialog
+
   const shown = filter === "All" ? apps : apps.filter(a => a.status === filter);
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'Accepted': return <CheckCircleOutlineIcon sx={{ color: 'success.main' }} />;
-      case 'Rejected': return <HighlightOffIcon sx={{ color: 'error.main' }} />;
-      case 'Pending': return <HourglassTopIcon sx={{ color: 'warning.main' }} />;
+      case 'Accepted': return <CheckCircleOutlineIcon sx={{ color: 'white' }} />;
+      case 'Rejected': return <HighlightOffIcon sx={{ color: 'white' }} />;
+      case 'Pending': return <HourglassTopIcon sx={{ color: 'white' }} />;
       default: return <ErrorOutlineIcon sx={{ color: 'action.disabled' }} />;
     }
   };
@@ -182,10 +189,10 @@ export default function TraineeApplications() {
               { label: "Accepted", color: "success.main" },
               { label: "Rejected" }
             ].map(st => (
-              <ToggleButton 
-                key={st.label} 
-                value={st.label} 
-                aria-label={st.label.toLowerCase()} 
+              <ToggleButton
+                key={st.label}
+                value={st.label}
+                aria-label={st.label.toLowerCase()}
                 sx={{ px: 2, py: 1, fontWeight: 'medium', color: st.color ? theme.palette[st.color.split('.')[0]].main : undefined }}
               >
                 {st.label}
@@ -207,7 +214,16 @@ export default function TraineeApplications() {
             <Grid item xs={12} sm={6} md={4} key={app.id}>
               <StyledCard status={app.status}>
                 <CardHeader
-                  avatar={<Avatar src={app.imagePath} variant="rounded" sx={{ width: 56, height: 56 }} />}
+                  avatar={
+                    <Avatar
+                      src={app.imagePath}
+                      variant="rounded"
+                      sx={{ width: 56, height: 56, cursor: 'pointer' }} // Added cursor pointer
+                      onClick={() => setSelectedImage(app.imagePath)} // Added onClick to open image dialog
+                    >
+                      {!app.imagePath && <ImageIcon />} {/* Fallback icon if no image */}
+                    </Avatar>
+                  }
                   title={<Tooltip title="Program Title" arrow placement="right"><span>{`#${app.id} - ${app.program}`}</span></Tooltip>}
                   subheader={
                     <Tooltip title="Category" arrow placement="right">
@@ -240,11 +256,11 @@ export default function TraineeApplications() {
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'space-between', borderTop: '1px solid', borderColor: 'divider', p: 2 }}>
                   {app.contentUrl && (
-                    <Button 
-                      size="small" 
-                      startIcon={<LinkIcon />} 
-                      href={app.contentUrl} 
-                      target="_blank" 
+                    <Button
+                      size="small"
+                      startIcon={<LinkIcon />}
+                      href={app.contentUrl}
+                      target="_blank"
                       rel="noopener noreferrer"
                       variant="outlined"
                     >
@@ -252,11 +268,11 @@ export default function TraineeApplications() {
                     </Button>
                   )}
                   {app.classroomUrl && (
-                    <Button 
-                      size="small" 
-                      startIcon={<SchoolIcon />} 
-                      href={app.classroomUrl} 
-                      target="_blank" 
+                    <Button
+                      size="small"
+                      startIcon={<SchoolIcon />}
+                      href={app.classroomUrl}
+                      target="_blank"
                       rel="noopener noreferrer"
                       variant="outlined"
                     >
@@ -296,6 +312,55 @@ export default function TraineeApplications() {
           }}
         />
       </Box>
+
+      {/* ─── نافذة معاينة الصورة فقط ────────────────────────────────────────────────── */}
+      <Dialog
+        open={Boolean(selectedImage)}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogContent
+          dividers // يمكنك إزالة هذا إذا كان هو مصدر الخط الفاصل بين المحتوى والزر
+          sx={{ position: 'relative', p: 0 }} // p: 0 لإزالة الـ padding الافتراضي، ثم سنضيف padding يدوي للصورة
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 1, // لضمان ظهور الزر فوق الصورة
+              backgroundColor: 'rgba(0, 16, 88, 0.7)', // خلفية خفيفة لمساعدة الرؤية على الصورة
+              '&:hover': {
+                backgroundColor: 'rgba(71, 196, 245, 0.9)',
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          {selectedImage && (
+            <Box
+              component="img"
+              src={selectedImage}
+              alt="Program Image Preview"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                maxHeight: '80vh', // حد أقصى للارتفاع لكي لا تكون الصورة كبيرة جدًا
+                display: 'block',
+                mx: 'auto',
+                objectFit: 'contain',
+                p: 2, // إضافة padding للصورة نفسها بدلاً من DialogTitle
+                margin: 'auto'
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 }

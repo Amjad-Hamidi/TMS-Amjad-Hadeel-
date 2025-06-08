@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Card,
@@ -14,9 +14,13 @@ import {
   Chip,
   Pagination,
   Fade,
+  Dialog, // Import Dialog for the image preview
+  DialogContent, // Import DialogContent for the image preview
+  IconButton // Import IconButton for the close button
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
+import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon for the close button
 
 const TraineeDashboard = () => {
   const navigate = useNavigate();
@@ -32,11 +36,13 @@ const TraineeDashboard = () => {
     totalPages: 1,
   });
 
-  const fetchCategories = async (page = 1, limit = 8, search = "") => {
+  const [selectedImage, setSelectedImage] = useState(null); // New state for image preview
+
+  const fetchCategories = useCallback(async (page = 1, limit = 8, search = "") => {
     setLoading(true);
     setError(null);
     try {
-      const url = `http://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
+      const url = `https://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
       const res = await fetchWithAuth(url, {
         headers: { Accept: "*/*" },
       });
@@ -54,18 +60,20 @@ const TraineeDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // useCallback dependency array is empty as fetchCategories doesn't depend on external state
 
   useEffect(() => {
     fetchCategories(meta.page, meta.limit, query);
-  }, [meta.page, meta.limit]);
+  }, [meta.page, meta.limit, fetchCategories]); // Added fetchCategories to dependency array
 
   useEffect(() => {
     if (searchTimeout) clearTimeout(searchTimeout);
-    setSearchTimeout(setTimeout(() => {
+    const newTimeout = setTimeout(() => {
       fetchCategories(1, meta.limit, query);
-    }, 500));
-  }, [query]);
+    }, 500);
+    setSearchTimeout(newTimeout);
+    return () => clearTimeout(newTimeout); // Clear timeout on unmount or re-render
+  }, [query, meta.limit, fetchCategories]); // Added fetchCategories to dependency array
 
   const handlePageChange = (e, value) => {
     setMeta((prev) => ({ ...prev, page: value }));
@@ -73,6 +81,14 @@ const TraineeDashboard = () => {
 
   const handleViewProgramClick = (id) => {
     navigate(`/CategoryTPrograms/${id}`);
+  };
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleCloseImageDialog = () => {
+    setSelectedImage(null);
   };
 
   return (
@@ -131,14 +147,16 @@ const TraineeDashboard = () => {
                         <CardMedia
                           component="img"
                           height="170"
-                          image={c.categoryImage.startsWith("http") ? c.categoryImage : `http://amjad-hamidi-tms.runasp.net${c.categoryImage}`}
+                          image={c.categoryImage.startsWith("http") ? c.categoryImage : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`}
                           alt={c.name}
                           sx={{
                             objectFit: "cover",
                             borderTopLeftRadius: 16,
                             borderTopRightRadius: 16,
                             borderBottom: "2px solid #f0f0f0",
+                            cursor: 'pointer', // Add cursor pointer
                           }}
+                          onClick={() => handleImageClick(c.categoryImage.startsWith("http") ? c.categoryImage : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`)} // Open dialog on click
                         />
                       )}
                       <CardContent sx={{ flex: 1 }}>
@@ -204,6 +222,55 @@ const TraineeDashboard = () => {
           />
         </Stack>
       </Paper>
+
+      {/* ─── نافذة معاينة الصورة ────────────────────────────────────────────────── */}
+      <Dialog
+        open={Boolean(selectedImage)}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogContent
+          dividers
+          sx={{ position: 'relative', p: 0 }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 1,
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          {selectedImage && (
+            <Box
+              component="img"
+              src={selectedImage}
+              alt="Category Image Preview"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                maxHeight: '80vh',
+                display: 'block',
+                mx: 'auto',
+                objectFit: 'contain',
+                p: 2,
+                margin: 'auto'
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

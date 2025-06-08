@@ -41,7 +41,7 @@ export default function EditModal({ feedback, onSave, onClose }) {
       if (editedAttachment) formData.append("Attachment", editedAttachment);
 
       const response = await fetchWithAuth(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/receiver-user/${feedback.receiverId}/feedback/${feedback.feedbackId}`,
+        `https://amjad-hamidi-tms.runasp.net/api/Feedbacks/receiver-user/${feedback.receiverId}/feedback/${feedback.feedbackId}`,
         {
           method: "PATCH",
           body: formData,

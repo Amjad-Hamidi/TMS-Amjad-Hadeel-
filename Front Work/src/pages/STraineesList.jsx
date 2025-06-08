@@ -12,7 +12,7 @@ export default function TraineesList() {
     async function fetchTrainees() {
       try {
         const response = await fetchWithAuth(
-          "http://amjad-hamidi-tms.runasp.net/api/Users/trainees-supervisor"
+          "https://amjad-hamidi-tms.runasp.net/api/Users/trainees-supervisor"
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);

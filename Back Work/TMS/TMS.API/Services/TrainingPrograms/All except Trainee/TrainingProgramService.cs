@@ -61,9 +61,10 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             var total = await query.CountAsync();
 
             // Apply pagination
-            var items = query
+            var items = await query
                 .Skip((page - 1) * limit)
-                .Take(limit);
+                .Take(limit)
+                .ToListAsync();
 
             //return await trainingPrograms.ToListAsync();
             return new PagedResult<TrainingProgram>

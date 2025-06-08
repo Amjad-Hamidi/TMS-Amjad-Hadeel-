@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Card, CardContent, Typography, Grid, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl, Alert, Avatar, CircularProgress, InputAdornment
+  Card, CardContent, Typography, Grid, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl, Alert, Avatar, CircularProgress, InputAdornment, Dialog, DialogContent
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { fetchWithAuth } from '../utils/fetchWithAuth';
-import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import PersonIcon from '@mui/icons-material/Person';
 import CakeIcon from '@mui/icons-material/Cake';
@@ -12,10 +11,13 @@ import WcIcon from '@mui/icons-material/Wc';
 import ImageIcon from '@mui/icons-material/Image';
 import DescriptionIcon from '@mui/icons-material/Description';
 import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility'; // Import for Preview Icon
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'; // For Supervisor
 import SchoolIcon from '@mui/icons-material/School'; // For Trainee
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'; // For Admin
-import { decodeToken } from "react-jwt";
+import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon
+import IconButton from '@mui/material/IconButton'; // Import IconButton
+import DialogTitle from '@mui/material/DialogTitle'; // Import DialogTitle
 import TMSLogo from '../images/TMS Logo.png'; // Assuming your logo is here
 
 const GENDER_OPTIONS = [
@@ -37,7 +39,10 @@ export default function EditProfile() {
     role: '',
   });
   const [currentProfileImageUrl, setCurrentProfileImageUrl] = useState('');
+  const [profileImagePreviewUrl, setProfileImagePreviewUrl] = useState(''); // New state for image preview
   const [currentCvPath, setCurrentCvPath] = useState('');
+  const [cvFilePreviewName, setCvFilePreviewName] = useState(''); // New state for CV preview name
+  const [cvFilePreviewUrl, setCvFilePreviewUrl] = useState(''); // New state for CV file preview URL
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [loadingCvUpload, setLoadingCvUpload] = useState(false);
@@ -46,39 +51,47 @@ export default function EditProfile() {
   const [success, setSuccess] = useState('');
   const [cvError, setCvError] = useState('');
   const [cvSuccess, setCvSuccess] = useState('');
-  const [currentUserName, setCurrentUserName] = useState('');
+  const [openImageDialog, setOpenImageDialog] = useState(false); // New state for image dialog
+  const [imageError, setImageError] = useState('');
+  const [imageSuccess, setImageSuccess] = useState('');
+  const [loadingImageUpload, setLoadingImageUpload] = useState(false);
+  const [loadingImageDelete, setLoadingImageDelete] = useState(false);
+
+
+  const fetchUserProfile = async () => {
+    setLoadingProfile(true);
+    setError('');
+    try {
+      const response = await fetchWithAuth("https://amjad-hamidi-tms.runasp.net/api/Profiles/form-edit-profile");
+      if (!response.ok) {
+        throw new Error("Failed to load profile data.");
+      }
+      const data = await response.json();
+      setForm({
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        userName: data.userName || '',
+        phoneNumber: data.phoneNumber || '',
+        gender: data.gender !== null ? data.gender : '',
+        birthDate: data.birthDate ? data.birthDate.split('T')[0] : '',
+        profileImageFile: null,
+        cvFile: null,
+        role: data.role || '',
+      });
+      setCurrentProfileImageUrl(data.profileImageUrl || '');
+      setCurrentCvPath(data.cvPath || '');
+      // Clear any pending previews from previous selections
+      setProfileImagePreviewUrl('');
+      setCvFilePreviewName('');
+      setCvFilePreviewUrl('');
+    } catch (err) {
+      setError(err.message || "Error loading profile data.");
+    } finally {
+      setLoadingProfile(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      setLoadingProfile(true);
-      setError('');
-      try {
-        const response = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/Profiles/form-edit-profile");
-        if (!response.ok) {
-          throw new Error("Failed to load profile data.");
-        }
-        const data = await response.json();
-        setForm({
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          userName: data.userName || '',
-          phoneNumber: data.phoneNumber || '',
-          gender: data.gender !== null ? data.gender : '',
-          birthDate: data.birthDate ? data.birthDate.split('T')[0] : '',
-          profileImageFile: null,
-          cvFile: null,
-          role: data.role || '',
-        });
-        setCurrentProfileImageUrl(data.profileImageUrl || '');
-        setCurrentCvPath(data.cvPath || '');
-        setCurrentUserName(data.userName || '');
-      } catch (err) {
-        setError(err.message || "Error loading profile data.");
-      } finally {
-        setLoadingProfile(false);
-      }
-    };
-
     fetchUserProfile();
   }, []);
 
@@ -88,7 +101,19 @@ export default function EditProfile() {
   };
 
   const handleFileChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.files[0] }));
+    const file = e.target.files[0];
+    if (e.target.name === 'profileImageFile') {
+      setForm((prev) => ({ ...prev, profileImageFile: file }));
+      setProfileImagePreviewUrl(file ? URL.createObjectURL(file) : '');
+      setImageError(''); // Clear image errors when a new file is selected
+      setImageSuccess(''); // Clear image success when a new file is selected
+    } else if (e.target.name === 'cvFile') {
+      setForm((prev) => ({ ...prev, cvFile: file }));
+      setCvFilePreviewName(file ? file.name : '');
+      setCvFilePreviewUrl(file ? URL.createObjectURL(file) : ''); // Set CV preview URL
+      setCvError(''); // Clear CV errors when a new file is selected
+      setCvSuccess(''); // Clear CV success when a new file is selected
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -108,7 +133,7 @@ export default function EditProfile() {
         data.append('ProfileImageFile', form.profileImageFile);
       }
 
-      const res = await fetch('http://amjad-hamidi-tms.runasp.net/api/Profiles/update-profile', {
+      const res = await fetch('https://amjad-hamidi-tms.runasp.net/api/Profiles/update-profile', {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -116,41 +141,35 @@ export default function EditProfile() {
         body: data,
       });
 
-      // --- Start of modified success/error handling logic ---
       if (!res.ok) {
-        let msg = "An unexpected error occurred."; // Default error message
+        let msg = "An unexpected error occurred.";
         try {
-          const json = await res.json(); // Try parsing as JSON first for structured errors
+          const json = await res.json();
           msg = json.message || Object.values(json.errors || {}).flat().join(' ') || msg;
         } catch {
-          // If it's not JSON, or JSON parsing fails, use the raw text response
           const text = await res.text();
-          msg = text || msg; // Use raw text if available, otherwise default
+          msg = text || msg;
         }
         setError(msg);
       } else {
         let successMessage = 'Profile updated successfully.';
         try {
-          const text = await res.text(); // Get raw text response
-          if (text) { // Check if text is not empty before parsing
-             const updatedData = JSON.parse(text); // Try parsing if content exists
-             successMessage = updatedData.message || successMessage; // Use backend message if provided
-             setCurrentProfileImageUrl(updatedData.profileImageUrl || currentProfileImageUrl);
+          const text = await res.text();
+          if (text) {
+            const updatedData = JSON.parse(text);
+            successMessage = updatedData.message || successMessage;
           }
         } catch (jsonParseError) {
-          // If JSON parsing fails for a successful response (e.g., empty response or simple string)
-          // The `successMessage` will remain the default 'Profile updated successfully.'
           console.warn("Successful response but JSON parse failed:", jsonParseError);
         }
         setSuccess(successMessage);
-        // Only navigate on success
-        setTimeout(() => navigate(-1), 1200);
+        // Refresh profile data to reflect changes immediately after a short delay
+        setTimeout(async () => {
+          await fetchUserProfile();
+          setSuccess(''); // Clear success message after refresh
+        }, 1500); // 1.5 seconds delay
       }
-      // --- End of modified success/error handling logic ---
-
     } catch (err) {
-      // This catch block will only be hit for true network errors
-      // or issues before the fetch response is received.
       setError(err.message || 'Network error or unexpected response.');
     } finally {
       setLoadingUpdate(false);
@@ -168,7 +187,7 @@ export default function EditProfile() {
         throw new Error("Please select a CV file to upload.");
       }
 
-      const res = await fetch('http://amjad-hamidi-tms.runasp.net/api/Profiles/upload-cv', {
+      const res = await fetch('https://amjad-hamidi-tms.runasp.net/api/Profiles/upload-cv', {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -176,7 +195,6 @@ export default function EditProfile() {
         body: formData,
       });
 
-      // --- Similar robust handling for CV upload ---
       if (!res.ok) {
         let msg = "An unexpected error occurred during CV upload.";
         try {
@@ -192,22 +210,22 @@ export default function EditProfile() {
         try {
           const text = await res.text();
           if (text) {
-            // Assuming backend might return a path or message on success
             const responseData = JSON.parse(text);
             successMessage = responseData.message || successMessage;
-            // Re-fetch profile data to get the updated cvPath
-            const profileResponse = await fetchWithAuth("http://amjad-hamidi-tms.runasp.net/api/Profiles/form-edit-profile");
-            const profileData = await profileResponse.json();
-            setCurrentCvPath(profileData.cvPath || '');
           }
         } catch (jsonParseError) {
           console.warn("Successful CV upload response but JSON parse failed:", jsonParseError);
         }
         setCvSuccess(successMessage);
         setForm(prev => ({ ...prev, cvFile: null })); // Clear selected file
+        setCvFilePreviewName(''); // Clear CV preview name
+        setCvFilePreviewUrl(''); // Clear CV preview URL
+        // Refresh profile data to get the new CV path after a short delay
+        setTimeout(async () => {
+          await fetchUserProfile();
+          setCvSuccess(''); // Clear success message after refresh
+        }, 1500); // 1.5 seconds delay
       }
-      // --- End of robust handling for CV upload ---
-
     } catch (err) {
       setCvError(err.message || 'Network error or unexpected response.');
     } finally {
@@ -219,7 +237,7 @@ export default function EditProfile() {
     setCvError(''); setCvSuccess(''); setLoadingCvDelete(true);
     try {
       const token = localStorage.getItem('accessToken');
-      const res = await fetch('http://amjad-hamidi-tms.runasp.net/api/Profiles/delete-cv', {
+      const res = await fetch('https://amjad-hamidi-tms.runasp.net/api/Profiles/delete-cv', {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -227,7 +245,6 @@ export default function EditProfile() {
         },
       });
 
-      // --- Similar robust handling for CV delete ---
       if (!res.ok) {
         let msg = "An unexpected error occurred during CV deletion.";
         try {
@@ -243,7 +260,6 @@ export default function EditProfile() {
         try {
           const text = await res.text();
           if (text) {
-            // Assuming backend might return a message on success
             const responseData = JSON.parse(text);
             successMessage = responseData.message || successMessage;
           }
@@ -251,16 +267,134 @@ export default function EditProfile() {
           console.warn("Successful CV delete response but JSON parse failed:", jsonParseError);
         }
         setCvSuccess(successMessage);
-        setCurrentCvPath(''); // Clear CV path in state
+        // Refresh profile data to update the CV path after a short delay
+        setTimeout(async () => {
+          await fetchUserProfile();
+          setCvSuccess(''); // Clear success message after refresh
+        }, 1500); // 1.5 seconds delay
       }
-      // --- End of robust handling for CV delete ---
-
     } catch (err) {
       setCvError('Network error or unexpected response.');
     } finally {
       setLoadingCvDelete(false);
     }
   };
+
+  const handlePreviewCV = () => {
+    if (cvFilePreviewUrl) {
+      window.open(cvFilePreviewUrl, '_blank');
+    } else if (currentCvPath) {
+      window.open(currentCvPath, '_blank');
+    }
+  };
+
+
+  const handleDownloadCV = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch('https://amjad-hamidi-tms.runasp.net/api/Profiles/download-cv', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to download CV.');
+      }
+
+      const blob = await res.blob();
+      const contentDisposition = res.headers.get("Content-Disposition");
+      let fileName = "cv.pdf";
+
+      // استخراج اسم الملف من Content-Disposition
+      if (contentDisposition && contentDisposition.includes("filename=")) {
+        fileName = contentDisposition.split("filename=")[1].replace(/"/g, '');
+      }
+
+      // تحميل الملف
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+      console.error("CV Download Error:", error);
+      alert("❌ Failed to download CV.");
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch('https://amjad-hamidi-tms.runasp.net/api/Profiles/download-profileImage', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("❌ Failed to download profile image.");
+
+      const blob = await res.blob();
+      const contentDisposition = res.headers.get("Content-Disposition");
+      let fileName = "profile-image.png";
+
+      if (contentDisposition && contentDisposition.includes("filename=")) {
+        fileName = contentDisposition.split("filename=")[1].replace(/"/g, '');
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Image Download Error:", error);
+      alert("❌ Failed to download profile image.");
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    setImageError('');
+    setImageSuccess('');
+    setLoadingImageDelete(true);
+    try {
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch('https://amjad-hamidi-tms.runasp.net/api/Profiles/delete-profieImage', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || "❌ Failed to delete profile image.");
+      }
+
+      setImageSuccess("🗑️ Profile image deleted successfully.");
+      // Refresh profile data to update the image URL after a short delay
+      setTimeout(async () => {
+        await fetchUserProfile();
+        setImageSuccess(''); // Clear success message after refresh
+      }, 1500); // 1.5 seconds delay
+    } catch (err) {
+      setImageError(err.message);
+    } finally {
+      setLoadingImageDelete(false);
+    }
+  };
+
+
 
   const getRoleIcon = (role) => {
     switch (role) {
@@ -273,6 +407,16 @@ export default function EditProfile() {
       default:
         return <PersonIcon />;
     }
+  };
+
+  const handleOpenImageDialog = () => {
+    if (currentProfileImageUrl || profileImagePreviewUrl) {
+      setOpenImageDialog(true);
+    }
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog(false);
   };
 
   if (loadingProfile) {
@@ -324,8 +468,17 @@ export default function EditProfile() {
           />
           <Avatar
             alt="Profile Image"
-            src={currentProfileImageUrl || ''}
-            sx={{ width: 120, height: 120, mb: 2, boxShadow: 2, border: '2px solid', borderColor: 'primary.main' }}
+            src={profileImagePreviewUrl || currentProfileImageUrl || ''}
+            sx={{
+              width: 120,
+              height: 120,
+              mb: 2,
+              boxShadow: 2,
+              border: '2px solid',
+              borderColor: 'primary.main',
+              cursor: (currentProfileImageUrl || profileImagePreviewUrl) ? 'pointer' : 'default',
+            }}
+            onClick={handleOpenImageDialog}
           />
           <Typography variant="h6" align="center" color="text.secondary">
             Your Profile
@@ -425,7 +578,6 @@ export default function EditProfile() {
                       onChange={handleChange}
                       startAdornment={<InputAdornment position="start"><WcIcon /></InputAdornment>}
                     >
-                      <MenuItem value="">Select Gender</MenuItem>
                       {GENDER_OPTIONS.map(opt => (
                         <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
                       ))}
@@ -445,88 +597,166 @@ export default function EditProfile() {
                     InputProps={{ startAdornment: <InputAdornment position="start"><CakeIcon /></InputAdornment> }}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 2 }}>
+                <Grid item xs={12} width={'40%'}>
+                  <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Button
                       variant="outlined"
                       component="label"
                       startIcon={<ImageIcon />}
-                      sx={{ textTransform: 'none', borderRadius: 2, flexGrow: 1 }}
+                      sx={{ textTransform: 'none', borderRadius: 2, fontWeight: 600, fontSize: '0.95rem', width: '100%' }}
                     >
                       Upload Profile Image
                       <input type="file" name="profileImageFile" accept="image/*" hidden onChange={handleFileChange} />
                     </Button>
-                    {form.profileImageFile && (
-                      <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0 }}>
-                        {form.profileImageFile.name}
+                    {(form.profileImageFile || profileImagePreviewUrl) && (
+                      <Typography variant="body2" color="text.secondary">
+                        Selected: {form.profileImageFile ? form.profileImageFile.name : "New image selected"}
                       </Typography>
+                    )}
+
+                    {/* Image Action Buttons */}
+                    {(currentProfileImageUrl || profileImagePreviewUrl) && (
+                      <Button
+                        variant="contained"
+                        color="info"
+                        startIcon={<VisibilityIcon />}
+                        onClick={handleOpenImageDialog}
+                        fullWidth
+                        sx={{ fontWeight: 600, textTransform: 'none' }}
+                      >
+                        Preview Image
+                      </Button>
+                    )}
+
+                    {currentProfileImageUrl && (
+                      <Button
+                        variant="contained"
+                        color="success"
+                        startIcon={<ImageIcon />}
+                        onClick={handleDownloadImage}
+                        fullWidth
+                        sx={{ fontWeight: 600, textTransform: 'none' }}
+                      >
+                        Download Current Image
+                      </Button>
+                    )}
+
+                    {currentProfileImageUrl && (
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        startIcon={<DeleteIcon />}
+                        onClick={handleDeleteImage}
+                        disabled={loadingImageDelete}
+                        fullWidth
+                        sx={{ fontWeight: 600, textTransform: 'none' }}
+                      >
+                        {loadingImageDelete ? <CircularProgress size={24} /> : 'Delete Image'}
+                      </Button>
+                    )}
+
+                    {/* Image Action Messages */}
+                    {imageError && <Alert severity="error">{imageError}</Alert>}
+                    {imageSuccess && <Alert severity="success">{imageSuccess}</Alert>}
+                    {(!currentProfileImageUrl && !profileImagePreviewUrl && !imageSuccess && !imageError) && (
+                      <Typography variant="body2" color="text.secondary">No profile image uploaded.</Typography>
                     )}
                   </Box>
                 </Grid>
 
                 {(form.role === 'Trainee' || form.role === 'Supervisor') && (
-                  <Grid item xs={12}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Grid item xs={12} width={'40%'}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+
+                      {/* زر اختيار ملف */}
+                      <Button
+                        variant="outlined"
+                        component="label"
+                        startIcon={<DescriptionIcon />}
+                        sx={{ textTransform: 'none', borderRadius: 2, fontWeight: 600, fontSize: '0.95rem', width: '100%' }}
+                      >
+                        Upload CV
+                        <input
+                          type="file"
+                          name="cvFile"
+                          accept=".pdf,.doc,.docx"
+                          hidden
+                          onChange={handleFileChange}
+                        />
+                      </Button>
+
+                      {/* اسم الملف المحدد إن وجد */}
+                      {cvFilePreviewName && (
+                        <Typography variant="body2" color="text.secondary">
+                          Selected: {cvFilePreviewName}
+                        </Typography>
+                      )}
+
+                      {/* أزرار العمليات */}
+                      {(currentCvPath || cvFilePreviewUrl) && (
                         <Button
-                          variant="outlined"
-                          component="label"
-                          startIcon={<DescriptionIcon />}
-                          sx={{ textTransform: 'none', borderRadius: 2, flexGrow: 1 }}
+                          variant="contained"
+                          color="info"
+                          startIcon={<VisibilityIcon />}
+                          onClick={handlePreviewCV}
+                          fullWidth
+                          sx={{ fontWeight: 600, textTransform: 'none' }}
                         >
-                          Upload CV
-                          <input type="file" name="cvFile" accept=".pdf,.doc,.docx" hidden onChange={handleFileChange} />
+                          Preview CV
                         </Button>
-                        {form.cvFile && (
-                          <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0 }}>
-                            {form.cvFile.name}
-                          </Typography>
-                        )}
-                      </Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
-                        {currentCvPath ? (
-                          <>
-                            <Button
-                              variant="text"
-                              color="primary"
-                              href={currentCvPath}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              startIcon={<DescriptionIcon />}
-                              sx={{ textTransform: 'none' }}
-                            >
-                              Download Current CV
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              color="error"
-                              startIcon={<DeleteIcon />}
-                              onClick={handleDeleteCV}
-                              disabled={loadingCvDelete}
-                            >
-                              {loadingCvDelete ? <CircularProgress size={24} /> : 'Delete CV'}
-                            </Button>
-                          </>
-                        ) : (
-                          <Typography variant="body2" color="text.secondary">No CV uploaded.</Typography>
-                        )}
-                        {form.cvFile && (
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleUploadCV}
-                            disabled={loadingCvUpload}
-                            sx={{ ml: 'auto' }}
-                          >
-                            {loadingCvUpload ? <CircularProgress size={24} /> : 'Upload Selected CV'}
-                          </Button>
-                        )}
-                      </Box>
-                      {cvError && <Alert severity="error" sx={{ mt: 1 }}>{cvError}</Alert>}
-                      {cvSuccess && <Alert severity="success" sx={{ mt: 1 }}>{cvSuccess}</Alert>}
+                      )}
+
+                      {currentCvPath && (
+                        <Button
+                          variant="contained"
+                          color="error"
+                          startIcon={<DescriptionIcon />}
+                          onClick={handleDownloadCV}
+                          fullWidth
+                          sx={{ fontWeight: 600, textTransform: 'none' }}
+                        >
+                          Download Current CV
+                        </Button>
+                      )}
+
+                      {currentCvPath && (
+                        <Button
+                          variant="contained"
+                          color="warning"
+                          startIcon={<DeleteIcon />}
+                          onClick={handleDeleteCV}
+                          disabled={loadingCvDelete}
+                          fullWidth
+                          sx={{ fontWeight: 600, textTransform: 'none' }}
+                        >
+                          {loadingCvDelete ? <CircularProgress size={24} /> : 'DELETE CV'}
+                        </Button>
+                      )}
+
+                      {/* زر رفع الملف المحدد */}
+                      {form.cvFile && (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleUploadCV}
+                          disabled={loadingCvUpload}
+                          fullWidth
+                          sx={{ fontWeight: 600, textTransform: 'none' }}
+                        >
+                          {loadingCvUpload ? <CircularProgress size={24} /> : 'Upload Selected CV'}
+                        </Button>
+                      )}
+
+                      {/* رسائل */}
+                      {cvError && <Alert severity="error">{cvError}</Alert>}
+                      {cvSuccess && <Alert severity="success">{cvSuccess}</Alert>}
+                      {(!currentCvPath && !cvFilePreviewName && !cvSuccess && !cvError) && (
+                        <Typography variant="body2" color="text.secondary">No CV uploaded.</Typography>
+                      )}
                     </Box>
                   </Grid>
                 )}
+
 
                 <Grid item xs={12} sx={{ display: 'flex', gap: 2, mt: 3 }}>
                   <Button
@@ -552,6 +782,36 @@ export default function EditProfile() {
           </CardContent>
         </Grid>
       </Card>
+
+      {/* Image Full-Screen Dialog */}
+      <Dialog open={openImageDialog} onClose={handleCloseImageDialog} maxWidth="md" fullWidth>
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          Profile Image
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              '&:hover': {
+                backgroundColor: (theme) => theme.palette.primary.light,
+              },
+              width: 'fit-content',
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 0 }}>
+          <img
+            src={profileImagePreviewUrl || currentProfileImageUrl || ''}
+            alt="Full size profile"
+            style={{ maxWidth: '100%', maxHeight: '80vh', objectFit: 'contain' }}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

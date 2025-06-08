@@ -16,10 +16,13 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
-  Fade
+  Fade,
+  Dialog,         // Import Dialog
+  DialogContent,  // Import DialogContent
+  IconButton      // Import IconButton
 } from "@mui/material";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
-import { CheckCircle, HourglassEmpty, Cancel, Apps, Category, SupervisorAccount, CalendarToday, AccessTime, LocationOn } from '@mui/icons-material';
+import { CheckCircle, HourglassEmpty, Cancel, Apps, Category, SupervisorAccount, CalendarToday, AccessTime, LocationOn, Close as CloseIcon } from '@mui/icons-material'; // Import CloseIcon
 
 const LIMIT = 8;
 
@@ -36,15 +39,17 @@ export default function CompanyTrainingPrograms() {
     totalPages: 1,
   });
   const [tab, setTab] = useState("All");
+  const [openImagePreview, setOpenImagePreview] = useState(false); // New state for image preview dialog
+  const [currentImageUrl, setCurrentImageUrl] = useState(null);     // New state for current image URL
 
   const fetchAllPrograms = useCallback(async (search = "") => {
     setLoading(true);
     setError(null);
     try {
       const [pendingRes, rejectedRes, approvedRes] = await Promise.all([
-        fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-pending?page=1&limit=100`),
-        fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-rejected?page=1&limit=100`),
-        fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-approved?page=1&limit=100`),
+        fetchWithAuth(`https://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-pending?page=1&limit=100`),
+        fetchWithAuth(`https://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-rejected?page=1&limit=100`),
+        fetchWithAuth(`https://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-approved?page=1&limit=100`),
       ]);
       const pending = (await pendingRes.json()).items || [];
       const rejected = (await rejectedRes.json()).items || [];
@@ -67,9 +72,12 @@ export default function CompanyTrainingPrograms() {
   }, []);
 
   useEffect(() => {
+    // This useEffect is for initial load and when 'search' changes (debounced)
+    // The debounce logic is now handled in the second useEffect below
+    // We call fetchAllPrograms directly here for initial load
     fetchAllPrograms(search);
-    // eslint-disable-next-line
-  }, [search]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only on initial mount
 
   useEffect(() => {
     if (searchTimeout) clearTimeout(searchTimeout);
@@ -78,8 +86,11 @@ export default function CompanyTrainingPrograms() {
         fetchAllPrograms(search);
       }, 500)
     );
-    // eslint-disable-next-line
-  }, [search]);
+    return () => {
+      if (searchTimeout) clearTimeout(searchTimeout); // Clear on unmount or before next effect
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]); // Re-run when search input changes
 
   const handlePageChange = (event, value) => {
     setMeta((prev) => ({ ...prev, page: value }));
@@ -105,6 +116,18 @@ export default function CompanyTrainingPrograms() {
     { value: "Rejected", label: "Rejected" },
     { value: "Pending", label: "Pending" },
   ];
+
+  // Handler for opening the image preview dialog
+  const handleImageClick = (imageUrl) => {
+    setCurrentImageUrl(imageUrl);
+    setOpenImagePreview(true);
+  };
+
+  // Handler for closing the image preview dialog
+  const handleCloseImagePreview = () => {
+    setOpenImagePreview(false);
+    setCurrentImageUrl(null);
+  };
 
   return (
     <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
@@ -192,7 +215,8 @@ export default function CompanyTrainingPrograms() {
                           height="180"
                           image={p.imagePath}
                           alt={p.title}
-                          sx={{ objectFit: "cover" }}
+                          sx={{ objectFit: "cover", cursor: 'pointer' }} // Add cursor pointer
+                          onClick={() => handleImageClick(p.imagePath)} // Handle click
                         />
                       )}
                       <CardContent>
@@ -222,17 +246,54 @@ export default function CompanyTrainingPrograms() {
             )}
           </Grid>
         )}
-        <Stack alignItems="center" sx={{ mt: 4 }}>
-          <Pagination
-            count={meta.totalPages}
-            page={meta.page}
-            onChange={handlePageChange}
-            color="primary"
-            shape="rounded"
-            size="large"
-          />
-        </Stack>
+        {/* Pagination is still present but note that fetchAllPrograms is not using page/limit from meta currently */}
+        {filtered.length > 0 && (
+          <Stack alignItems="center" sx={{ mt: 4 }}>
+            <Pagination
+              count={meta.totalPages}
+              page={meta.page}
+              onChange={handlePageChange}
+              color="primary"
+              shape="rounded"
+              size="large"
+            />
+          </Stack>
+        )}
       </Paper>
+
+      {/* Image Preview Dialog */}
+      <Dialog open={openImagePreview} onClose={handleCloseImagePreview} maxWidth="md" fullWidth>
+        <DialogContent sx={{ p: 0, position: 'relative' }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImagePreview}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 1,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {currentImageUrl && (
+            <Box
+              component="img"
+              src={currentImageUrl}
+              alt="Program Image"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                display: 'block',
+                borderRadius: 2,
+                margin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

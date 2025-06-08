@@ -15,5 +15,7 @@ namespace TMS.API.Services.Profiles
         Task<bool> UploadCVAsync(int userId, IFormFile cvFile, HttpContext httpContext);
         Task<bool> DeleteCVAsync(int userId);
         Task<(string? Path, string? FileName)> GetCVDownloadInfoAsync(int userId);
+        Task<(string? Path, string? ImageName)> GetImageDownloadInfoAsync(int userId);
+        Task<bool> DeleteImageAsync(int userId);
     }
 }

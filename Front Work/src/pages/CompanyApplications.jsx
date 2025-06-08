@@ -25,9 +25,12 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Divider
+  Divider,
+  Dialog,          // Import Dialog
+  DialogContent,   // Import DialogContent
+  IconButton       // Import IconButton
 } from "@mui/material";
-import { CheckCircle, HourglassEmpty, Cancel, Person, Email, Assignment, CalendarToday } from '@mui/icons-material';
+import { CheckCircle, HourglassEmpty, Cancel, Person, Email, Assignment, CalendarToday, Close as CloseIcon } from '@mui/icons-material'; // Import CloseIcon
 
 const statusMap = {
   0: "pending",
@@ -59,6 +62,9 @@ const CompanyApplications = () => {
   const [programIdSearchMode, setProgramIdSearchMode] = useState(false);
   const [programId, setProgramId] = useState("");
 
+  const [openImagePreview, setOpenImagePreview] = useState(false); // New state for image preview dialog
+  const [currentImageUrl, setCurrentImageUrl] = useState(null);     // New state for current image URL
+
   const token = localStorage.getItem("accessToken");
 
   const fetchApplications = async (page = 1, limit = 10, search = "", status = "all") => {
@@ -69,7 +75,7 @@ const CompanyApplications = () => {
     }
     setLoading(true);
     setError("");
-    let url = `http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/all-applicants?page=${page}&limit=${limit}`;
+    let url = `https://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/all-applicants?page=${page}&limit=${limit}`;
     if (status !== "all") url += `&status=${status}`;
     if (search) url += `&search=${encodeURIComponent(search)}`;
     try {
@@ -114,12 +120,16 @@ const CompanyApplications = () => {
         setLoading(true);
         setError("");
         try {
-          let url = `http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/applicants/${programId}?page=1&limit=10`;
+          let url = `https://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/applicants/${programId}?page=1&limit=10`;
           if (status !== "all") url += `&status=${status}`;
           const response = await fetchWithAuth(url);
           if (!response.ok) throw new Error("Failed to fetch");
           const data = await response.json();
-          setApplications(data.items || []);
+          const mappedApps = (data.items || []).map(app => ({ // Map status here as well
+            ...app,
+            status: statusMap[app.status] || "unknown",
+          }));
+          setApplications(mappedApps);
           setMeta({
             totalCount: data.totalCount,
             page: data.page,
@@ -146,6 +156,9 @@ const CompanyApplications = () => {
         fetchApplications(1, meta.limit, search, status);
       }, 500)
     );
+    return () => {
+      if (searchTimeout) clearTimeout(searchTimeout); // Clear on unmount or before next effect
+    };
     // eslint-disable-next-line
   }, [search]);
 
@@ -156,7 +169,7 @@ const CompanyApplications = () => {
   const handleAction = async (traineeId, programId, accept) => {
     setActionMessage("Processing...");
     try {
-      const res = await fetchWithAuth(`http://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/review/trainee/${traineeId}/program/${programId}?accept=${accept}`, {
+      const res = await fetchWithAuth(`https://amjad-hamidi-tms.runasp.net/api/ProgramEnrollments/review/trainee/${traineeId}/program/${programId}?accept=${accept}`, {
         method: "PATCH"
       });
       const message = await res.text();
@@ -175,6 +188,9 @@ const CompanyApplications = () => {
   };
 
   const filteredApps = applications.filter(app => {
+    // If programIdSearchMode is active, the filtering is done by the API, so just return true
+    if (programIdSearchMode && programId) return true;
+    
     if (!search) return true;
     const s = search.toLowerCase();
     return (
@@ -183,8 +199,36 @@ const CompanyApplications = () => {
     );
   });
 
-  if (loading) return <p>Loading applications...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  // Handler for opening the image preview dialog
+  const handleImageClick = (imageUrl) => {
+    setCurrentImageUrl(imageUrl);
+    setOpenImagePreview(true);
+  };
+
+  // Handler for closing the image preview dialog
+  const handleCloseImagePreview = () => {
+    setOpenImagePreview(false);
+    setCurrentImageUrl(null);
+  };
+
+  if (loading) return (
+    <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}>
+        <Stack alignItems="center" sx={{ my: 6 }}>
+          <CircularProgress size={44} color="primary" />
+          <Typography sx={{ mt: 2 }}>Loading applications...</Typography>
+        </Stack>
+      </Paper>
+    </Box>
+  );
+
+  if (error) return (
+    <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}>
+        <Typography color="error">{error}</Typography>
+      </Paper>
+    </Box>
+  );
 
   return (
     <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
@@ -239,11 +283,11 @@ const CompanyApplications = () => {
           <Chip label={`Limit: ${meta.limit}`} color="info" />
         </Stack>
         {actionMessage && <Typography sx={{ mt: 1, color: "green" }}>{actionMessage}</Typography>}
-        {loading ? (
+        {loading ? ( // This loading state is already handled before the return statement. Keeping for consistency.
           <Stack alignItems="center" sx={{ my: 6 }}>
             <CircularProgress size={44} color="primary" />
           </Stack>
-        ) : error ? (
+        ) : error ? ( // This error state is already handled before the return statement. Keeping for consistency.
           <Typography color="error">{error}</Typography>
         ) : (
           <Stack spacing={3}>
@@ -257,7 +301,15 @@ const CompanyApplications = () => {
                       component="img"
                       image={app.profileImageUrl || "https://i.pravatar.cc/100"}
                       alt={app.fullName}
-                      sx={{ width: 80, height: 80, borderRadius: 2, objectFit: "cover", mr: 3 }}
+                      sx={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: "50%", // Make it circular
+                        objectFit: "cover",
+                        mr: 3,
+                        cursor: 'pointer' // Add cursor pointer
+                      }}
+                      onClick={() => handleImageClick(app.profileImageUrl || "https://i.pravatar.cc/100")} // Handle image click
                     />
                     <Box sx={{ flex: 1 }}>
                       <Typography variant="h6" sx={{ fontWeight: 600 }}><Person sx={{ mr: 1, fontSize: 20 }} />{app.fullName}</Typography>
@@ -288,7 +340,7 @@ const CompanyApplications = () => {
                         sx={{ fontSize: 18, height: 40, minWidth: 120, fontWeight: 700, letterSpacing: 1, ml: 2, transition: 'all 0.3s' }}
                       />
                     </Fade>
-                    {app.status === 0 && (
+                    {(app.status === "pending" || app.status === 0) && ( // Ensure the condition matches actual status values (string "pending" or number 0)
                       <Stack direction="row" spacing={1} sx={{ ml: 2 }}>
                         <Button variant="contained" color="success" onClick={() => handleAction(app.traineeId, app.trainingProgramId, true)}>
                           ✅ Accept
@@ -315,6 +367,40 @@ const CompanyApplications = () => {
           />
         </Stack>
       </Paper>
+
+      {/* Image Preview Dialog */}
+      <Dialog open={openImagePreview} onClose={handleCloseImagePreview} maxWidth="md" fullWidth>
+        <DialogContent sx={{ p: 0, position: 'relative' }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImagePreview}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 1,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {currentImageUrl && (
+            <Box
+              component="img"
+              src={currentImageUrl}
+              alt="Profile Image"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                display: 'block',
+                borderRadius: 2,
+                margin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

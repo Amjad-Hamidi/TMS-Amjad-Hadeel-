@@ -11,7 +11,11 @@ import CompanyDashboard from "./pages/CompanyDashboard";
 import TraineeDashboard from "./pages/TraineeDashboard";
 import UserManagement from "./pages/UserManagement";
 import AdminCategories from "./pages/AdminCategories";
-import PendingTrainingPro from "./pages/PendingTrainingPro";
+import AdminPrograms from "./pages/AdminPrograms";
+import AdminAddUser from "./pages/AdminAddUser";
+import AdminAddCategory from "./pages/AdminAddCategory";
+import AdminProgramsOverview from "./pages/AdminProgramsOverview";
+import AdminAddProgram from "./pages/AdminAddProgram";
 import TraineeApplications from "./pages/TraineeApplications";
 import TraineeFeedback from "./pages/TraineeFeedback";
 import TraineePrograms from "./pages/TraineePrograms";
@@ -129,7 +133,11 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="categories" element={<AdminCategories />} />
-          <Route path="pendingTrainingPro" element={<PendingTrainingPro />} />
+          <Route path="programs" element={<AdminPrograms />} />
+          <Route path='add-user' element={<AdminAddUser />} />
+          <Route path="add-category" element={<AdminAddCategory />} />
+          <Route path="programs-overview" element={<AdminProgramsOverview />} />
+          <Route path="add-program" element={<AdminAddProgram />} ></Route>
         </Route>
 
         {/* Auth */}

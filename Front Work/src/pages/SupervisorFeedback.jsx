@@ -16,14 +16,16 @@ import {
   Alert,
   MenuItem,
   Tooltip,
-  IconButton, // IconButton might be needed for future enhancements
+  IconButton, // Keep this single import for IconButton
   FormControl,
   InputLabel,
   Select,
   FormHelperText,
   Paper,
   Pagination,
-  Chip
+  Chip,
+  Modal, // Import Modal for image preview
+  Fade, // Import Fade for smooth modal transition
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -32,7 +34,9 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from "@mui/icons-material/Close"; // Import CloseIcon
 import debounce from 'lodash/debounce';
+
 
 const ITEMS_PER_PAGE = 6;
 
@@ -41,7 +45,6 @@ const feedbackTypes = {
   2: "Suggestion",
   3: "Complaint",
   4: "Praise",
-  // Add more if needed, or ensure API returns these string values directly if possible
 };
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -54,7 +57,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
   display: 'flex',
   flexDirection: 'column',
-  height: '100%', 
+  height: '100%',
 }));
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
@@ -88,19 +91,90 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+// Style for the image preview modal (same as before)
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "90%",
+  maxWidth: "900px",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 2,
+  borderRadius: 4,
+  outline: "none",
+  overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+};
+
+// Component for Image Preview Modal
+function ImagePreviewModal({ imageUrl, onClose }) {
+  return (
+    <Modal
+      open={Boolean(imageUrl)}
+      onClose={onClose}
+      aria-labelledby="image-preview-title"
+      aria-describedby="image-preview-description"
+      closeAfterTransition
+    >
+      <Fade in={Boolean(imageUrl)}>
+        <Box sx={modalStyle}>
+          <IconButton
+            onClick={onClose}
+            sx={{
+              width: 'fit-content',
+              position: "absolute",
+              top: 8,
+              right: 8,
+              color: "#1976d2",
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              "&:hover": {
+                backgroundColor: "rgba(25, 118, 210, 0.2)",
+                transform: "scale(1.1)",
+                transition: "transform 0.2s ease-in-out",
+              },
+              transition:
+                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+              zIndex: 1,
+            }}
+          >
+            {/* تم تصغير حجم الـ X هنا */}
+            <CloseIcon fontSize="medium" /> {/* أو استخدم "small" أو sx={{ fontSize: 24 }} */}
+          </IconButton>
+          <img
+            src={imageUrl}
+            alt="Feedback Attachment"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "80vh",
+              borderRadius: 8,
+              objectFit: "contain",
+              display: "block",
+            }}
+          />
+        </Box>
+      </Fade>
+    </Modal>
+  );
+}
+
 const SupervisorFeedback = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loadingFeedbacks, setLoadingFeedbacks] = useState(false);
   const [loadingSend, setLoadingSend] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null); // State for image preview
 
   // Form state
   const [showForm, setShowForm] = useState(false);
   const [toUserId, setToUserId] = useState("");
   const [trainingProgramId, setTrainingProgramId] = useState("");
   const [message, setMessage] = useState("");
-  const [rating, setRating] = useState(1); 
+  const [rating, setRating] = useState(1);
   const [type, setType] = useState("General"); // Default to string value
   const [attachment, setAttachment] = useState(null);
   const [attachmentName, setAttachmentName] = useState("");
@@ -132,7 +206,7 @@ const SupervisorFeedback = () => {
       }
 
       const res = await fetchWithAuth(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received?${params.toString()}`
+        `https://amjad-hamidi-tms.runasp.net/api/Feedbacks/received?${params.toString()}`
       );
 
       if (!res.ok) {
@@ -157,7 +231,7 @@ const SupervisorFeedback = () => {
   const debouncedFetch = useCallback(
     debounce((newSearchTerm) => {
       setDebouncedSearchTerm(newSearchTerm);
-      setCurrentPage(1); 
+      setCurrentPage(1);
     }, 500),
     []
   );
@@ -227,7 +301,7 @@ const SupervisorFeedback = () => {
       formData.append("TrainingProgramId", trainingProgramId);
       formData.append("Message", message);
       formData.append("Rating", rating.toString());
-      formData.append("Type", type); 
+      formData.append("Type", type);
       if (attachment) {
         formData.append("Attachment", attachment);
       }
@@ -253,7 +327,7 @@ const SupervisorFeedback = () => {
       setAttachment(null);
       setAttachmentName("");
       setShowForm(false);
-      fetchFeedbacksCallback(1, ""); 
+      fetchFeedbacksCallback(1, "");
       setSearchTerm("");
     } catch (err) {
       setError(err.message || "An unexpected error occurred while sending feedback.");
@@ -282,6 +356,16 @@ const SupervisorFeedback = () => {
     setCurrentPage(value);
   };
 
+  // Function to open image preview
+  const handleImagePreview = (url) => {
+    setImagePreviewUrl(url);
+  };
+
+  // Function to close image preview
+  const handleCloseImagePreview = () => {
+    setImagePreviewUrl(null);
+  };
+
   return (
     <Box sx={{ maxWidth: 900, margin: 'auto', padding: { xs: 2, md: 3 }, backgroundColor: '#f9f9f9', borderRadius: 2 }}>
       <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', mb: 3, color: 'primary.main', fontWeight: 'bold' }}>
@@ -304,7 +388,7 @@ const SupervisorFeedback = () => {
                 <SearchIcon sx={{ mr: 1, color: 'action.active' }} />
               ),
             }}
-            sx={{ flexGrow: 1, minWidth: '200px', maxWidth: '400px'}}
+            sx={{ flexGrow: 1, minWidth: '200px', maxWidth: '400px' }}
           />
           <Button
             variant="contained"
@@ -318,7 +402,7 @@ const SupervisorFeedback = () => {
             size="large"
             sx={{
               transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': { 
+              '&:hover': {
                 transform: 'scale(1.05)',
                 boxShadow: (theme) => theme.shadows[4]
               }
@@ -330,7 +414,7 @@ const SupervisorFeedback = () => {
       )}
 
       {showForm && (
-        <StyledCard elevation={4} sx={{ p: { xs: 2, md: 3}, mb: 4, backgroundColor: 'white' }}>
+        <StyledCard elevation={4} sx={{ p: { xs: 2, md: 3 }, mb: 4, backgroundColor: 'white' }}>
           <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 2, textAlign: 'center', color: 'secondary.main' }}>
             Send New Feedback
           </Typography>
@@ -392,27 +476,27 @@ const SupervisorFeedback = () => {
                   {error && error.toLowerCase().includes("type") && <FormHelperText>{error}</FormHelperText>}
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'center' }}>
-                 <Typography component="legend" sx={{mb:0.5}}>Your Rating</Typography>
-                 <Rating
-                    name="feedback-rating"
-                    value={rating}
-                    onChange={(event, newValue) => {
-                      setRating(newValue === null ? 0 : newValue);
-                    }}
-                    precision={1}
-                    size="large"
-                  />
-                  {error && error.toLowerCase().includes("rating") && <FormHelperText error sx={{textAlign: 'center'}}>{error}</FormHelperText>}
+              <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography component="legend" sx={{ mb: 0.5 }}>Your Rating</Typography>
+                <Rating
+                  name="feedback-rating"
+                  value={rating}
+                  onChange={(event, newValue) => {
+                    setRating(newValue === null ? 0 : newValue);
+                  }}
+                  precision={1}
+                  size="large"
+                />
+                {error && error.toLowerCase().includes("rating") && <FormHelperText error sx={{ textAlign: 'center' }}>{error}</FormHelperText>}
               </Grid>
-              <Grid item xs={12} sx={{textAlign: 'center'}}>
+              <Grid item xs={12} sx={{ textAlign: 'center' }}>
                 <Button component="label" variant="outlined" startIcon={<FileUploadIcon />} sx={{ textTransform: 'none' }}>
                   Upload Attachment (Optional)
                   <VisuallyHiddenInput type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" onChange={handleAttachmentChange} />
                 </Button>
-                {attachmentName && <Typography variant="caption" display="block" sx={{mt:1, color: 'text.secondary'}}>{attachmentName}</Typography>}
+                {attachmentName && <Typography variant="caption" display="block" sx={{ mt: 1, color: 'text.secondary' }}>{attachmentName}</Typography>}
               </Grid>
-              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt:2 }}>
+              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
                 <Button
                   variant="outlined"
                   onClick={() => {
@@ -483,12 +567,27 @@ const SupervisorFeedback = () => {
               {/* Grid for displaying feedback cards */}
               <Grid container spacing={3}>
                 {feedbacks.map((fb) => (
-                  <Grid item xs={12} sm={6} md={6} key={fb.id || `${fb.fromUserAccountId}-${fb.createdAt}-${fb.message?.substring(0,10)}`}>
+                  <Grid item xs={12} sm={6} md={6} key={fb.id || `${fb.fromUserAccountId}-${fb.createdAt}-${fb.message?.substring(0, 10)}`}>
                     <StyledCard elevation={2}>
                       <CardHeader
                         avatar={
                           <Tooltip title={fb.fromFullName || 'Anonymous User'} placement="top">
-                            <StyledAvatar src={fb.fromImageUrl || undefined} alt={fb.fromFullName || 'User Avatar'} sx={{ width: 56, height: 56 }}>
+                            {/* Make the Avatar clickable for preview */}
+                            <StyledAvatar
+                              src={fb.fromImageUrl || undefined}
+                              alt={fb.fromFullName || 'User Avatar'}
+                              sx={{
+                                width: 56,
+                                height: 56,
+                                cursor: fb.fromImageUrl ? "pointer" : "default", // Show pointer cursor if image exists
+                                '&:hover': {
+                                  transform: fb.fromImageUrl ? 'scale(1.12)' : 'none',
+                                  boxShadow: fb.fromImageUrl ? (theme) => theme.shadows[6] : 'none',
+                                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                                },
+                              }}
+                              onClick={() => fb.fromImageUrl && handleImagePreview(fb.fromImageUrl)} // Call preview on click
+                            >
                               {fb.fromFullName ? fb.fromFullName.charAt(0).toUpperCase() : 'A'}
                             </StyledAvatar>
                           </Tooltip>
@@ -512,7 +611,7 @@ const SupervisorFeedback = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                           <Typography variant="subtitle1" component="span" sx={{ mr: 0.5, fontWeight: 'medium' }}>Type:</Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {typeof fb.type === 'number' ? feedbackTypes[fb.type] : fb.type || "Unknown"} 
+                            {typeof fb.type === 'number' ? feedbackTypes[fb.type] : fb.type || "Unknown"}
                           </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
@@ -520,13 +619,18 @@ const SupervisorFeedback = () => {
                           <Rating name={`rating-${fb.id}`} value={parseFloat(fb.rating) || 0} precision={0.5} readOnly size="small" />
                         </Box>
                         <Paper variant="outlined" sx={{ p: 1.5, backgroundColor: (theme) => theme.palette.grey[50], borderRadius: 1, mb: 1.5, maxHeight: '100px', overflowY: 'auto' }}>
-                          <Typography variant="body1" component="div" sx={{ fontStyle: 'italic', color: 'text.primary', whiteSpace: 'pre-wrap', margin:0, wordBreak: 'break-word' }}>
+                          <Typography variant="body1" component="div" sx={{ fontStyle: 'italic', color: 'text.primary', whiteSpace: 'pre-wrap', margin: 0, wordBreak: 'break-word' }}>
                             {fb.message}
                           </Typography>
                         </Paper>
                         {fb.attachmentUrl && (
                           <Typography variant="body2">
-                            <Link href={fb.attachmentUrl} target="_blank" rel="noopener noreferrer" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
+                            {/* Make the "View Attachment" link clickable for preview */}
+                            <Link
+                              component="button" // Use component="button" to enable onClick on Link
+                              onClick={() => handleImagePreview(fb.attachmentUrl)}
+                              sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                            >
                               <AttachmentIcon sx={{ fontSize: '1rem', mr: 0.5 }} /> View Attachment
                             </Link>
                           </Typography>
@@ -546,6 +650,7 @@ const SupervisorFeedback = () => {
                 page={currentPage}
                 onChange={handlePageChange}
                 color="primary"
+                shape="rounded"
                 showFirstButton
                 showLastButton
               />
@@ -553,6 +658,12 @@ const SupervisorFeedback = () => {
           )}
         </>
       )}
+
+      {/* Image Preview Modal */}
+      <ImagePreviewModal
+        imageUrl={imagePreviewUrl}
+        onClose={handleCloseImagePreview}
+      />
     </Box>
   );
 };

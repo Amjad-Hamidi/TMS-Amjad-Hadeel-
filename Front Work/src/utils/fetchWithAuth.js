@@ -9,7 +9,7 @@ export async function fetchWithAuth(url, options = {}) {
 
   if (response.status === 401) {
     // Try to refresh token
-    const refreshRes = await fetch('http://amjad-hamidi-tms.runasp.net/api/Account/refresh', {
+    const refreshRes = await fetch('https://amjad-hamidi-tms.runasp.net/api/Account/refresh', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: '*/*' },
       body: JSON.stringify({ accessToken, refreshToken }),

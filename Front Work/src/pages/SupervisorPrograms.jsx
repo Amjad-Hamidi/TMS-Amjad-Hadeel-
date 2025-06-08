@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { fetchWithAuth } from '../utils/fetchWithAuth';
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 import debounce from "lodash/debounce";
 import {
   Box,
@@ -20,6 +20,9 @@ import {
   Stack,
   TextField,
   Fade,
+  Dialog, // Import Dialog
+  DialogContent, // Import DialogContent
+  IconButton, // Import IconButton
 } from "@mui/material";
 import {
   Event as EventIcon,
@@ -39,22 +42,23 @@ import {
   Update as UpdateIcon,
   ErrorOutline as ErrorOutlineIcon,
   Assessment as AssessmentIcon,
-  FormatListNumbered as FormatListNumberedIcon,  // replaced PageviewIcon
-  List as ListIcon,                              // replaced GroupIcon
+  FormatListNumbered as FormatListNumberedIcon, // replaced PageviewIcon
+  List as ListIcon, // replaced GroupIcon
+  Close as CloseIcon, // Import CloseIcon for the modal
 } from "@mui/icons-material";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 const ITEMS_PER_PAGE = 6;
 
 const StyledCard = styled(Card)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  transition: theme.transitions.create(['transform', 'box-shadow'], {
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  transition: theme.transitions.create(["transform", "box-shadow"], {
     duration: theme.transitions.duration.short,
   }),
-  '&:hover': {
-    transform: 'translateY(-4px)',
+  "&:hover": {
+    transform: "translateY(-4px)",
     boxShadow: theme.shadows[8],
   },
 }));
@@ -69,6 +73,11 @@ export default function SupervisorPrograms() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
+  // New state for image preview modal
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
+  const [selectedImageAlt, setSelectedImageAlt] = useState("");
+
   const fetchPrograms = useCallback(
     async (currentPage, search = "") => {
       setIsLoading(true);
@@ -81,7 +90,7 @@ export default function SupervisorPrograms() {
         if (search) params.append("search", search);
 
         const response = await fetchWithAuth(
-          `http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-supervised?${params.toString()}`
+          `https://amjad-hamidi-tms.runasp.net/api/TrainingPrograms/my-supervised?${params.toString()}`
         );
         if (!response.ok) {
           const errorData = await response.text();
@@ -136,20 +145,43 @@ export default function SupervisorPrograms() {
     if (!dateString) return "N/A";
     try {
       return new Date(dateString).toLocaleDateString(undefined, {
-        year: 'numeric', month: 'short', day: 'numeric'
+        year: "numeric",
+        month: "short",
+        day: "numeric",
       });
     } catch {
       return "Invalid Date";
     }
   };
 
+  // Handler for image click to open modal
+  const handleImageClick = (imageUrl, altText) => {
+    setSelectedImageUrl(imageUrl);
+    setSelectedImageAlt(altText);
+    setOpenImageModal(true);
+  };
+
+  // Handler to close the image modal
+  const handleCloseImageModal = () => {
+    setOpenImageModal(false);
+    setSelectedImageUrl("");
+    setSelectedImageAlt("");
+  };
+
   return (
-    <Box sx={{ maxWidth: 900, margin: 'auto', p: { xs: 2, md: 3 }, bgcolor: '#f5f5f5', borderRadius: 2 }}>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', mb: 3, color: 'primary.main', fontWeight: 'bold' }}>
+    <Box
+      sx={{ maxWidth: 900, margin: "auto", p: { xs: 2, md: 3 }, bgcolor: "#f5f5f5", borderRadius: 2 }}
+    >
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{ textAlign: "center", mb: 3, color: "primary.main", fontWeight: "bold" }}
+      >
         Programs Under My Supervision
       </Typography>
 
-      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
         <TextField
           fullWidth
           placeholder="Search programs..."
@@ -158,17 +190,17 @@ export default function SupervisorPrograms() {
           variant="outlined"
           size="small"
           InputProps={{
-            startAdornment: <InfoOutlinedIcon sx={{ mr: 1, color: 'action.active' }} />,
+            startAdornment: <InfoOutlinedIcon sx={{ mr: 1, color: "action.active" }} />,
           }}
-          sx={{ maxWidth: 400, bgcolor: 'background.paper', borderRadius: 1 }}
+          sx={{ maxWidth: 400, bgcolor: "background.paper", borderRadius: 1 }}
         />
       </Box>
 
       {totalCount > 0 && !isLoading && (
         <Stack
-          direction={{ xs: 'column', sm: 'row' }}
+          direction={{ xs: "column", sm: "row" }}
           spacing={1}
-          sx={{ mb: 2, flexWrap: 'wrap', justifyContent: 'center' }}
+          sx={{ mb: 2, flexWrap: "wrap", justifyContent: "center" }}
         >
           <Chip
             icon={
@@ -180,8 +212,8 @@ export default function SupervisorPrograms() {
             variant="outlined"
             color="primary"
             sx={{
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' }
+              transition: "transform 0.2s",
+              "&:hover": { transform: "scale(1.05)" },
             }}
           />
           <Chip
@@ -194,8 +226,8 @@ export default function SupervisorPrograms() {
             variant="outlined"
             color="secondary"
             sx={{
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' }
+              transition: "transform 0.2s",
+              "&:hover": { transform: "scale(1.05)" },
             }}
           />
           <Chip
@@ -208,21 +240,23 @@ export default function SupervisorPrograms() {
             variant="outlined"
             color="primary"
             sx={{
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' }
+              transition: "transform 0.2s",
+              "&:hover": { transform: "scale(1.05)" },
             }}
           />
         </Stack>
       )}
 
       {isLoading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", my: 5 }}>
           <CircularProgress size={60} />
         </Box>
       ) : errorMessage && programs.length === 0 ? (
-        <Paper elevation={2} sx={{ p: 3, textAlign: 'center', mt: 3 }}>
-          <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
-            {debouncedSearchTerm ? `No programs found for "${debouncedSearchTerm}".` : "You have no supervised programs."}
+        <Paper elevation={2} sx={{ p: 3, textAlign: "center", mt: 3 }}>
+          <Typography variant="subtitle1" sx={{ color: "text.secondary" }}>
+            {debouncedSearchTerm
+              ? `No programs found for "${debouncedSearchTerm}".`
+              : "You have no supervised programs."}
           </Typography>
         </Paper>
       ) : (
@@ -232,32 +266,54 @@ export default function SupervisorPrograms() {
               const approvalProps = (() => {
                 switch (program.approvalStatus) {
                   case 1:
-                    return { label: "Approved", color: "success", icon: <CheckCircleOutlineIcon fontSize="small" /> };
+                    return {
+                      label: "Approved",
+                      color: "success",
+                      icon: <CheckCircleOutlineIcon fontSize="small" />,
+                    };
                   case 2:
-                    return { label: "Rejected", color: "error", icon: <CancelIcon fontSize="small" /> };
+                    return {
+                      label: "Rejected",
+                      color: "error",
+                      icon: <CancelIcon fontSize="small" />,
+                    };
                   default:
-                    return { label: "Pending", color: "warning", icon: <HourglassEmptyIcon fontSize="small" /> };
+                    return {
+                      label: "Pending",
+                      color: "warning",
+                      icon: <HourglassEmptyIcon fontSize="small" />,
+                    };
                 }
               })();
               const statusProps = program.status
                 ? { label: "Active", color: "success" }
                 : { label: "Inactive", color: "default" };
 
+              const imageUrl = program.imagePath || "https://via.placeholder.com/600x400.png?text=No+Image";
+              const imageAlt = program.title || "Program image";
+
               return (
-                <Grid item xs={12} key={program.trainingProgramId}>
+                <Grid item xs={12} sm={6} md={4} key={program.trainingProgramId}>
                   <Fade in timeout={300 + index * 100}>
                     <StyledCard elevation={2}>
-                      <CardMedia
-                        component="img"
-                        sx={{
-                          width: '100%',
-                          height: 200,
-                          objectFit: 'contain',
-                          bgcolor: '#e0e0e0'
-                        }}
-                        image={program.imagePath || 'https://via.placeholder.com/600x400.png?text=No+Image'}
-                        alt={program.title}
-                      />
+                      <Tooltip title={`View ${program.title}'s Image`} placement="top">
+                        <CardMedia
+                          component="img"
+                          sx={{
+                            width: "100%",
+                            height: 200,
+                            objectFit: "contain",
+                            bgcolor: "#e0e0e0",
+                            cursor: "pointer", // Add cursor pointer to indicate clickability
+                            "&:hover": {
+                                opacity: 0.8, // Slight dim on hover
+                            },
+                          }}
+                          image={imageUrl}
+                          alt={imageAlt}
+                          onClick={() => handleImageClick(imageUrl, imageAlt)} // Add onClick handler
+                        />
+                      </Tooltip>
                       <CardContent sx={{ flexGrow: 1, p: 2 }}>
                         <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                           <Typography variant="subtitle2" color="text.secondary" noWrap>
@@ -276,23 +332,23 @@ export default function SupervisorPrograms() {
                             variant="h5"
                             component="div"
                             noWrap
-                            sx={{ fontWeight: 'medium', display: 'inline-block' }}
+                            sx={{ fontWeight: "medium", display: "inline-block" }}
                           >
                             {program.title}
                           </Typography>
                         </Tooltip>
 
-                        <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: 'wrap' }}>
+                        <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: "wrap" }}>
                           <Tooltip title="Category Name" placement="top">
                             <Chip
                               icon={<CategoryIcon />}
-                              label={program.categoryName || 'N/A'}
+                              label={program.categoryName || "N/A"}
                               size="small"
                               variant="outlined"
                               color="info"
                               sx={{
-                                transition: 'transform 0.2s',
-                                '&:hover': { transform: 'scale(1.05)' }
+                                transition: "transform 0.2s",
+                                "&:hover": { transform: "scale(1.05)" },
                               }}
                             />
                           </Tooltip>
@@ -304,8 +360,8 @@ export default function SupervisorPrograms() {
                               color={approvalProps.color}
                               variant="outlined"
                               sx={{
-                                transition: 'transform 0.2s',
-                                '&:hover': { transform: 'scale(1.05)' }
+                                transition: "transform 0.2s",
+                                "&:hover": { transform: "scale(1.05)" },
                               }}
                             />
                           </Tooltip>
@@ -316,8 +372,8 @@ export default function SupervisorPrograms() {
                               color={statusProps.color}
                               variant="outlined"
                               sx={{
-                                transition: 'transform 0.2s',
-                                '&:hover': { transform: 'scale(1.05)' }
+                                transition: "transform 0.2s",
+                                "&:hover": { transform: "scale(1.05)" },
                               }}
                             />
                           </Tooltip>
@@ -334,9 +390,9 @@ export default function SupervisorPrograms() {
                                 emptyIcon={<StarBorderIcon fontSize="inherit" />}
                                 sx={{
                                   "&:hover": {
-                                    transform: 'scale(1.2)',
+                                    transform: "scale(1.2)",
                                   },
-                                  transition: 'transform 0.2s',
+                                  transition: "transform 0.2s",
                                 }}
                               />
                               <Typography variant="body2" color="text.secondary">
@@ -352,8 +408,8 @@ export default function SupervisorPrograms() {
                             color="text.primary"
                             sx={{
                               mb: 2,
-                              whiteSpace: 'pre-wrap',
-                              wordBreak: 'break-word',
+                              whiteSpace: "pre-wrap",
+                              wordBreak: "break-word",
                             }}
                           >
                             {program.description}
@@ -363,7 +419,7 @@ export default function SupervisorPrograms() {
                         <Box>
                           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
                             <Tooltip title="Duration" placement="top">
-                              <AccessTimeIcon sx={{ color: 'text.secondary' }} />
+                              <AccessTimeIcon sx={{ color: "text.secondary" }} />
                             </Tooltip>
                             <Tooltip title="Duration Value" placement="top">
                               <Typography variant="body2" color="text.secondary">
@@ -374,18 +430,18 @@ export default function SupervisorPrograms() {
 
                           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
                             <Tooltip title="Location" placement="top">
-                              <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                              <LocationOnIcon sx={{ color: "text.secondary" }} />
                             </Tooltip>
                             <Tooltip title="Location Value" placement="top">
                               <Typography variant="body2" color="text.secondary">
-                                {program.location || 'N/A'}
+                                {program.location || "N/A"}
                               </Typography>
                             </Tooltip>
                           </Stack>
 
                           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
                             <Tooltip title="Start Date" placement="top">
-                              <EventIcon sx={{ color: 'text.secondary' }} />
+                              <EventIcon sx={{ color: "text.secondary" }} />
                             </Tooltip>
                             <Tooltip title="Start Date Value" placement="top">
                               <Typography variant="body2" color="text.secondary">
@@ -396,7 +452,7 @@ export default function SupervisorPrograms() {
 
                           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
                             <Tooltip title="End Date" placement="top">
-                              <EventIcon sx={{ color: 'text.secondary' }} />
+                              <EventIcon sx={{ color: "text.secondary" }} />
                             </Tooltip>
                             <Tooltip title="End Date Value" placement="top">
                               <Typography variant="body2" color="text.secondary">
@@ -407,7 +463,7 @@ export default function SupervisorPrograms() {
 
                           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
                             <Tooltip title="Seats Available" placement="top">
-                              <PeopleOutlineIcon sx={{ color: 'text.secondary' }} />
+                              <PeopleOutlineIcon sx={{ color: "text.secondary" }} />
                             </Tooltip>
                             <Tooltip title="Seats Value" placement="top">
                               <Typography variant="body2" color="text.secondary">
@@ -418,18 +474,18 @@ export default function SupervisorPrograms() {
 
                           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
                             <Tooltip title="Company Name" placement="top">
-                              <BusinessIcon sx={{ color: 'text.secondary' }} />
+                              <BusinessIcon sx={{ color: "text.secondary" }} />
                             </Tooltip>
                             <Tooltip title="Company Value" placement="top">
                               <Typography variant="body2" color="text.secondary">
-                                {program.companyName || 'N/A'}
+                                {program.companyName || "N/A"}
                               </Typography>
                             </Tooltip>
                           </Stack>
 
                           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
                             <Tooltip title="Created Date" placement="top">
-                              <UpdateIcon sx={{ color: 'text.secondary' }} />
+                              <UpdateIcon sx={{ color: "text.secondary" }} />
                             </Tooltip>
                             <Tooltip title="Created Value" placement="top">
                               <Typography variant="body2" color="text.secondary">
@@ -440,7 +496,7 @@ export default function SupervisorPrograms() {
                         </Box>
                       </CardContent>
 
-                      <CardActions sx={{ borderTop: '1px solid #eee', bgcolor: 'grey.50', p: 1 }}>
+                      <CardActions sx={{ borderTop: "1px solid #eee", bgcolor: "grey.50", p: 1 }}>
                         <Button
                           size="small"
                           variant="outlined"
@@ -450,7 +506,12 @@ export default function SupervisorPrograms() {
                           rel="noopener noreferrer"
                           disabled={!program.contentUrl}
                           fullWidth
-                          sx={{ mr: 0.5, textTransform: 'none', transition: 'background-color 0.2s', '&:hover': { bgcolor: 'primary.light' } }}
+                          sx={{
+                            mr: 0.5,
+                            textTransform: "none",
+                            transition: "background-color 0.2s",
+                            "&:hover": { bgcolor: "primary.light" },
+                          }}
                         >
                           Content
                         </Button>
@@ -463,7 +524,12 @@ export default function SupervisorPrograms() {
                           rel="noopener noreferrer"
                           disabled={!program.classroomUrl}
                           fullWidth
-                          sx={{ ml: 0.5, textTransform: 'none', transition: 'background-color 0.2s', '&:hover': { bgcolor: 'primary.dark' } }}
+                          sx={{
+                            ml: 0.5,
+                            textTransform: "none",
+                            transition: "background-color 0.2s",
+                            "&:hover": { bgcolor: "primary.dark" },
+                          }}
                         >
                           Classroom
                         </Button>
@@ -476,7 +542,7 @@ export default function SupervisorPrograms() {
           </Grid>
 
           {totalPages > 0 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
               <Pagination
                 count={totalPages}
                 page={page}
@@ -486,15 +552,46 @@ export default function SupervisorPrograms() {
                 showLastButton
                 sx={{
                   "& .MuiPaginationItem-root": {
-                    transition: 'transform 0.2s',
-                    '&:hover': { transform: 'scale(1.1)' }
-                  }
+                    transition: "transform 0.2s",
+                    "&:hover": { transform: "scale(1.1)" },
+                  },
                 }}
               />
             </Box>
           )}
         </>
       )}
+
+      {/* Image Preview Dialog */}
+      <Dialog
+        open={openImageModal}
+        onClose={handleCloseImageModal}
+        maxWidth="md"
+        fullWidth
+        aria-labelledby="image-preview-dialog-title"
+      >
+        <DialogContent sx={{ p: 0, position: "relative" }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageModal}
+            sx={{
+              width: 'fit-content',
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 1, // Ensure close button is above the image
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <img
+            src={selectedImageUrl}
+            alt={selectedImageAlt}
+            style={{ width: "50%", height: "auto", display: "block", margin: 'auto' }}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

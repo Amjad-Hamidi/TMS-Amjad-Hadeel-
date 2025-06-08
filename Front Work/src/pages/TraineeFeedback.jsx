@@ -20,7 +20,10 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Dialog, // Import Dialog for the image preview
+  DialogContent, // Import DialogContent for the image preview
+  IconButton // Import IconButton for the close button
 } from "@mui/material";
 import {
   FileUpload as FileUploadIcon,
@@ -28,7 +31,9 @@ import {
   AddComment as AddCommentIcon,
   Cancel as CancelIcon,
   Attachment as AttachmentIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
+  Close as CloseIcon, // Import CloseIcon for the close button
+  Image as ImageIcon // Import ImageIcon for fallback
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import debounce from "lodash/debounce";
@@ -109,6 +114,8 @@ export default function TraineeFeedback() {
   const [feedbackType, setFeedbackType] = useState(1);
   const [fileAttachment, setFileAttachment] = useState(null);
 
+  const [selectedImage, setSelectedImage] = useState(null); // New state for image preview
+
   const authToken = localStorage.getItem("accessToken");
 
   const fetchFeedbacks = useCallback(async (pageNum = 1, currentSearchTerm = "") => {
@@ -123,7 +130,7 @@ export default function TraineeFeedback() {
         params.append('search', currentSearchTerm);
       }
       const response = await fetchWithAuth(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received?${params.toString()}`
+        `https://amjad-hamidi-tms.runasp.net/api/Feedbacks/received?${params.toString()}`
       );
       if (!response.ok) {
         const errorData = await response.text();
@@ -195,7 +202,7 @@ export default function TraineeFeedback() {
       }
 
       const response = await fetchWithAuth(
-        `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/send`,
+        `https://amjad-hamidi-tms.runasp.net/api/Feedbacks/send`,
         {
           method: "POST",
           body: formData,
@@ -247,6 +254,14 @@ export default function TraineeFeedback() {
 
   const handlePageChange = (event, value) => {
     setPage(value);
+  };
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleCloseImageDialog = () => {
+    setSelectedImage(null);
   };
 
   const getFeedbackTypeDisplay = (typeValue) => {
@@ -522,6 +537,8 @@ export default function TraineeFeedback() {
                           <StyledAvatar
                             src={feedback.fromImageUrl || undefined}
                             alt={feedback.fromFullName || 'Sender'}
+                            sx={{ cursor: feedback.fromImageUrl ? 'pointer' : 'default' }} // Add cursor pointer if image exists
+                            onClick={() => feedback.fromImageUrl && handleImageClick(feedback.fromImageUrl)} // Open dialog only if image exists
                           >
                             {feedback.fromFullName
                               ? feedback.fromFullName.charAt(0).toUpperCase()
@@ -568,12 +585,12 @@ export default function TraineeFeedback() {
                             size="small"
                             color={
                               feedback.type === 2
-                                ? "error"
+                                ? "error" // Changed 'Suggestion' to 'error' as per image
                                 : feedback.type === 3
-                                ? "warning"
+                                ? "warning" // Changed 'Complaint' to 'warning' as per image
                                 : feedback.type === 4
-                                ? "success"
-                                : "info"
+                                ? "success" // Changed 'Praise' to 'success' as per image
+                                : "info" // 'General' or unknown
                             }
                           />
                           {feedback.rating && (
@@ -651,6 +668,55 @@ export default function TraineeFeedback() {
           )}
         </>
       )}
+
+      {/* ─── نافذة معاينة الصورة فقط ────────────────────────────────────────────────── */}
+      <Dialog
+        open={Boolean(selectedImage)}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogContent
+          dividers // يمكنك إزالة هذا إذا كان هو مصدر الخط الفاصل بين المحتوى والزر
+          sx={{ position: 'relative', p: 0 }} // p: 0 لإزالة الـ padding الافتراضي، ثم سنضيف padding يدوي للصورة
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 1, // لضمان ظهور الزر فوق الصورة
+              backgroundColor: 'rgba(255, 255, 255, 0.7)', // خلفية خفيفة لمساعدة الرؤية على الصورة
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          {selectedImage && (
+            <Box
+              component="img"
+              src={selectedImage}
+              alt="User Image Preview"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                maxHeight: '80vh', // حد أقصى للارتفاع لكي لا تكون الصورة كبيرة جدًا
+                display: 'block',
+                mx: 'auto',
+                objectFit: 'contain',
+                p: 2, // إضافة padding للصورة نفسها بدلاً من DialogTitle
+                marigin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Paper>
   );
 }

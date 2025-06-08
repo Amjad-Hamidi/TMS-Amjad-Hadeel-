@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // Added useCallback
 import {
   Box,
   Card,
@@ -14,6 +14,9 @@ import {
   Fade,
   Grow,
   Paper,
+  Dialog, // Import Dialog for the image preview
+  DialogContent, // Import DialogContent for the image preview
+  IconButton, // Import IconButton for the close button
 } from "@mui/material";
 import { Grid } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -24,6 +27,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import CancelIcon from "@mui/icons-material/Cancel";
+import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon for the close button
 import { useNavigate } from "react-router-dom";
 
 // Swiper imports
@@ -56,6 +60,8 @@ export default function AdminDashboard() {
   const [query, setQuery] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
 
+  const [selectedImage, setSelectedImage] = useState(null); // New state for image preview
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,7 +70,7 @@ export default function AdminDashboard() {
       setErrorStats(null);
       try {
         const token = localStorage.getItem("accessToken");
-        const res = await fetch("http://amjad-hamidi-tms.runasp.net/api/Users/statistics", {
+        const res = await fetch("https://amjad-hamidi-tms.runasp.net/api/Users/statistics", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch statistics");
@@ -79,12 +85,12 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  const fetchCategories = async (page = 1, limit = 10, search = "") => {
+  const fetchCategories = useCallback(async (page = 1, limit = 10, search = "") => {
     setLoadingCategories(true);
     setErrorCategories(null);
     try {
       const token = localStorage.getItem("accessToken");
-      const url = `http://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
+      const url = `https://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
       const res = await fetch(url, {
         headers: { Accept: "*/*", Authorization: `Bearer ${token}` },
       });
@@ -102,22 +108,22 @@ export default function AdminDashboard() {
     } finally {
       setLoadingCategories(false);
     }
-  };
+  }, []); // useCallback dependency array is empty as fetchCategories doesn't depend on external state
 
   useEffect(() => {
     fetchCategories(categoriesMeta.page, categoriesMeta.limit, query);
     // eslint-disable-next-line
-  }, [categoriesMeta.page, categoriesMeta.limit]);
+  }, [categoriesMeta.page, categoriesMeta.limit, fetchCategories]); // Added fetchCategories to dependency array
 
   useEffect(() => {
     if (searchTimeout) clearTimeout(searchTimeout);
-    setSearchTimeout(
-      setTimeout(() => {
-        fetchCategories(1, categoriesMeta.limit, query);
-      }, 500)
-    );
+    const newTimeout = setTimeout(() => {
+      fetchCategories(1, categoriesMeta.limit, query);
+    }, 500);
+    setSearchTimeout(newTimeout);
+    return () => clearTimeout(newTimeout); // Clear timeout on unmount or re-render
     // eslint-disable-next-line
-  }, [query]);
+  }, [query, categoriesMeta.limit, fetchCategories]); // Added fetchCategories to dependency array
 
   const handlePageChange = (event, value) => {
     setCategoriesMeta((prev) => ({ ...prev, page: value }));
@@ -125,6 +131,14 @@ export default function AdminDashboard() {
 
   const handleViewProgramClick = (categoryId) => {
     navigate(`/CategoryTProgramsW/${categoryId}`);
+  };
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleCloseImageDialog = () => {
+    setSelectedImage(null);
   };
 
   return (
@@ -242,14 +256,16 @@ export default function AdminDashboard() {
                         <CardMedia
                           component="img"
                           height="170"
-                          image={c.categoryImage.startsWith("http") ? c.categoryImage : `http://amjad-hamidi-tms.runasp.net${c.categoryImage}`}
+                          image={c.categoryImage.startsWith("http") ? c.categoryImage : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`}
                           alt={c.name}
                           sx={{
                             objectFit: "cover",
                             borderTopLeftRadius: 16,
                             borderTopRightRadius: 16,
                             borderBottom: "2px solid #f0f0f0",
+                            cursor: 'pointer', // Add cursor pointer
                           }}
+                          onClick={() => handleImageClick(c.categoryImage.startsWith("http") ? c.categoryImage : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`)} // Open dialog on click
                         />
                       )}
                       <CardContent sx={{ flex: 1 }}>
@@ -314,6 +330,55 @@ export default function AdminDashboard() {
           />
         </Stack>
       </Paper>
+
+      {/* ─── نافذة معاينة الصورة ────────────────────────────────────────────────── */}
+      <Dialog
+        open={Boolean(selectedImage)}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogContent
+          dividers
+          sx={{ position: 'relative', p: 0 }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 1,
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          {selectedImage && (
+            <Box
+              component="img"
+              src={selectedImage}
+              alt="Category Image Preview"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                maxHeight: '80vh',
+                display: 'block',
+                mx: 'auto',
+                objectFit: 'contain',
+                p: 2,
+                margin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

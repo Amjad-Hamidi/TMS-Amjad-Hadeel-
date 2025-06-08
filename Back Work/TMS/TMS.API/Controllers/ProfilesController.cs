@@ -169,7 +169,7 @@ namespace TMS.API.Controllers
         }
 
         [HttpGet("download-cv/{userId}")]
-        [Authorize(Roles = $"{StaticData.Admin}, {StaticData.Company}")]
+        [Authorize]
         //[AllowAnonymous]
         public async Task<IActionResult> DownloadCVForUser([FromRoute] int userId)
         {
@@ -184,6 +184,33 @@ namespace TMS.API.Controllers
             var contentType = GetMimeType(fileName); 
 
             return File(stream, contentType, fileName);
+        }
+
+        [HttpGet("download-profileImage")]
+        [Authorize]
+        public async Task<IActionResult> DownloadImage()
+        {
+            var userId = int.Parse(User.FindFirst(CustomClaimNames.UserAccountId)!.Value);
+            var (path, imageName) = await profileService.GetImageDownloadInfoAsync(userId);
+
+            if (string.IsNullOrEmpty(path))
+                return NotFound("❌ Image not found.");
+
+            var stream = System.IO.File.OpenRead(path);
+
+            // GetMimeType => is from MimeTypesMap library
+            var contentType = GetMimeType(imageName);
+
+            return File(stream, contentType, imageName);
+        }
+
+        [HttpDelete("delete-profieImage")]
+        [Authorize]
+        public async Task<IActionResult> DeleteImage()
+        {
+            var userId = int.Parse(User.FindFirst(CustomClaimNames.UserAccountId)!.Value);
+            var success = await profileService.DeleteImageAsync(userId);
+            return success ? Ok("🗑️ Image deleted successfully.") : NotFound("❌ No image to delete.");
         }
 
 

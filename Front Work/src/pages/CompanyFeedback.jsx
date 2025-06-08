@@ -1,5 +1,4 @@
 // CompanyFeedback.jsx
-
 import React, { useState, useEffect, useCallback } from "react";
 import { fetchWithAuth } from '../utils/fetchWithAuth';
 import {
@@ -24,7 +23,10 @@ import {
   Select,
   FormHelperText,
   Paper,
-  Pagination
+  Pagination,
+  Modal, // Import Modal for image preview
+  Fade,  // Import Fade for smooth modal transition
+  IconButton, // Import IconButton
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -33,6 +35,8 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from "@mui/icons-material/Close"; // Import CloseIcon for the modal
+
 import debounce from 'lodash/debounce';
 
 const ITEMS_PER_PAGE = 6;
@@ -44,6 +48,7 @@ const feedbackTypes = {
   4: "Praise",
 };
 
+// --- Styled Components ---
 const StyledCard = styled(Card)(({ theme }) => ({
   transition: theme.transitions.create(['transform', 'box-shadow'], {
     duration: theme.transitions.duration.short,
@@ -87,6 +92,77 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1,
 });
+// --- End Styled Components ---
+
+// --- Image Preview Modal Component ---
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "90%",
+  maxWidth: "900px",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 2,
+  borderRadius: 4,
+  outline: "none",
+  overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+};
+
+function ImagePreviewModal({ imageUrl, onClose }) {
+  return (
+    <Modal
+      open={Boolean(imageUrl)}
+      onClose={onClose}
+      aria-labelledby="image-preview-title"
+      aria-describedby="image-preview-description"
+      closeAfterTransition
+    >
+      <Fade in={Boolean(imageUrl)}>
+        <Box sx={modalStyle}>
+          <IconButton
+            onClick={onClose}
+            sx={{
+              width: 'fit-content',
+              position: "absolute",
+              top: 8,
+              right: 8,
+              color: "#1976d2", // A common blue for Material-UI buttons
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              "&:hover": {
+                backgroundColor: "rgba(25, 118, 210, 0.2)", // Lighter blue on hover
+                transform: "scale(1.1)",
+                transition: "transform 0.2s ease-in-out",
+              },
+              transition:
+                "transform 0.2s ease-in-out, background-color 0.2s ease-in-out",
+              zIndex: 1, // Ensure it's above the image
+            }}
+          >
+            <CloseIcon fontSize="medium" />
+          </IconButton>
+          <img
+            src={imageUrl}
+            alt="Feedback Attachment"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "80vh", // Limit height to 80% of viewport height
+              borderRadius: 8,
+              objectFit: "contain", // Ensures the entire image is visible within its bounds
+              display: "block",
+            }}
+          />
+        </Box>
+      </Fade>
+    </Modal>
+  );
+}
+// --- End Image Preview Modal Component ---
+
 
 const CompanyFeedback = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -94,6 +170,9 @@ const CompanyFeedback = () => {
   const [loadingSend, setLoadingSend] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null); // State for image preview
+
+  // Form state
   const [showForm, setShowForm] = useState(false);
   const [toUserId, setToUserId] = useState("");
   const [trainingProgramId, setTrainingProgramId] = useState("");
@@ -102,6 +181,8 @@ const CompanyFeedback = () => {
   const [type, setType] = useState("General");
   const [attachment, setAttachment] = useState(null);
   const [attachmentName, setAttachmentName] = useState("");
+
+  // Pagination and Search state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
@@ -111,6 +192,7 @@ const CompanyFeedback = () => {
   const allowedTypes = ["General", "Suggestion", "Complaint", "Praise"];
   const token = localStorage.getItem("accessToken");
 
+  // --- Fetch Feedbacks Function ---
   const fetchFeedbacksCallback = useCallback(
     async (pageToFetch, currentSearch) => {
       if (!token) {
@@ -128,8 +210,9 @@ const CompanyFeedback = () => {
           params.append('search', currentSearch);
         }
 
+        // Using your original API endpoint for received feedbacks
         const res = await fetchWithAuth(
-          `http://amjad-hamidi-tms.runasp.net/api/Feedbacks/received?${params.toString()}`
+          `https://amjad-hamidi-tms.runasp.net/api/Feedbacks/received?${params.toString()}`
         );
 
         if (!res.ok) {
@@ -154,6 +237,7 @@ const CompanyFeedback = () => {
     [token]
   );
 
+  // --- Debounced Search Effect ---
   const debouncedFetch = useCallback(
     debounce((newSearchTerm) => {
       setDebouncedSearchTerm(newSearchTerm);
@@ -173,6 +257,7 @@ const CompanyFeedback = () => {
     fetchFeedbacksCallback(currentPage, debouncedSearchTerm);
   }, [currentPage, debouncedSearchTerm, fetchFeedbacksCallback]);
 
+  // --- Handle Attachment Change for New Feedback Form ---
   const handleAttachmentChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -184,6 +269,7 @@ const CompanyFeedback = () => {
     }
   };
 
+  // --- Handle Submit New Feedback ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoadingSend(true);
@@ -232,8 +318,9 @@ const CompanyFeedback = () => {
         formData.append("Attachment", attachment);
       }
 
+      // Using your original API endpoint for sending feedbacks
       const res = await fetchWithAuth(
-        "http://amjad-hamidi-tms.runasp.net/api/Feedbacks/send",
+        "https://amjad-hamidi-tms.runasp.net/api/Feedbacks/send",
         {
           method: "POST",
           body: formData,
@@ -255,7 +342,7 @@ const CompanyFeedback = () => {
       setAttachmentName("");
       setShowForm(false);
 
-      fetchFeedbacksCallback(1, "");
+      fetchFeedbacksCallback(1, ""); // Refresh feedbacks after sending
       setSearchTerm("");
     } catch (err) {
       setError(err.message || "An unexpected error occurred while sending feedback.");
@@ -264,6 +351,7 @@ const CompanyFeedback = () => {
     }
   };
 
+  // --- Date Formatting ---
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     try {
@@ -280,8 +368,18 @@ const CompanyFeedback = () => {
     }
   };
 
+  // --- Handle Pagination Change ---
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
+  };
+
+  // --- Image Preview Handlers ---
+  const handleImagePreview = (url) => {
+    setImagePreviewUrl(url);
+  };
+
+  const handleCloseImagePreview = () => {
+    setImagePreviewUrl(null);
   };
 
   return (
@@ -298,6 +396,7 @@ const CompanyFeedback = () => {
       {(!showForm && error) && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {successMsg && <Alert severity="success" sx={{ mb: 2 }}>{successMsg}</Alert>}
 
+      {/* --- Search Bar and Add New Feedback Button --- */}
       {!showForm && (
         <Box
           sx={{
@@ -345,6 +444,7 @@ const CompanyFeedback = () => {
         </Box>
       )}
 
+      {/* --- New Feedback Form --- */}
       {showForm && (
         <StyledCard elevation={4} sx={{ p: { xs: 2, md: 3 }, mb: 4, backgroundColor: 'white' }}>
           <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 2, textAlign: 'center', color: 'secondary.main' }}>
@@ -484,6 +584,7 @@ const CompanyFeedback = () => {
         </StyledCard>
       )}
 
+      {/* --- Display Received Feedbacks --- */}
       {!showForm && (
         <>
           {loadingFeedbacks ? (
@@ -505,16 +606,19 @@ const CompanyFeedback = () => {
                   <Chip
                     label={`Total: ${totalCount}`}
                     color="primary"
+                    variant="outlined"
                     sx={{ fontWeight: 700 }}
                   />
                   <Chip
                     label={`Page: ${currentPage} / ${totalPages}`}
                     color="secondary"
+                    variant="outlined"
                     sx={{ fontWeight: 700 }}
                   />
                   <Chip
                     label={`Limit: ${ITEMS_PER_PAGE}`}
                     color="primary"
+                    variant="outlined"
                     sx={{ fontWeight: 700 }}
                   />
                 </Box>
@@ -524,7 +628,7 @@ const CompanyFeedback = () => {
                 {feedbacks.map((fb) => (
                   <Grid
                     item
-                    xs={12} sm={12} md={12} lg={12} xl={12} // כל כרטיס תופס שורה מלאה
+                    xs={12} sm={12} md={12} lg={12} xl={12} // Each card takes a full row
                     key={fb.id || `${fb.fromUserAccountId}-${fb.createdAt}-${fb.message?.substring(0, 10)}`}
                     sx={{ display: 'flex' }}
                   >
@@ -532,7 +636,19 @@ const CompanyFeedback = () => {
                       <CardHeader
                         avatar={
                           <Tooltip title={fb.fromFullName || 'Anonymous User'} placement="top">
-                            <StyledAvatar src={fb.fromImageUrl || undefined} alt={fb.fromFullName || 'User Avatar'}>
+                            <StyledAvatar
+                              src={fb.fromImageUrl || undefined}
+                              alt={fb.fromFullName || 'User Avatar'}
+                              sx={{
+                                cursor: fb.fromImageUrl ? "pointer" : "default", // Only clickable if there's an image
+                                '&:hover': {
+                                  transform: fb.fromImageUrl ? 'scale(1.12)' : 'none',
+                                  boxShadow: fb.fromImageUrl ? (theme) => theme.shadows[6] : 'none',
+                                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                                },
+                              }}
+                              onClick={() => fb.fromImageUrl && handleImagePreview(fb.fromImageUrl)} // Trigger preview on click
+                            >
                               {fb.fromFullName ? fb.fromFullName.charAt(0).toUpperCase() : 'A'}
                             </StyledAvatar>
                           </Tooltip>
@@ -597,10 +713,9 @@ const CompanyFeedback = () => {
                         {fb.attachmentUrl && (
                           <Typography variant="body2">
                             <Link
-                              href={fb.attachmentUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}
+                              component="button" // Use button component to trigger onClick, instead of href
+                              onClick={() => handleImagePreview(fb.attachmentUrl)} // Trigger preview on click
+                              sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                             >
                               <AttachmentIcon sx={{ fontSize: '1rem', mr: 0.5 }} /> View Attachment
                             </Link>
@@ -619,6 +734,7 @@ const CompanyFeedback = () => {
                     page={currentPage}
                     onChange={handlePageChange}
                     color="primary"
+                    shape="rounded"
                     showFirstButton
                     showLastButton
                   />
@@ -628,6 +744,12 @@ const CompanyFeedback = () => {
           )}
         </>
       )}
+
+      {/* --- Image Preview Modal --- */}
+      <ImagePreviewModal
+        imageUrl={imagePreviewUrl}
+        onClose={handleCloseImagePreview}
+      />
     </Box>
   );
 };

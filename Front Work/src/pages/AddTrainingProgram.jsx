@@ -12,6 +12,9 @@ import {
   Alert,
   AlertTitle,
   CircularProgress,
+  Dialog, // Import Dialog for image preview
+  DialogContent, // Import DialogContent for image preview
+  IconButton, // Import IconButton for close button
 } from "@mui/material";
 import {
   Title as TitleIcon,
@@ -27,6 +30,7 @@ import {
   CloudUpload as CloudUploadIcon,
   Send as SendIcon,
   RocketLaunch as RocketLaunchIcon,
+  Close as CloseIcon, // Import CloseIcon for the dialog
 } from "@mui/icons-material";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 
@@ -53,8 +57,8 @@ function AddTrainingProgram() {
     contentUrl: "",
     classroomUrl: "",
     categoryId: "",
-    companyId: "", // Assuming current user's company or selectable
-    supervisorId: "", // Potentially selectable
+    companyId: "", // Made required
+    supervisorId: "", // Made required
     imageFile: null,
     status: true,
   };
@@ -63,6 +67,7 @@ function AddTrainingProgram() {
   const [errors, setErrors] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [openImageDialog, setOpenImageDialog] = useState(false); // State for image dialog
 
   useEffect(() => {
     // Cleanup for imagePreview URL
@@ -118,7 +123,7 @@ function AddTrainingProgram() {
 
     try {
       const res = await fetchWithAuth(
-        "http://amjad-hamidi-tms.runasp.net/api/TrainingPrograms",
+        "https://amjad-hamidi-tms.runasp.net/api/TrainingPrograms",
         {
           method: "POST",
           body: data, // FormData handles multipart/form-data header automatically
@@ -135,8 +140,6 @@ function AddTrainingProgram() {
       }
 
       if (!res.ok) {
-        // Assuming result.errors is an object like { FieldName: ["Error message"] }
-        // Or result might be a simple string error from text()
         let formattedErrors = {};
         if (typeof result === "string") {
           formattedErrors.general = result;
@@ -165,7 +168,6 @@ function AddTrainingProgram() {
         }
         setImagePreview(null);
         setErrors(null);
-        // Clear form or redirect
       }
     } catch (error) {
       console.error("Request Failed:", error);
@@ -174,6 +176,14 @@ function AddTrainingProgram() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleOpenImageDialog = () => {
+    setOpenImageDialog(true);
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog(false);
   };
 
   return (
@@ -464,19 +474,20 @@ function AddTrainingProgram() {
             />
           </Box>
 
-          {/* Company ID (Optional) */}
+          {/* Company ID (Required) */}
           <Box mb={3}>
             <TextField
               name="companyId"
-              label="Company ID (Optional)"
+              label="Company ID"
               type="number"
               value={formData.companyId}
               onChange={handleChange}
+              required // Made required
               fullWidth
               variant="outlined"
-              placeholder="Enter Company ID if applicable"
+              placeholder="Enter your Company ID"
               error={!!errors?.companyid}
-              helperText={errors?.companyid}
+              helperText={errors?.companyid || "Enter your ID (required)"}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -487,19 +498,19 @@ function AddTrainingProgram() {
             />
           </Box>
 
-          {/* Supervisor ID (Optional) */}
+          {/* Supervisor ID (Required) */}
           <Box mb={3}>
             <TextField
               name="supervisorId"
-              label="Supervisor ID (Optional)"
+              label="Supervisor ID"
               type="number"
               value={formData.supervisorId}
               onChange={handleChange}
+              required // Made required
               fullWidth
               variant="outlined"
-              placeholder="Enter Supervisor ID if applicable"
+              placeholder="Enter Supervisor ID"
               error={!!errors?.supervisorid}
-              helperText={errors?.supervisorid}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -550,7 +561,9 @@ function AddTrainingProgram() {
                     borderRadius: "8px",
                     marginTop: "8px",
                     border: "1px solid #ddd",
+                    cursor: 'pointer', // Make image clickable
                   }}
+                  onClick={handleOpenImageDialog} // Open dialog on image click
                 />
               </Box>
             )}
@@ -613,6 +626,52 @@ function AddTrainingProgram() {
           </Box>
         </Box>
       </Paper>
+
+      {/* Image Preview Dialog */}
+      <Dialog
+        open={openImageDialog}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogContent sx={{ position: 'relative', p: 0 }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImageDialog}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              zIndex: 1,
+              color: 'white',
+              backgroundColor: 'rgba(29, 48, 214, 0.7)',
+              '&:hover': {
+                backgroundColor: 'rgba(194, 133, 223, 0.9)',
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {imagePreview && (
+            <Box
+              component="img"
+              src={imagePreview}
+              alt="Full-size Preview"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                maxHeight: '80vh', // Limit height to avoid excessively tall images
+                display: 'block',
+                mx: 'auto', // Center the image
+                objectFit: 'contain', // Ensure the entire image is visible
+                p: 2, // Add some padding inside the dialog
+                margin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 }

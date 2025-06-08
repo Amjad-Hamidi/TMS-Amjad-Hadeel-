@@ -15,6 +15,9 @@ import {
   Pagination,
   Fade,
   Link as MuiLink, // Alias to avoid conflict with react-router Link
+  Dialog, // Import Dialog
+  DialogContent, // Import DialogContent
+  IconButton, // Import IconButton
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../styles/CompanySupervisors.css";
@@ -24,6 +27,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DescriptionIcon from '@mui/icons-material/Description'; // For CV icon
+import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon
 
 const LIMIT = 8;
 
@@ -40,6 +44,8 @@ const CompanySupervisors = () => {
     limit: LIMIT,
     totalPages: 1,
   });
+  const [openImagePreview, setOpenImagePreview] = useState(false); // New state for image preview dialog
+  const [currentImageUrl, setCurrentImageUrl] = useState(null); // New state for current image URL
   const navigate = useNavigate();
 
   const fetchSupervisors = async (page = 1, limit = LIMIT, search = "") => {
@@ -47,8 +53,8 @@ const CompanySupervisors = () => {
     setError(null);
     let url =
       viewType === "all"
-        ? `http://amjad-hamidi-tms.runasp.net/api/Users/all-supervisors?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`
-        : `http://amjad-hamidi-tms.runasp.net/api/Users/supervisors-company?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
+        ? `https://amjad-hamidi-tms.runasp.net/api/Users/all-supervisors?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`
+        : `https://amjad-hamidi-tms.runasp.net/api/Users/supervisors-company?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
     try {
       const res = await fetchWithAuth(url, {
         headers: { Accept: "*/*" },
@@ -90,6 +96,18 @@ const CompanySupervisors = () => {
 
   const handleViewCompanySupervisors = () => {
     navigate("/company-supervisors");
+  };
+
+  // Handler for opening the image preview dialog
+  const handleImageClick = (imageUrl) => {
+    setCurrentImageUrl(imageUrl);
+    setOpenImagePreview(true);
+  };
+
+  // Handler for closing the image preview dialog
+  const handleCloseImagePreview = () => {
+    setOpenImagePreview(false);
+    setCurrentImageUrl(null);
   };
 
   return (
@@ -164,7 +182,8 @@ const CompanySupervisors = () => {
                           height="180"
                           image={sup.profileImageUrl}
                           alt={sup.fullName}
-                          sx={{ objectFit: "cover" }}
+                          sx={{ objectFit: "cover", cursor: 'pointer' }} // Add cursor pointer
+                          onClick={() => handleImageClick(sup.profileImageUrl)} // Add onClick handler
                         />
                       ) : (
                         <Box sx={{ height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'grey.200' }}>
@@ -191,7 +210,7 @@ const CompanySupervisors = () => {
                             <Typography variant="body2" color="text.secondary">{sup.phoneNumber}</Typography>
                           </Stack>
                         )}
-                        <Box sx={{ mt: 'auto', pt: 1 }}> {/* Push CV to bottom */} 
+                        <Box sx={{ mt: 'auto', pt: 1 }}> {/* Push CV to bottom */}
                           {sup.cvPath ? (
                             <Button
                               href={sup.cvPath}
@@ -200,8 +219,8 @@ const CompanySupervisors = () => {
                               variant="outlined"
                               size="small"
                               startIcon={<DescriptionIcon />}
-                              sx={{ 
-                                width: '100%', 
+                              sx={{
+                                width: '100%',
                                 borderRadius: 2,
                                 transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                                 '&:hover': {
@@ -213,12 +232,12 @@ const CompanySupervisors = () => {
                               View Resume
                             </Button>
                           ) : (
-                            <Chip 
+                            <Chip
                               icon={<DescriptionIcon fontSize="small" />}
                               label="No Resume Available"
                               variant="outlined"
                               size="small"
-                              sx={{ width: '100%', borderRadius: 2, justifyContent: 'flex-start', pl: 1 }} 
+                              sx={{ width: '100%', borderRadius: 2, justifyContent: 'flex-start', pl: 1 }}
                             />
                           )}
                         </Box>
@@ -241,6 +260,40 @@ const CompanySupervisors = () => {
           />
         </Stack>
       </Paper>
+
+      {/* Image Preview Dialog */}
+      <Dialog open={openImagePreview} onClose={handleCloseImagePreview} maxWidth="md" fullWidth>
+        <DialogContent sx={{ p: 0, position: 'relative' }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseImagePreview}
+            sx={{
+              width: 'fit-content',
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+              zIndex: 1, // Ensure the close button is on top
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {currentImageUrl && (
+            <Box
+              component="img"
+              src={currentImageUrl}
+              alt="Supervisor Profile"
+              sx={{
+                width: '50%',
+                height: 'auto',
+                display: 'block',
+                borderRadius: 2, // Optional: Add some border radius to the image
+                margin: 'auto',
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
