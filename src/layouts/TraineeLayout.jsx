@@ -21,7 +21,7 @@ const TraineeLayout = () => {
     <div className={`trainee-layout ${collapsed ? "collapsed" : ""}`}>
       <nav className="sidebar">
         <div className="sidebar-header">
-          <h2><i className="fas fa-user-graduate"></i> Trainee</h2>
+          <h2 style={{color:"#fff23e"}}><i className="fas fa-user-graduate"></i> Trainee</h2>
         </div>
         <ul className="nav-links">
           <li>

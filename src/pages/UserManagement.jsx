@@ -344,7 +344,7 @@ function UserManagement() {
                 variant="contained"
                 size="small"
                 startIcon={<AddIcon />}
-                onClick={() => navigate("/add-user")} // Navigate to Add User page
+                onClick={() => navigate("/admin/add-user")} // Navigate to Add User page
                 sx={{
                   background: "linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)", // Blue gradient
                   color: "#fff",

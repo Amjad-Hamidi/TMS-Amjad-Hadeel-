@@ -24,7 +24,7 @@ const CompanyLayout = () => {
     <div className={`company-layout ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
       <nav className="sidebar">
         <div className="sidebar-header">
-          <h2><i className="fas fa-building"></i> <span>{isSidebarOpen ? "Company" : "Comp"}</span></h2>
+          <h2 style={{color:"#fff23e"}}><i className="fas fa-building"></i> <span>{isSidebarOpen ? "Company" : "Comp"}</span></h2>
           <button className="toggle-btn" onClick={toggleSidebar} aria-label="Toggle sidebar">
             <MenuIcon />
           </button>

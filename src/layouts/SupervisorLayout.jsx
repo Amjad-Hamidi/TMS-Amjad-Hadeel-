@@ -23,7 +23,7 @@ const [collapsed, setCollapsed] = useState(true);
     <div className={`supervisor-layout ${collapsed ? "collapsed" : ""}`}>
       <nav className="sidebar">
         <div className="sidebar-header">
-          <h2><i className="fas fa-chalkboard-teacher"></i> Supervisor</h2>
+          <h2 style={{color:"#fff23e"}}><i className="fas fa-chalkboard-teacher"></i> Supervisor</h2>
         </div>
         <ul className="nav-links">
           <li><NavLink to="/supervisor" end><i className="fas fa-home"></i><span>Dashboard</span></NavLink></li>
