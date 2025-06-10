@@ -1394,35 +1394,6 @@ export default function GuestPage() {
                 gap: 1,
               }}
             >
-              <Box
-                component="img"
-                src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-                alt="GitHub"
-                sx={{
-                  width: 22,
-                  height: 22,
-                  opacity: 0.9,
-                  transition: "transform 0.4s ease",
-                  "&:hover": {
-                    transform: "rotate(15deg) scale(1.2)",
-                    opacity: 1,
-                  },
-                }}
-              />
-              <Box
-                component="a"
-                href="https://github.com/Hadeel-Hamdan"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  fontWeight: "bold",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  color: darkMode ? "#90caf9" : "#1976d2",
-                }}
-              >
-                Hadeel Hamdan
-              </Box>
             </Box>
           </Typography>
         </Box>
