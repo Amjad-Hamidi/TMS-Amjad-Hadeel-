@@ -44,10 +44,19 @@ import ExtensionIcon from "@mui/icons-material/Extension";
 import ArticleIcon from "@mui/icons-material/Article";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 
-import logo from '../images/TMS Logo.png'; // هذا هو شعار TMS
-import qrImage from "../images/QR Code-TMS.png";
+import logo from '../images/TMS Logo.png'; // تأكد أن هذا المسار صحيح
+import qrImage from "../images/QR Code-TMS.png"; // تأكد أن هذا المسار صحيح
 
 const RegisterForm = () => {
+    // === هذا هو المكان الصحيح لتعريف navItems ===
+    const navItems = [
+        { label: "Home", icon: <HomeIcon />, path: "/" },
+        { label: "Courses", icon: <ExtensionIcon />, path: "/courses" },
+        { label: "Blog", icon: <ArticleIcon />, path: "/blog" },
+        { label: "Contact", icon: <ContactMailIcon />, path: "/contact" },
+    ];
+    // ===========================================
+
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -63,30 +72,33 @@ const RegisterForm = () => {
         confirmPassword: '',
         gender: '',
         birthDate: '',
-        profileImageFile: null,
+        profileImageFile: null, // For storing the actual file
         role: '',
     });
+
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [showQR, setShowQR] = useState(false);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false); // Dedicated state for the profile image modal
+    const [isLogoModalOpen, setLogoModalOpen] = useState(false); // Existing for the TMS logo modal
+    const [profileImagePreview, setProfileImagePreview] = useState(null); // State for image preview URL
     const [isQRModalOpen, setQRModalOpen] = useState(false);
-    // حالة جديدة للـ Modal الخاص بشعار TMS
-    const [isLogoModalOpen, setLogoModalOpen] = useState(false);
-
-    const navItems = [
-        { label: "Home", icon: <HomeIcon />, path: "/" },
-        { label: "Features", icon: <ExtensionIcon />, path: "/#features" },
-        { label: "Blog", icon: <ArticleIcon />, path: "/#blog" },
-        { label: "Contact", icon: <ContactMailIcon />, path: "/#contact" }
-    ];
+    
 
     useEffect(() => {
         document.body.style.backgroundColor = darkMode ? "#121212" : "#fafafa";
         document.body.style.color = darkMode ? "#eee" : "#212121";
-    }, [darkMode]);
+
+        // Clean up the object URL when the component unmounts or a new file is selected
+        return () => {
+            if (profileImagePreview) {
+                URL.revokeObjectURL(profileImagePreview);
+            }
+        };
+    }, [darkMode, profileImagePreview]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -94,62 +106,116 @@ const RegisterForm = () => {
             ...prev,
             [name]: value,
         }));
+        // Clear error for the field when user starts typing
+        if (errors[name]) {
+            setErrors((prev) => ({ ...prev, [name]: '' }));
+        }
     };
 
     const handleFileChange = (e) => {
+        const file = e.target.files && e.target.files.length > 0 ? e.target.files.item(0) : null;
         setFormData((prev) => ({
             ...prev,
-            profileImageFile: e.target.files && e.target.files.length > 0 ? e.target.files.item(0) : null,
+            profileImageFile: file,
         }));
+
+        // Clean up previous preview URL to prevent memory leaks
+        if (profileImagePreview) {
+            URL.revokeObjectURL(profileImagePreview);
+        }
+
+        // Create new preview URL if a file is selected
+        if (file) {
+            setProfileImagePreview(URL.createObjectURL(file));
+        } else {
+            setProfileImagePreview(null);
+        }
+    };
+
+    const validate = () => {
+        let tempErrors = {};
+        // Add your validation logic here for other fields if needed
+        // For example:
+        if (!formData.firstName) tempErrors.firstName = "First Name is required.";
+        if (!formData.lastName) tempErrors.lastName = "Last Name is required.";
+        if (!formData.userName) tempErrors.userName = "Username is required.";
+        if (!formData.phone) tempErrors.phone = "Phone number is required.";
+        if (!formData.email) {
+            tempErrors.email = "Email is required.";
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            tempErrors.email = "Email is not valid.";
+        }
+        if (!formData.password) {
+            tempErrors.password = "Password is required.";
+        } else if (formData.password.length < 6) {
+            tempErrors.password = "Password must be at least 6 characters.";
+        }
+        if (formData.password !== formData.confirmPassword) {
+            tempErrors.confirmPassword = "Passwords do not match.";
+        }
+        if (!formData.gender) tempErrors.gender = "Gender is required.";
+        if (!formData.birthDate) tempErrors.birthDate = "Birth Date is required.";
+        if (!formData.role) tempErrors.role = "Role is required.";
+
+        setErrors(tempErrors);
+        return Object.keys(tempErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({});
-        setSuccessMessage('');
-
-        const data = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-            if (value !== null) {
-                data.append(key.charAt(0).toUpperCase() + key.slice(1), value);
-            }
-        });
-
-        if (formData.profileImageFile) {
-            data.append('ProfileImageFile', formData.profileImageFile);
-        }
-
-        try {
-            const response = await fetch('https://amjad-hamidi-tms.runasp.net/api/Account/Register', {
-                method: 'POST',
-                body: data,
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                setSuccessMessage('Registered Successfully, please confirm your email on Gmail');
-                setShowSnackbar(true);
-                setErrors({});
-                setTimeout(() => navigate('/login'), 3000);
-            } else {
-                if (result.errors) {
-                    const fieldErrors = {};
-                    for (const key in result.errors) {
-                        fieldErrors[(key || '').toLowerCase()] = result.errors[(key || '')].join(', ');
+        if (validate()) {
+            console.log("Form Data Submitted:", formData);
+            // Simulate API call
+            try {
+                const data = new FormData();
+                Object.entries(formData).forEach(([key, value]) => {
+                    if (value !== null && key !== 'profileImageFile') {
+                        data.append(key.charAt(0).toUpperCase() + key.slice(1), value);
                     }
-                    setErrors(fieldErrors);
-                } else {
-                    setErrors({ general: result.message || 'Registration failed.' });
+                });
+
+                if (formData.profileImageFile) {
+                    data.append('ProfileImageFile', formData.profileImageFile);
                 }
+
+                const response = await fetch('https://amjad-hamidi-tms.runasp.net/api/Account/Register', {
+                    method: 'POST',
+                    body: data,
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    setSuccessMessage('Registered Successfully, please confirm your email on Gmail');
+                    setShowSnackbar(true);
+                    setErrors({});
+                    setTimeout(() => navigate('/login'), 3000);
+                } else {
+                    if (result.errors) {
+                        const fieldErrors = {};
+                        for (const key in result.errors) {
+                            fieldErrors[(key || '').toLowerCase()] = result.errors[(key || '')].join(', ');
+                        }
+                        setErrors(fieldErrors);
+                    } else {
+                        setErrors({ general: result.message || 'Registration failed.' });
+                    }
+                }
+            } catch (error) {
+                setErrors({ general: 'Something went wrong. Please try again.' });
             }
-        } catch (error) {
-            setErrors({ general: 'Something went wrong. Please try again.' });
+        } else {
+            setSuccessMessage('Please correct the errors in the form.');
+            setShowSnackbar(true);
         }
     };
 
     const handleGoogleLogin = () => {
         alert('Google login not implemented.');
+    };
+
+    const toggleDarkMode = () => {
+        setDarkMode((prevMode) => !prevMode);
     };
 
     return (
@@ -192,23 +258,23 @@ const RegisterForm = () => {
                         ))}
                     </Box>
                     <Box>
-                      <Button
-                        startIcon={<DescriptionIcon />}
-                        href="https://tugesucj.manus.space/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                          mx: 0.5,
-                          color: darkMode ? "#80cbc4" : "#00838f",
-                          "&:hover": {
-                            bgcolor: darkMode ? "#2e2e2e" : "#e0f2f7",
-                            color: darkMode ? "#a7ffeb" : "#00bfa5",
-                          },
-                          transition: "0.3s",
-                        }}
-                      >
-                        Build CV
-                      </Button>                     
+                        <Button
+                            startIcon={<DescriptionIcon />}
+                            href="https://tugesucj.manus.space/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{
+                                mx: 0.5,
+                                color: darkMode ? "#80cbc4" : "#00838f",
+                                "&:hover": {
+                                    bgcolor: darkMode ? "#2e2e2e" : "#e0f2f7",
+                                    color: darkMode ? "#a7ffeb" : "#00bfa5",
+                                },
+                                transition: "0.3s",
+                            }}
+                        >
+                            Build CV
+                        </Button>
 
                         <Button startIcon={<PersonAddIcon />} href="/register" sx={{
                             mx: 0.5,
@@ -220,7 +286,7 @@ const RegisterForm = () => {
                             color: darkMode ? "#ffab91" : "#d84315",
                             "&:hover": { bgcolor: darkMode ? "#2e2e2e" : "#ffebee" }
                         }}>Login</Button>
-                        <IconButton onClick={() => setDarkMode(!darkMode)}>
+                        <IconButton onClick={toggleDarkMode}>
                             {darkMode ? <Brightness7Icon sx={{ color: "#ffd54f" }} /> : <Brightness2Icon sx={{ color: "#1976d2" }} />}
                         </IconButton>
                     </Box>
@@ -251,10 +317,10 @@ const RegisterForm = () => {
                                 borderRadius: '30%',
                                 marginBottom: 24,
                                 boxShadow: theme.shadows[4],
-                                cursor: 'pointer', // لإظهار مؤشر اليد عند المرور فوق الصورة
+                                cursor: 'pointer',
                                 transition: 'transform 0.3s ease-in-out',
                             }}
-                            onClick={() => setLogoModalOpen(true)} // فتح الـ Modal الجديد
+                            onClick={() => setLogoModalOpen(true)}
                             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         />
@@ -270,7 +336,7 @@ const RegisterForm = () => {
                 <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
                     <Paper elevation={isMobile ? 0 : 6} sx={{
                         width: '100%',
-                        maxWidth: 700, // Increased maxWidth
+                        maxWidth: 700,
                         p: { xs: 2, md: 6 },
                         borderRadius: 4,
                         boxShadow: isMobile ? 'none' : undefined,
@@ -296,8 +362,8 @@ const RegisterForm = () => {
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
-                                        error={!!errors.firstname}
-                                        helperText={errors.firstname}
+                                        error={!!errors.firstName}
+                                        helperText={errors.firstName}
                                         autoComplete="given-name"
                                         InputLabelProps={{ style: { color: darkMode ? '#bbb' : 'inherit' } }}
                                         InputProps={{
@@ -310,7 +376,7 @@ const RegisterForm = () => {
                                         }}
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                backgroundColor: darkMode ? '#2d2d2d' : '#fff', // Darker background for input fields
+                                                backgroundColor: darkMode ? '#2d2d2d' : '#fff',
                                             }
                                         }}
                                     />
@@ -323,8 +389,8 @@ const RegisterForm = () => {
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
-                                        error={!!errors.lastname}
-                                        helperText={errors.lastname}
+                                        error={!!errors.lastName}
+                                        helperText={errors.lastName}
                                         autoComplete="family-name"
                                         InputLabelProps={{ style: { color: darkMode ? '#bbb' : 'inherit' } }}
                                         InputProps={{
@@ -351,8 +417,8 @@ const RegisterForm = () => {
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
-                                        error={!!errors.username}
-                                        helperText={errors.username}
+                                        error={!!errors.userName}
+                                        helperText={errors.userName}
                                         autoComplete="username"
                                         InputLabelProps={{ style: { color: darkMode ? '#bbb' : 'inherit' } }}
                                         InputProps={{
@@ -482,8 +548,8 @@ const RegisterForm = () => {
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
-                                        error={!!errors.confirmpassword}
-                                        helperText={errors.confirmpassword}
+                                        error={!!errors.confirmPassword}
+                                        helperText={errors.confirmPassword}
                                         autoComplete="new-password"
                                         InputLabelProps={{ style: { color: darkMode ? '#bbb' : 'inherit' } }}
                                         InputProps={{
@@ -498,8 +564,8 @@ const RegisterForm = () => {
                                                 '& .MuiOutlinedInput-root': {
                                                     backgroundColor: darkMode ? '#2d2d2d' : '#fff', // Apply directly here
                                                     '& .MuiOutlinedInput-notchedOutline': { borderColor: darkMode ? '#555' : 'rgba(0, 0, 0, 0.23)' },
-                                                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: darkMode ? theme.palette.primary.light : theme.palette.primary.main },
-                                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: darkMode ? theme.palette.primary.light : theme.palette.primary.main },
+                                                    '&:hover fieldset': { borderColor: darkMode ? theme.palette.primary.light : theme.palette.primary.main },
+                                                    '&.Mui-focused fieldset': { borderColor: darkMode ? theme.palette.primary.light : theme.palette.primary.main },
                                                 },
                                             },
                                             endAdornment: (
@@ -524,13 +590,13 @@ const RegisterForm = () => {
                                         minWidth: 180,
                                         '& .MuiInputLabel-root': { color: darkMode ? '#bbb' : 'inherit' },
                                         '& .MuiOutlinedInput-root': {
-                                            backgroundColor: darkMode ? '#2d2d2d' : '#fff', // Darker background for select field
+                                            backgroundColor: darkMode ? '#2d2d2d' : '#fff',
                                             '& .MuiOutlinedInput-notchedOutline': { borderColor: darkMode ? '#555' : 'rgba(0, 0, 0, 0.23)' },
                                             '&:hover fieldset': { borderColor: darkMode ? theme.palette.primary.light : theme.palette.primary.main },
                                             '&.Mui-focused fieldset': { borderColor: darkMode ? theme.palette.primary.light : theme.palette.primary.main },
                                         },
-                                        '& .MuiSelect-select': { color: darkMode ? '#eee' : 'inherit' }, // Selected value color
-                                        '& .MuiSvgIcon-root': { color: darkMode ? '#999' : 'rgba(0, 0, 0, 0.54)' }, // Dropdown arrow color
+                                        '& .MuiSelect-select': { color: darkMode ? '#eee' : 'inherit' },
+                                        '& .MuiSvgIcon-root': { color: darkMode ? '#999' : 'rgba(0, 0, 0, 0.54)' },
                                     }}>
                                         <InputLabel>Gender</InputLabel>
                                         <Select
@@ -539,10 +605,9 @@ const RegisterForm = () => {
                                             label="Gender"
                                             onChange={handleInputChange}
                                             MenuProps={{
-                                                // Styling for the dropdown menu
                                                 PaperProps: {
                                                     sx: {
-                                                        bgcolor: darkMode ? '#3a3a3a' : '#fff', // Menu background
+                                                        bgcolor: darkMode ? '#3a3a3a' : '#fff',
                                                         border: `1px solid ${darkMode ? '#555' : '#ccc'}`,
                                                     },
                                                 },
@@ -565,8 +630,8 @@ const RegisterForm = () => {
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
-                                        error={!!errors.birthdate}
-                                        helperText={errors.birthdate}
+                                        error={!!errors.birthDate}
+                                        helperText={errors.birthDate}
                                         InputLabelProps={{ shrink: true, style: { color: darkMode ? '#bbb' : 'inherit' } }}
                                         InputProps={{
                                             style: { color: darkMode ? '#eee' : 'inherit' },
@@ -632,7 +697,7 @@ const RegisterForm = () => {
                                             p: 1,
                                             border: `1px solid ${darkMode ? '#555' : '#e0e0e0'}`,
                                             borderRadius: 2,
-                                            backgroundColor: darkMode ? '#2d2d2d' : '#fafafa', // Darker background for file input area
+                                            backgroundColor: darkMode ? '#2d2d2d' : '#fafafa',
                                             minHeight: '56px'
                                         }}>
                                             <Button variant="outlined" component="label" sx={{
@@ -644,22 +709,39 @@ const RegisterForm = () => {
                                                     borderColor: darkMode ? theme.palette.info.light : theme.palette.primary.dark,
                                                     bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(25,118,210,0.04)'
                                                 }
-                                            }}
-                                            >
+                                            }}>
                                                 Upload Profile Image
                                                 <input type="file" accept="image/*" hidden onChange={handleFileChange} />
                                             </Button>
-                                            <Box sx={{ flex: 1, ml: 2 }}>
-                                                {formData.profileImageFile ?
-                                                    (
+                                            <Box sx={{ flex: 1, ml: 2, display: 'flex', alignItems: 'center' }}>
+                                                {profileImagePreview ? (
+                                                    <>
+                                                        <Avatar
+                                                            src={profileImagePreview}
+                                                            alt="Profile Preview"
+                                                            sx={{
+                                                                width: 56,
+                                                                height: 56,
+                                                                mr: 2,
+                                                                boxShadow: darkMode ? "0 0 8px rgba(144,202,249,0.4)" : "0 0 6px rgba(0,0,0,0.2)",
+                                                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                                                cursor: "pointer",
+                                                                '&:hover': {
+                                                                    transform: "scale(1.1)",
+                                                                    boxShadow: darkMode ? "0 0 15px rgba(144,202,249,0.6)" : "0 0 10px rgba(0,0,0,0.3)"
+                                                                }
+                                                            }}
+                                                            onClick={() => setIsImageModalOpen(true)} // Use the dedicated image modal state
+                                                        />
                                                         <Typography variant="body2" color={darkMode ? '#eee' : 'text.secondary'} sx={{ fontStyle: 'italic' }}>
-                                                            {formData.profileImageFile.name}
+                                                            {formData.profileImageFile ? formData.profileImageFile.name : ''}
                                                         </Typography>
-                                                    ) : (
-                                                        <Typography variant="body2" color={darkMode ? '#aaa' : 'text.disabled'} sx={{ fontStyle: 'italic' }}>
-                                                            No file selected
-                                                        </Typography>
-                                                    )}
+                                                    </>
+                                                ) : (
+                                                    <Typography variant="body2" color={darkMode ? '#aaa' : 'text.disabled'} sx={{ fontStyle: 'italic' }}>
+                                                        No file selected
+                                                    </Typography>
+                                                )}
                                             </Box>
                                         </Box>
                                     </FormControl>
@@ -727,7 +809,7 @@ const RegisterForm = () => {
                 </Grid>
             </Grid>
 
-            {/* Modal for TMS Logo (new) */}
+            {/* Modal for TMS Logo */}
             <Modal
                 open={isLogoModalOpen}
                 onClose={() => setLogoModalOpen(false)}
@@ -753,7 +835,7 @@ const RegisterForm = () => {
                     maxHeight: '90%',
                     outline: 'none',
                     animation: 'fadeIn 0.5s ease-out',
-                }}>
+                }} onClick={e => e.stopPropagation()}> {/* ADDED: Stop propagation for clicks inside the modal content */}
                     <IconButton
                         aria-label="close"
                         onClick={() => setLogoModalOpen(false)}
@@ -788,10 +870,49 @@ const RegisterForm = () => {
                 onClose={() => setShowSnackbar(false)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
-                <Alert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
-                    {successMessage}
+                <Alert onClose={() => setShowSnackbar(false)} severity={errors.general ? "error" : "success"} sx={{ width: '100%' }}>
+                    {errors.general || successMessage}
                 </Alert>
             </Snackbar>
+
+            {/* MODAL FOR FULL PROFILE IMAGE VIEW */}
+            {isImageModalOpen && profileImagePreview && (
+                <Box sx={{
+                    position: "fixed", inset: 0, zIndex: 3000,
+                    backgroundColor: "rgba(0,0,0,0.85)",
+                    display: "flex", justifyContent: "center", alignItems: "center",
+                    animation: "fadeIn 0.5s ease-in",
+                    backdropFilter: 'blur(5px)',
+                }} onClick={() => setIsImageModalOpen(false)}> {/* Close modal on outside click (background) */}
+                    <Box onClick={e => e.stopPropagation()} sx={{ // ADDED: Stop propagation for clicks inside the modal content
+                        position: "relative", maxWidth: "90%", maxHeight: "90%",
+                        outline: 'none',
+                    }}>
+                        <IconButton onClick={() => setIsImageModalOpen(false)} sx={{
+                            position: "absolute", top: -20, right: -20,
+                            bgcolor: darkMode ? "#333" : "#fff",
+                            color: darkMode ? "#f48fb1" : "#d32f2f",
+                            "&:hover": {
+                                bgcolor: darkMode ? "#f06292" : "#f44336",
+                                transform: "rotate(45deg) scale(1.2)"
+                            },
+                            boxShadow: darkMode ? "0 0 12px rgba(255,105,135,0.5)" : "0 0 8px rgba(244,67,54,0.3)",
+                            transition: "all 0.3s ease"
+                        }}>
+                            <CloseIcon />
+                        </IconButton>
+                        <CardMedia component="img" src={profileImagePreview} alt="Full Profile Image" sx={{
+                            borderRadius: 3,
+                            maxWidth: "100%",
+                            maxHeight: "80vh",
+                            boxShadow: darkMode ? "0 0 25px rgba(144,202,249,0.6)" : "0 0 25px rgba(0,0,0,0.2)",
+                            animation: "zoomIn 0.4s ease-out"
+                        }} />
+                    </Box>
+                </Box>
+            )}
+
+            
 
             {/* ===== Footer (Contact + Share + Signature) ===== */}
             <Box id="contact" component="footer" sx={{
@@ -854,53 +975,90 @@ const RegisterForm = () => {
                         {showQR ? "Hide QR" : "Show QR"}
                     </Button>
                 </Box>
-                {showQR && (
-                    <Box sx={{ mt: 2, animation: "fadeIn 0.6s ease-in" }}>
-                        <CardMedia component="img" src={qrImage} alt="QR Code" sx={{
-                            width: 120, height: 120, mb: 2, mx: "auto", cursor: "pointer", borderRadius: 2,
-                            boxShadow: darkMode ? "0 0 12px rgba(144,202,249,0.4)" : "0 0 10px rgba(0,0,0,0.2)",
-                            "&:hover": {
-                                transform: "scale(1.1)",
-                                boxShadow: darkMode ? "0 0 25px rgba(144,202,249,0.6)" : "0 0 20px rgba(0,0,0,0.3)"
-                            },
-                            transition: "transform 0.3s ease, box-shadow 0.3s ease"
-                        }} onClick={() => setQRModalOpen(true)} />
-                    </Box>
-                )}
-                {/* Modal for QR Code (existing) */}
-                {isQRModalOpen && (
-                    <Box sx={{
-                        position: "fixed", inset: 0, zIndex: 3000,
-                        backgroundColor: "rgba(0,0,0,0.85)",
-                        display: "flex", justifyContent: "center", alignItems: "center",
-                        animation: "fadeIn 0.5s ease-in",
-                        backdropFilter: 'blur(5px)',
-                    }} onClick={() => setQRModalOpen(false)}>
-                        <Box onClick={e => e.stopPropagation()} sx={{
-                            position: "relative", maxWidth: "90%", maxHeight: "90%",
-                            outline: 'none',
-                        }}>
-                            <IconButton onClick={() => setQRModalOpen(false)} sx={{
-                                position: "absolute", top: -20, right: -20,
-                                bgcolor: darkMode ? "#333" : "#fff",
-                                color: darkMode ? "#f48fb1" : "#d32f2f",
-                                "&:hover": {
-                                    bgcolor: darkMode ? "#f06292" : "#f44336",
-                                    transform: "rotate(45deg) scale(1.2)"
-                                },
-                                boxShadow: darkMode ? "0 0 12px rgba(255,105,135,0.5)" : "0 0 8px rgba(244,67,54,0.3)",
-                                transition: "all 0.3s ease"
-                            }}><CloseIcon /></IconButton>
-                            <CardMedia component="img" src={qrImage} alt="Full QR" sx={{
-                                borderRadius: 3,
-                                maxWidth: "100%",
-                                maxHeight: "80vh",
-                                boxShadow: darkMode ? "0 0 25px rgba(144,202,249,0.6)" : "0 0 25px rgba(0,0,0,0.2)",
-                                animation: "zoomIn 0.4s ease-out"
-                            }} />
+                    {showQR && (
+                        <Box sx={{ mt: 2, animation: "fadeIn 0.6s ease-in" }}>
+                            <CardMedia
+                                component="img"
+                                src={qrImage}
+                                alt="QR Code"
+                                sx={{
+                                    width: 120,
+                                    height: 120,
+                                    mb: 2,
+                                    mx: "auto",
+                                    cursor: "pointer",
+                                    borderRadius: 2,
+                                    boxShadow: darkMode
+                                        ? "0 0 12px rgba(144,202,249,0.4)"
+                                        : "0 0 10px rgba(0,0,0,0.2)",
+                                    "&:hover": {
+                                        transform: "scale(1.1)",
+                                        boxShadow: darkMode
+                                            ? "0 0 25px rgba(144,202,249,0.6)"
+                                            : "0 0 20px rgba(0,0,0,0.3)",
+                                    },
+                                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                }}
+                                onClick={() => setQRModalOpen(true)} // <-- تأكد أن هذا السطر هكذا
+                            />
                         </Box>
-                    </Box>
-                )}
+                    )}
+                    {isQRModalOpen && (
+                        <Box
+                            sx={{
+                                position: "fixed",
+                                inset: 0,
+                                zIndex: 3000,
+                                backgroundColor: "rgba(0,0,0,0.85)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                animation: "fadeIn 0.5s ease-in",
+                            }}
+                            onClick={() => setQRModalOpen(false)}
+                        >
+                            <Box
+                                onClick={(e) => e.stopPropagation()}
+                                sx={{ position: "relative", maxWidth: "90%", maxHeight: "90%" }}
+                            >
+                                <IconButton
+                                    onClick={() => setQRModalOpen(false)}
+                                    sx={{
+                                        position: "absolute",
+                                        top: -20,
+                                        right: -20,
+                                        bgcolor: darkMode ? "#333" : "#fff",
+                                        color: darkMode ? "#f48fb1" : "#d32f2f",
+                                        "&:hover": {
+                                            bgcolor: darkMode ? "#f06292" : "#f44336",
+                                            transform: "rotate(45deg) scale(1.2)",
+                                        },
+                                        boxShadow: darkMode
+                                            ? "0 0 12px rgba(255,105,135,0.5)"
+                                            : "0 0 8px rgba(244,67,54,0.3)",
+                                        transition: "all 0.3s ease",
+                                    }}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                                <CardMedia
+                                    component="img"
+                                    src={qrImage}
+                                    alt="Full QR"
+                                    sx={{
+                                        borderRadius: 3,
+                                        maxWidth: "100%",
+                                        maxHeight: "80vh",
+                                        boxShadow: darkMode
+                                            ? "0 0 25px rgba(144,202,249,0.6)"
+                                            : "0 0 25px rgba(0,0,0,0.2)",
+                                        animation: "zoomIn 0.4s ease-out",
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                    )}
+
 
                 {/* ===== Footer Signature ===== */}
                 <Box sx={{ mt: 4, textAlign: "center", animation: "fadeIn 1s ease-in" }}>
@@ -999,7 +1157,7 @@ const RegisterForm = () => {
                 @keyframes pulseCircle {0%,100%{transform:scale(1);opacity:0.6;}50%{transform:scale(1.3);opacity:0.3;} }
                 @keyframes iconPulse {0%,100%{transform:scale(1);}50%{transform:scale(1.3);} }
                 @keyframes fadeIn {from{opacity:0;transform:scale(0.95);} to{opacity:1;transform:scale(1);}}
-                @keyframes zoomIn {from{transform:scale(0.7);opacity:0;} to{transform:1;opacity:1;}}
+                @keyframes zoomIn {from{transform:scale(0.7);opacity:0;} to{transform:scale(1);opacity:1;}}
             `}</style>
         </Box>
     );
