@@ -17,6 +17,7 @@ import {
   Dialog, // Import Dialog for the image preview
   DialogContent, // Import DialogContent for the image preview
   IconButton, // Import IconButton for the close button
+  Tooltip,
 } from "@mui/material";
 import { Grid } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -27,8 +28,18 @@ import CategoryIcon from "@mui/icons-material/Category";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import CancelIcon from "@mui/icons-material/Cancel";
-import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon for the close button
+import CloseIcon from "@mui/icons-material/Close"; // Import CloseIcon for the close button
 import { useNavigate } from "react-router-dom";
+
+import {
+    FormatListNumbered as TotalCountIcon,
+    Layers as PageIcon,
+    AspectRatio as LimitIcon,
+    ImportContacts as TotalPagesIcon,
+    VpnKey as VpnKeyIcon, // For ID
+    Description as DescriptionIcon, // For description
+    Psychology as PsychologyIcon, // For general skills
+} from "@mui/icons-material";
 
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -39,21 +50,58 @@ import "swiper/css/autoplay";
 
 const statCards = [
   { key: "usersCount", label: "Users", icon: <GroupIcon color="primary" /> },
-  { key: "compainesCount", label: "Companies", icon: <BusinessIcon color="secondary" /> },
-  { key: "supervisorsCount", label: "Supervisors", icon: <SupervisorAccountIcon color="info" /> },
-  { key: "traineesCount", label: "Trainees", icon: <SchoolIcon color="success" /> },
-  { key: "categoriesCount", label: "Categories", icon: <CategoryIcon color="warning" /> },
-  { key: "totalTrainingProgramsCount", label: "Total Programs", icon: <CheckCircleIcon color="primary" /> },
-  { key: "approvedTrainingProgramsCount", label: "Approved Programs", icon: <CheckCircleIcon color="success" /> },
-  { key: "rejectedTrainingProgramsCount", label: "Rejected Programs", icon: <CancelIcon color="error" /> },
-  { key: "pendingTrainingProgramsCount", label: "Pending Programs", icon: <HourglassEmptyIcon color="warning" /> },
+  {
+    key: "compainesCount",
+    label: "Companies",
+    icon: <BusinessIcon color="secondary" />,
+  },
+  {
+    key: "supervisorsCount",
+    label: "Supervisors",
+    icon: <SupervisorAccountIcon color="info" />,
+  },
+  {
+    key: "traineesCount",
+    label: "Trainees",
+    icon: <SchoolIcon color="success" />,
+  },
+  {
+    key: "categoriesCount",
+    label: "Categories",
+    icon: <CategoryIcon color="warning" />,
+  },
+  {
+    key: "totalTrainingProgramsCount",
+    label: "Total Programs",
+    icon: <CheckCircleIcon color="primary" />,
+  },
+  {
+    key: "approvedTrainingProgramsCount",
+    label: "Approved Programs",
+    icon: <CheckCircleIcon color="success" />,
+  },
+  {
+    key: "rejectedTrainingProgramsCount",
+    label: "Rejected Programs",
+    icon: <CancelIcon color="error" />,
+  },
+  {
+    key: "pendingTrainingProgramsCount",
+    label: "Pending Programs",
+    icon: <HourglassEmptyIcon color="warning" />,
+  },
 ];
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loadingStats, setLoadingStats] = useState(true);
   const [categories, setCategories] = useState([]);
-  const [categoriesMeta, setCategoriesMeta] = useState({ totalCount: 0, page: 1, limit: 10, totalPages: 1 });
+  const [categoriesMeta, setCategoriesMeta] = useState({
+    totalCount: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+  });
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [errorStats, setErrorStats] = useState(null);
   const [errorCategories, setErrorCategories] = useState(null);
@@ -70,9 +118,12 @@ export default function AdminDashboard() {
       setErrorStats(null);
       try {
         const token = localStorage.getItem("accessToken");
-        const res = await fetch("https://amjad-hamidi-tms.runasp.net/api/Users/statistics", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          "https://amjad-hamidi-tms.runasp.net/api/Users/statistics",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!res.ok) throw new Error("Failed to fetch statistics");
         const data = await res.json();
         setStats(data);
@@ -85,30 +136,35 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  const fetchCategories = useCallback(async (page = 1, limit = 10, search = "") => {
-    setLoadingCategories(true);
-    setErrorCategories(null);
-    try {
-      const token = localStorage.getItem("accessToken");
-      const url = `https://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`;
-      const res = await fetch(url, {
-        headers: { Accept: "*/*", Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch categories");
-      const data = await res.json();
-      setCategories(Array.isArray(data) ? data : data.items || []);
-      setCategoriesMeta({
-        totalCount: data.totalCount,
-        page: data.page,
-        limit: data.limit,
-        totalPages: data.totalPages,
-      });
-    } catch (err) {
-      setErrorCategories("Failed to load categories.");
-    } finally {
-      setLoadingCategories(false);
-    }
-  }, []); // useCallback dependency array is empty as fetchCategories doesn't depend on external state
+  const fetchCategories = useCallback(
+    async (page = 1, limit = 10, search = "") => {
+      setLoadingCategories(true);
+      setErrorCategories(null);
+      try {
+        const token = localStorage.getItem("accessToken");
+        const url = `https://amjad-hamidi-tms.runasp.net/api/Categories?page=${page}&limit=${limit}&search=${encodeURIComponent(
+          search
+        )}`;
+        const res = await fetch(url, {
+          headers: { Accept: "*/*", Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch categories");
+        const data = await res.json();
+        setCategories(Array.isArray(data) ? data : data.items || []);
+        setCategoriesMeta({
+          totalCount: data.totalCount,
+          page: data.page,
+          limit: data.limit,
+          totalPages: data.totalPages,
+        });
+      } catch (err) {
+        setErrorCategories("Failed to load categories.");
+      } finally {
+        setLoadingCategories(false);
+      }
+    },
+    []
+  ); // useCallback dependency array is empty as fetchCategories doesn't depend on external state
 
   useEffect(() => {
     fetchCategories(categoriesMeta.page, categoriesMeta.limit, query);
@@ -142,15 +198,30 @@ export default function AdminDashboard() {
   };
 
   return (
-    <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
-      <Typography variant="h3" sx={{ fontWeight: 700, mb: 3, color: "#1e3c72", letterSpacing: 1 }}>
+    <Box
+      sx={{
+        maxWidth: 1300,
+        mx: "auto",
+        p: { xs: 1, md: 4 },
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)",
+      }}
+    >
+      <Typography
+        variant="h3"
+        sx={{ fontWeight: 700, mb: 3, color: "#1e3c72", letterSpacing: 1 }}
+      >
         System Overview
       </Typography>
 
       {/* Stats Section with Swiper */}
       <Box sx={{ mb: 5 }}>
         {loadingStats ? (
-          <Stack alignItems="center" justifyContent="center" sx={{ minHeight: 120 }}>
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            sx={{ minHeight: 120 }}
+          >
             <CircularProgress size={48} color="primary" />
           </Stack>
         ) : errorStats ? (
@@ -170,12 +241,17 @@ export default function AdminDashboard() {
           >
             {statCards.map((stat, idx) => (
               <SwiperSlide key={stat.key}>
-                <Grow in={!loadingStats} style={{ transformOrigin: "0 0 0" }} timeout={500 + idx * 150}>
+                <Grow
+                  in={!loadingStats}
+                  style={{ transformOrigin: "0 0 0" }}
+                  timeout={500 + idx * 150}
+                >
                   <Card
                     elevation={6}
                     sx={{
                       borderRadius: 4,
-                      background: "linear-gradient(120deg, #1e3c72 60%, #f5a623 100%)",
+                      background:
+                        "linear-gradient(120deg, #1e3c72 60%, #f5a623 100%)",
                       color: "#fff",
                       boxShadow: "0 8px 32px 0 #00000022",
                       minHeight: 120,
@@ -185,13 +261,19 @@ export default function AdminDashboard() {
                     }}
                   >
                     <CardContent>
-                      <Stack direction="row" alignItems="center" spacing={2}>
+                      <Stack direction="row" alignItems="center" spacing={1}>
                         {stat.icon}
-                        <Typography variant="h6" sx={{ fontWeight: 700, flex: 1 }}>
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: 700, flex: 1 }}
+                        >
                           {stat.label}
                         </Typography>
                       </Stack>
-                      <Typography variant="h4" sx={{ mt: 2, fontWeight: 900, letterSpacing: 1 }}>
+                      <Typography
+                        variant="h4"
+                        sx={{ mt: 2, fontWeight: 900, letterSpacing: 1 }}
+                      >
                         {stats ? stats[stat.key] : 0}
                       </Typography>
                     </CardContent>
@@ -204,8 +286,17 @@ export default function AdminDashboard() {
       </Box>
 
       {/* Categories Section */}
-      <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}>
-        <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 3 }}>
+      <Paper
+        elevation={3}
+        sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}
+      >
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          alignItems="center"
+          justifyContent="space-between"
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
           <Typography variant="h4" sx={{ fontWeight: 700, color: "#1e3c72" }}>
             Explore Categories
           </Typography>
@@ -217,11 +308,79 @@ export default function AdminDashboard() {
             sx={{ minWidth: 260, background: "#f5f7fa", borderRadius: 2 }}
           />
         </Stack>
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-          <Chip label={`Total: ${categoriesMeta.totalCount}`} color="primary" />
-          <Chip label={`Page: ${categoriesMeta.page} / ${categoriesMeta.totalPages}`} color="secondary" />
-          <Chip label={`Limit: ${categoriesMeta.limit}`} color="info" />
-        </Stack>
+
+        {/* Categories Meta Info in Buttons */}
+        <Grid container spacing={1} mb={4} justifyContent="center">
+          <Grid item>
+            <Button
+              variant="outlined"
+              startIcon={<TotalCountIcon />}
+              size="small"
+              sx={{
+                color: "#0b3458",
+                borderColor: "#1976d2",
+                bgcolor: "#e3f2fd", // Added background color
+                "&:hover": {
+                  bgcolor: "#bbdefb", // Darker background on hover
+                },
+              }}
+            >
+              Total: {categoriesMeta.totalCount}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              startIcon={<PageIcon />}
+              size="small"
+              sx={{
+                color: "#0b3458",
+                borderColor: "#1976d2",
+                bgcolor: "#e3f2fd", // Added background color
+                "&:hover": {
+                  bgcolor: "#bbdefb", // Darker background on hover
+                },
+              }}
+            >
+              Page: {categoriesMeta.page}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              startIcon={<LimitIcon />}
+              size="small"
+              sx={{
+                color: "#0b3458",
+                borderColor: "#1976d2",
+                bgcolor: "#e3f2fd", // Added background color
+                "&:hover": {
+                  bgcolor: "#bbdefb", // Darker background on hover
+                },
+              }}
+            >
+              Limit: {categoriesMeta.limit}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              startIcon={<TotalPagesIcon />}
+              size="small"
+              sx={{
+                color: "#0b3458",
+                borderColor: "#1976d2",
+                bgcolor: "#e3f2fd", // Added background color
+                "&:hover": {
+                  bgcolor: "#bbdefb", // Darker background on hover
+                },
+              }}
+            >
+              Total Pages: {categoriesMeta.totalPages}
+            </Button>
+          </Grid>
+        </Grid>
+
         {loadingCategories ? (
           <Stack alignItems="center" sx={{ my: 6 }}>
             <CircularProgress size={44} color="primary" />
@@ -231,10 +390,16 @@ export default function AdminDashboard() {
         ) : (
           <Grid container spacing={4}>
             {categories.length === 0 ? (
-              <Grid item xs={12}><Typography>No categories found.</Typography></Grid>
+              <Grid item xs={12}>
+                <Typography>No categories found.</Typography>
+              </Grid>
             ) : (
               categories.map((c, idx) => (
-                <Fade in={!loadingCategories} timeout={600 + idx * 120} key={c.id}>
+                <Fade
+                  in={!loadingCategories}
+                  timeout={600 + idx * 120}
+                  key={c.id}
+                >
                   <Grid item xs={12} sm={6} md={4} lg={3}>
                     <Card
                       elevation={4}
@@ -256,29 +421,106 @@ export default function AdminDashboard() {
                         <CardMedia
                           component="img"
                           height="170"
-                          image={c.categoryImage.startsWith("http") ? c.categoryImage : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`}
+                          image={
+                            c.categoryImage.startsWith("http")
+                              ? c.categoryImage
+                              : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`
+                          }
                           alt={c.name}
                           sx={{
                             objectFit: "cover",
                             borderTopLeftRadius: 16,
                             borderTopRightRadius: 16,
                             borderBottom: "2px solid #f0f0f0",
-                            cursor: 'pointer', // Add cursor pointer
+                            cursor: "pointer", // Add cursor pointer
                           }}
-                          onClick={() => handleImageClick(c.categoryImage.startsWith("http") ? c.categoryImage : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`)} // Open dialog on click
+                          onClick={() =>
+                            handleImageClick(
+                              c.categoryImage.startsWith("http")
+                                ? c.categoryImage
+                                : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`
+                            )
+                          } // Open dialog on click
                         />
                       )}
                       <CardContent sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                          {c.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                          {c.description}
-                        </Typography>
+                        {/* Tooltip for ID */}
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          spacing={1}
+                          sx={{ mb: 1 }}
+                        >
+                          <Tooltip title="Category ID" placement="bottom" arrow>
+                            <VpnKeyIcon
+                              sx={{ color: "#555" }}
+                              fontSize="small"
+                            />
+                          </Tooltip>
+                          <Typography variant="body2" color="text.secondary">
+                            {c.id}
+                          </Typography>
+                        </Stack>
+                        {/* Tooltip for Name */}
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          spacing={1}
+                          sx={{ mb: 1 }}
+                        >
+                          <Tooltip
+                            title="Category Name"
+                            placement="bottom"
+                            arrow
+                          >
+                            <CategoryIcon sx={{ color: "#1e3c72" }} />
+                          </Tooltip>
+                          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                            {c.name}
+                          </Typography>
+                        </Stack>
+                        {/* Tooltip for Description */}
+                        <Stack
+                          direction="row"
+                          alignItems="flex-start"
+                          spacing={1}
+                          sx={{ mb: 1 }}
+                        >
+                          <Tooltip
+                            title="Category Description"
+                            placement="bottom"
+                            arrow
+                          >
+                            <DescriptionIcon sx={{ color: "#4CAF50" }} />
+                          </Tooltip>
+                          <Typography variant="body2" color="text.secondary">
+                            {c.description}
+                          </Typography>
+                        </Stack>
                         {c.generalSkills && c.generalSkills.length > 0 && (
-                          <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1 }}>
-                            {c.generalSkills.map((skill, idx) => (
-                              <Chip key={idx} label={skill} color="info" size="small" sx={{ fontWeight: 600 }} />
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            flexWrap="wrap"
+                            sx={{ mb: 1 }}
+                            alignItems="center"
+                          >
+                            {/* Tooltip for General Skills */}
+                            <Tooltip
+                              title="General Skills"
+                              placement="bottom"
+                              arrow
+                            >
+                              <PsychologyIcon sx={{ color: "#9C27B0" }} />
+                            </Tooltip>
+                            {c.generalSkills.map((skill, skillIdx) => (
+                              <Chip
+                                key={skillIdx}
+                                label={skill}
+                                color="info"
+                                size="small"
+                                sx={{ fontWeight: 600 }}
+                              />
                             ))}
                           </Stack>
                         )}
@@ -292,7 +534,8 @@ export default function AdminDashboard() {
                             fontWeight: 700,
                             boxShadow: "0 2px 8px 0 #1e3c7233",
                             letterSpacing: 1,
-                            background: "linear-gradient(90deg, #1e3c72 60%, #f5a623 100%)",
+                            background:
+                              "linear-gradient(90deg, #1e3c72 60%, #f5a623 100%)",
                           }}
                           onClick={() => handleViewProgramClick(c.id)}
                         >
@@ -314,6 +557,8 @@ export default function AdminDashboard() {
             color="primary"
             shape="rounded"
             size="large"
+            showFirstButton // Added showFirstButton
+            showLastButton // Added showLastButton
             sx={{
               "& .MuiPaginationItem-root": {
                 fontWeight: 700,
@@ -326,6 +571,15 @@ export default function AdminDashboard() {
                 color: "#fff !important",
                 background: "#1e3c72 !important",
               },
+              "& .MuiPaginationItem-firstLast": {
+                color: "#1976d2", // Consistent color for first/last buttons
+              },
+              "& .MuiPaginationItem-previousNext": {
+                color: "#1976d2", // Consistent color for prev/next buttons
+              },
+              "& .MuiPaginationItem-ellipsis": {
+                color: "#757575", // Consistent color for ellipsis
+              },
             }}
           />
         </Stack>
@@ -337,24 +591,34 @@ export default function AdminDashboard() {
         onClose={handleCloseImageDialog}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            bgcolor: "#fff",
+            boxShadow: "0 0 25px rgba(0,0,0,0.2)",
+            borderRadius: 3,
+            position: "relative",
+          },
+        }}
       >
-        <DialogContent
-          dividers
-          sx={{ position: 'relative', p: 0 }}
-        >
+        <DialogContent dividers sx={{ position: "relative", p: 0 }}>
           <IconButton
             aria-label="close"
             onClick={handleCloseImageDialog}
             sx={{
-              width: 'fit-content',
-              position: 'absolute',
-              right: 8,
-              top: 8,
+              width: "fit-content",
+              position: "absolute",
+              right: 10, // Adjusted for better spacing
+              top: 10, // Adjusted for better spacing
               zIndex: 1,
-              backgroundColor: 'rgba(255, 255, 255, 0.7)',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              }
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              color: "#555", // Default color for light theme
+              boxShadow: "0 0 8px rgba(244,67,54,0.3)", // Added boxShadow as requested
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                transform: "rotate(45deg) scale(1.1)", // Added hover effect
+                boxShadow: "0 0 12px rgba(244,67,54,0.5)", // Stronger shadow on hover
+              },
+              transition: "all 0.3s ease", // Smooth transition
             }}
           >
             <CloseIcon />
@@ -366,14 +630,14 @@ export default function AdminDashboard() {
               src={selectedImage}
               alt="Category Image Preview"
               sx={{
-                width: '50%',
-                height: 'auto',
-                maxHeight: '80vh',
-                display: 'block',
-                mx: 'auto',
-                objectFit: 'contain',
+                width: "50%",
+                height: "auto",
+                maxHeight: "80vh",
+                display: "block",
+                mx: "auto",
+                objectFit: "contain",
                 p: 2,
-                margin: 'auto',
+                margin: "auto",
               }}
             />
           )}
