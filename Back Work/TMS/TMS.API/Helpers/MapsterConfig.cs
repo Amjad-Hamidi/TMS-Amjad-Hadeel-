@@ -64,12 +64,14 @@ namespace TMS.API.Helpers
                 src => src.Company.ApplicationUser.FirstName + " " + src.Company.ApplicationUser.LastName)
                 .Map(dest => dest.DurationInDays, src => (src.EndDate - src.StartDate).TotalDays + " days");
 
+            /* // Done manually mapping in (GetApprovedByCompanyAsync, GetBySupervisorAsync) services 
             TypeAdapterConfig<TrainingProgram, ApprovedProgramDto>
                 .NewConfig()
                 .Map(dest => dest.CategoryName, src => src.Category.Name)
                 .Map(dest => dest.SupervisorName,
                 src => src.Supervisor.ApplicationUser.FirstName + " " + src.Supervisor.ApplicationUser.LastName)
                 .Map(dest => dest.DurationInDays, src => (src.EndDate - src.StartDate).TotalDays + " days");
+            */
 
             TypeAdapterConfig<TrainingProgram, RejectedCompanyProgramDto>
                 .NewConfig()

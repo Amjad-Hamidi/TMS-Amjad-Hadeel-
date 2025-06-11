@@ -310,13 +310,7 @@ namespace TMS.API.Controllers
             int companyId = int.Parse(companyIdClaim.Value);
             var result = await trainingProgramService.GetApprovedByCompanyAsync(companyId, search, page, limit);
 
-            return Ok(new PagedResult<ApprovedProgramDto>
-            {
-                Items = result.Items.Adapt<IReadOnlyList<ApprovedProgramDto>>(),
-                TotalCount = result.TotalCount,
-                Page = result.Page,
-                Limit = result.Limit
-            });
+            return Ok(result);
         }
 
         [HttpGet("my-supervised")]

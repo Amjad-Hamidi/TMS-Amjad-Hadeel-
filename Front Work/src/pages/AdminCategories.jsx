@@ -404,83 +404,75 @@ const AdminCategories = () => {
     }));
   };
 
-  const handleUpdateCategory = async () => {
-    if (!currentCategoryToEdit) return;
+ const handleUpdateCategory = async () => {
+  if (!currentCategoryToEdit) return;
 
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("id", currentCategoryToEdit.id);
-      formData.append("name", editForm.name);
-      formData.append("description", editForm.description);
+  setLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append("id", currentCategoryToEdit.id);
+    formData.append("name", editForm.name);
+    formData.append("description", editForm.description);
 
-      if (newImageFile) {
-        formData.append("categoryImageFile", newImageFile);
-      } else if (editForm.categoryImage && currentCategoryToEdit.categoryImage) {
-        // If no new file, but there was an existing image and it wasn't cleared,
-        // we might need to send a signal to the backend to keep the existing one.
-        // This depends on your API. If your API handles missing imageFile as "keep existing",
-        // then no need to append anything. If it needs the URL, append it.
+    if (newImageFile) {
+      formData.append("categoryImageFile", newImageFile);
+    } else if (editForm.categoryImage && currentCategoryToEdit.categoryImage) {
+      // حسب احتياج API، هنا ممكن تضيف URL الصورة القديمة إذا مطلوب
+    }
+
+    editForm.generalSkills.forEach((skill, index) => {
+      formData.append(`generalSkills[${index}]`, skill);
+    });
+
+    const response = await fetchWithAuth(
+      `${API_BASE_URL}/Categories/${currentCategoryToEdit.id}`,
+      {
+        method: "PUT",
+        body: formData,
       }
+    );
 
-      editForm.generalSkills.forEach((skill, index) => {
-        formData.append(`generalSkills[${index}]`, skill);
-      });
-
-      const response = await fetchWithAuth(
-        `${API_BASE_URL}/Categories/${currentCategoryToEdit.id}`,
-        {
-          method: "PUT",
-          body: formData,
+    if (response.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Updated!',
+        text: `Category "${editForm.name}" updated successfully!`,
+        timer: 3000,
+        showConfirmButton: false,
+        customClass: {
+          container: 'swal-container',
+          popup: 'swal-popup',
+          header: 'swal-header',
+          title: 'swal-title',
+          content: 'swal-content'
         }
-      );
-
-      if (response.ok) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Updated!',
-          text: `Category "${editForm.name}" updated successfully!`,
-          timer: 3000,
-          showConfirmButton: false,
-          customClass: {
-            container: 'swal-container',
-            popup: 'swal-popup',
-            header: 'swal-header',
-            title: 'swal-title',
-            content: 'swal-content'
-          }
-        }).then(() => {
-          fetchCategories();
-          handleEditModalClose();
-          setSnackbarMessage(`Category "${editForm.name}" updated successfully!`);
-          setSnackbarSeverity("success");
-          setSnackbarOpen(true);
-        });
-      } else {
-        const errorData = await response.json();
-        const errorMessage = errorData.message || "Failed to update category.";
-        Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: errorMessage,
-          customClass: {
-            container: 'swal-container',
-            popup: 'swal-popup',
-            header: 'swal-header',
-            title: 'swal-title',
-            content: 'swal-content'
-          }
-        });
-        setSnackbarMessage(errorMessage);
-        setSnackbarSeverity("error");
+      }).then(() => {
+        fetchCategories();
+        handleEditModalClose();
+        setSnackbarMessage(`Category "${editForm.name}" updated successfully!`);
+        setSnackbarSeverity("success");
         setSnackbarOpen(true);
+      });
+    } else {
+      const errorData = await response.json();
+
+      let errorMessage = "Failed to update category.";
+
+      if (errorData.errors) {
+        // في رسالة واحدة Validation دمج كل أخطاء الـ
+        errorMessage = Object.entries(errorData.errors)
+          .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+          .join("\n");
+      } else if (errorData.title) {
+        errorMessage = errorData.title;
+      } else if (errorData.message) {
+        errorMessage = errorData.message;
       }
-    } catch (err) {
-      console.error("Update category error:", err);
+
       Swal.fire({
         icon: 'error',
-        title: 'Network Error!',
-        text: `Could not connect to server: ${err.message}`,
+        title: 'Error!',
+        text: errorMessage,
         customClass: {
           container: 'swal-container',
           popup: 'swal-popup',
@@ -489,13 +481,33 @@ const AdminCategories = () => {
           content: 'swal-content'
         }
       });
-      setSnackbarMessage(`Network error: ${err.message}`);
+
+      setSnackbarMessage(errorMessage);
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (err) {
+    console.error("Update category error:", err);
+    Swal.fire({
+      icon: 'error',
+      title: 'Network Error!',
+      text: `Could not connect to server: ${err.message}`,
+      customClass: {
+        container: 'swal-container',
+        popup: 'swal-popup',
+        header: 'swal-header',
+        title: 'swal-title',
+        content: 'swal-content'
+      }
+    });
+    setSnackbarMessage(`Network error: ${err.message}`);
+    setSnackbarSeverity("error");
+    setSnackbarOpen(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
 
   if (loading) {

@@ -23,7 +23,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         Task<PagedResult<TrainingProgram>> GetRejectedAsync(string? search, int page, int limit);
         Task<PagedResult<TrainingProgram>> GetRejectedByCompanyAsync(int companyId, string? search, int page, int limit);
         Task<PagedResult<ApprovedAdminProgramDto>> GetApprovedAsync(string? search, int page, int limit);
-        Task<PagedResult<TrainingProgram>> GetApprovedByCompanyAsync(int companyId, string? search, int page, int limit);
-        Task<PagedResult<TrainingProgram>> GetBySupervisorAsync(int supervisorId, string? search, int page, int limit);
+        Task<PagedResult<ApprovedProgramDto>> GetApprovedByCompanyAsync(int companyId, string? search, int page, int limit);
+        Task<PagedResult<SupervisedProgramDto>> GetBySupervisorAsync(int supervisorId, string? search, int page, int limit);
     }
 }

@@ -401,88 +401,65 @@ const AdminPrograms = () => {
     setEditForm((prev) => ({ ...prev, imagePath: null })); // Clear image URL if user wants to remove existing one
   };
 
-  const handleUpdateProgram = async () => {
-    if (!currentProgramToEdit) return;
+const handleUpdateProgram = async () => {
+  if (!currentProgramToEdit) return;
 
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("id", currentProgramToEdit.trainingProgramId); // تأكد من استخدام ID الصحيح
-      formData.append("title", editForm.title);
-      formData.append("description", editForm.description);
-      formData.append("durationInDays", editForm.durationInDays);
-      formData.append("startDate", editForm.startDate);
-      formData.append("endDate", editForm.endDate);
-      formData.append("location", editForm.location);
-      formData.append("seatsAvailable", editForm.seatsAvailable);
-      formData.append("contentUrl", editForm.contentUrl);
-      formData.append("classroomUrl", editForm.classroomUrl);
+  setLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append("id", currentProgramToEdit.trainingProgramId);
+    formData.append("title", editForm.title);
+    formData.append("description", editForm.description);
+    formData.append("durationInDays", editForm.durationInDays);
+    formData.append("startDate", editForm.startDate);
+    formData.append("endDate", editForm.endDate);
+    formData.append("location", editForm.location);
+    formData.append("seatsAvailable", editForm.seatsAvailable);
+    formData.append("contentUrl", editForm.contentUrl);
+    formData.append("classroomUrl", editForm.classroomUrl);
 
-      // إذا كان هناك ملف صورة جديد، قم بإضافته
-      if (newImageFile) {
-        formData.append("imageFile", newImageFile);
-      } else if (editForm.imagePath && currentProgramToEdit.imagePath) {
-        // إذا لم يكن هناك ملف جديد ولكن كانت هناك صورة سابقة ولم يتم مسحها،
-        // يجب أن يحدد API الخاص بك كيفية التعامل مع هذا.
-        // في معظم الحالات، إذا لم ترسل ملف صورة جديد، سيحتفظ الـ API بالصورة الموجودة.
-        // إذا كان الـ API يتوقع قيمة معينة للإشارة إلى الاحتفاظ بالصورة، أضفها هنا.
+    if (newImageFile) {
+      formData.append("imageFile", newImageFile);
+    }
+
+    const response = await fetchWithAuth(
+      `${API_BASE_URL}/TrainingPrograms/${currentProgramToEdit.trainingProgramId}`,
+      {
+        method: "PATCH",
+        body: formData,
       }
+    );
 
+    const rawText = await response.text();
+    console.log("Response status:", response.status);
+    console.log("Raw response text:", rawText);
 
-      const response = await fetchWithAuth(
-        `${API_BASE_URL}/TrainingPrograms/${currentProgramToEdit.trainingProgramId}`,
-        {
-          method: "PUT",
-          body: formData,
+    if (response.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Updated!',
+        text: `Program "${editForm.title}" updated successfully!`,
+        timer: 3000,
+        showConfirmButton: false,
+        customClass: {
+          container: 'swal-container',
+          popup: 'swal-popup',
+          header: 'swal-header',
+          title: 'swal-title',
+          content: 'swal-content'
         }
-      );
-
-      if (response.ok) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Updated!',
-          text: `Program "${editForm.title}" updated successfully!`,
-          timer: 3000,
-          showConfirmButton: false,
-          customClass: {
-            container: 'swal-container',
-            popup: 'swal-popup',
-            header: 'swal-header',
-            title: 'swal-title',
-            content: 'swal-content'
-          }
-        }).then(() => {
-          fetchPrograms();
-          handleEditModalClose();
-          setSnackbarMessage(`Program "${editForm.title}" updated successfully!`);
-          setSnackbarSeverity("success");
-          setSnackbarOpen(true);
-        });
-      } else {
-        const errorData = await response.json();
-        const errorMessage = errorData.message || "Failed to update program.";
-        Swal.fire({
-          icon: 'error',
-          title: 'Error!',
-          text: errorMessage,
-          customClass: {
-            container: 'swal-container',
-            popup: 'swal-popup',
-            header: 'swal-header',
-            title: 'swal-title',
-            content: 'swal-content'
-          }
-        });
-        setSnackbarMessage(errorMessage);
-        setSnackbarSeverity("error");
+      }).then(() => {
+        fetchPrograms();
+        handleEditModalClose();
+        setSnackbarMessage(`Program "${editForm.title}" updated successfully!`);
+        setSnackbarSeverity("success");
         setSnackbarOpen(true);
-      }
-    } catch (err) {
-      console.error("Update program error:", err);
+      });
+    } else {
       Swal.fire({
         icon: 'error',
-        title: 'Network Error!',
-        text: `Could not connect to server: ${err.message}`,
+        title: 'Error!',
+        text: rawText || 'An unknown error occurred.',
         customClass: {
           container: 'swal-container',
           popup: 'swal-popup',
@@ -491,13 +468,35 @@ const AdminPrograms = () => {
           content: 'swal-content'
         }
       });
-      setSnackbarMessage(`Network error: ${err.message}`);
+      setSnackbarMessage(rawText || 'An unknown error occurred.');
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (err) {
+    console.error("Update program error:", err);
+    Swal.fire({
+      icon: 'error',
+      title: 'Network Error!',
+      text: err.message || 'Could not connect to the server.',
+      customClass: {
+        container: 'swal-container',
+        popup: 'swal-popup',
+        header: 'swal-header',
+        title: 'swal-title',
+        content: 'swal-content'
+      }
+    });
+    setSnackbarMessage(`Network error: ${err.message}`);
+    setSnackbarSeverity("error");
+    setSnackbarOpen(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
 
 
   if (loading) {
