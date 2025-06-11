@@ -244,6 +244,9 @@ const SupervisorDashboard = () => {
                                                             borderTopRightRadius: 16,
                                                             borderBottom: "2px solid #f0f0f0",
                                                             cursor: "pointer",
+                                                            width: 'fit-content',
+                                                            maxWidth: "100%",
+                                                            display: 'block',
                                                             "&:hover": {
                                                                 opacity: 0.8,
                                                             },

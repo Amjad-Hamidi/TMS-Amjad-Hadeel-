@@ -47,6 +47,8 @@ import {
   AspectRatio as LimitIcon,
   ImportContacts as TotalPagesIcon,
 } from "@mui/icons-material";
+import Tooltip from '@mui/material/Tooltip';
+
 import HomeIcon from "@mui/icons-material/Home";
 import ExtensionIcon from "@mui/icons-material/Extension";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -126,32 +128,48 @@ export default function GuestPage() {
     },
   ];
 
-  const features = [
-    {
-      title: "👤 Guest Access",
-      desc: "Open exploration of training categories and general program overviews, enabling first-time users to navigate offerings without registration.",
-    },
-    {
-      title: "🎓 Trainee Portal",
-      desc: "Comprehensive profile building, CV upload, and seamless access to approved programs, with integrated submission tools for tasks, projects, and feedback cycles to support continuous personal development.",
-    },
-    {
-      title: "🏢 Company Tools",
-      desc: "End-to-end management of training programs, including structured creation flows, status tracking, supervisor assignment, and streamlined application review dashboards.",
-    },
-    {
-      title: "🧑‍🏫 Supervisor Dashboard",
-      desc: "Centralized hub for managing assigned programs with capabilities for task and project assignment, trainee tracking, and performance evaluation mechanisms.",
-    },
-    {
-      title: "🛠️ Admin Control Panel",
-      desc: "Platform-wide user moderation, role oversight, category management, and program approval infrastructure ensuring policy alignment and operational integrity.",
-    },
-    {
-      title: "💬 Feedback & Assessment Engine",
-      desc: "Dynamic channels for structured, role-based feedback exchange, project assessments, and performance insights to elevate training quality and stakeholder collaboration.",
-    },
-  ];
+const features = [
+  {
+    title: "👤 Guest Access",
+    desc: "Visitors can explore training categories, get an overview of available programs, and build their CVs for free using advanced ATS tools—all without registration or access to profiles of others—providing a safe and open environment to discover opportunities.",
+  },
+  {
+    title: "🎓 Trainee Dashboard",
+    desc: "Build your professional future on a dedicated platform designed to develop both your technical and soft skills, prepare you for the job market, upload and enhance your CV with ATS evaluation, apply to accredited training programs, track your progress, earn certificates, and communicate effectively with supervisors and companies to maximize career and job opportunities.",
+  },
+  {
+    title: "🧑‍🏫 Supervisor Tools",
+    desc: "Work with leading global companies by managing training programs, assigning tasks, monitoring trainee performance, providing instant feedback, scheduling meetings with companies, recommending trainees for jobs or programs, and showcasing your CV to potential employers. Grow your professional career and expand your network with impactful collaborations.",
+  },
+  {
+    title: "🏢 Company Portal",
+    desc: "Elevate your company’s reputation by creating and managing impactful training programs, assigning qualified supervisors, reviewing trainee applications, accessing CVs of trainees and supervisors, recommending and hiring top talent, and transforming ideas into real projects. Facilitate seamless collaboration between your company, supervisors, and trainees to boost training quality and outcomes.",
+  },
+  {
+    title: "🛠️ Admin Panel",
+    desc: "Oversee all platform users and roles, with the ability to block or delete accounts, manage training categories and programs, manually add users, and access detailed reports and analytics to ensure smooth operation and policy compliance across the system.",
+  },
+  {
+    title: "📄 CV Builder & ATS Evaluator",
+    desc: "Create or improve your CV using guided templates, evaluate its compatibility with ATS systems, receive personalized tips for enhancement, and share it confidently with supervisors and companies to increase your career opportunities.",
+  },
+  {
+    title: "📢 Smart Feedback System",
+    desc: "Role-based, real-time feedback channels connecting trainees, supervisors, and companies, fostering continuous growth and maintaining high standards of training quality.",
+  },
+  {
+    title: "🤝 Smart Matching & Auto Recommendations",
+    desc: "Automatically recommend trainees to suitable programs and job opportunities based on their CVs and achievements. Supervisors’ CVs are visible to companies seeking qualified professionals to lead and manage programs, streamlining career advancement and hiring processes.",
+  },
+  {
+    title: "🤖 AI Chat Support",
+    desc: "An integrated AI-powered chat assistant is available 24/7 to guide users with instant help on any questions or issues, enhancing user experience across the platform.",
+  },
+  {
+    title: "📱 Responsive & Intuitive Design",
+    desc: "Our platform features visually stunning, flexible, and highly responsive interfaces designed for ease of use and seamless accessibility across all devices—desktop, tablet, and mobile—ensuring every user enjoys a smooth and intuitive experience.",
+  },
+];
 
   const articleData = [
     {
@@ -256,6 +274,7 @@ export default function GuestPage() {
     if (window.Typed && typedRef.current) {
       const typed = new window.Typed(typedRef.current, {
         strings: [
+          `🔧 Developed by <strong style="color:#1e90ff; transition: transform 0.3s; display:inline-block; cursor: default;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">Amjad Hamidi</strong>. For inquiries or support, please contact via <a href='mailto:amjadhmaidi1@gmail.com' style="color:#0077b6; font-weight:600; transition: transform 0.3s; text-decoration:none;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">Email</a> or <a href='https://www.linkedin.com/in/amjad-hamidi/' target='_blank' rel='noopener noreferrer' style="color:#0077b6; font-weight:600; transition: transform 0.3s; text-decoration:none;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">LinkedIn</a>.`,
           "🚀 TMS: Where Tech Talents Are Born.",
           "🌍 Empowering the Next Million Developers.",
         ],
@@ -732,123 +751,161 @@ export default function GuestPage() {
                         }}
                       >
                         {c.categoryImage && (
-                          <CardMedia
-                            component="img"
-                            height="170"
-                            image={
-                              c.categoryImage.startsWith("http")
-                                ? c.categoryImage
-                                : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`
-                            }
-                            alt={c.name}
-                            sx={{
-                              objectFit: "cover",
-                              borderTopLeftRadius: 16,
-                              borderTopRightRadius: 16,
-                              borderBottom: "2px solid #f0f0f0",
-                              cursor: "pointer",
-                              "&:hover": {
-                                opacity: 0.8,
-                              },
-                            }}
-                            onClick={() =>
-                              handleImageClick(
+                          <Tooltip title="Category Image" placement="top">
+                            <CardMedia
+                              component="img"
+                              height="170"
+                              image={
                                 c.categoryImage.startsWith("http")
                                   ? c.categoryImage
-                                  : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`,
-                                c.name
-                              )
-                            }
-                          />
+                                  : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`
+                              }
+                              alt={c.name}
+                              sx={{
+                                objectFit: "cover",
+                                borderTopLeftRadius: 16,
+                                borderTopRightRadius: 16,
+                                borderBottom: "2px solid #f0f0f0",
+                                cursor: "pointer",
+                                width: 'fit-content',
+                                maxWidth: "100%",
+                                display: 'block',
+                                "&:hover": {
+                                  opacity: 0.8,
+                                },
+                              }}
+                              onClick={() =>
+                                handleImageClick(
+                                  c.categoryImage.startsWith("http")
+                                    ? c.categoryImage
+                                    : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`,
+                                  c.name
+                                )
+                              }
+                            />
+                          </Tooltip>
                         )}
-                        <CardContent sx={{ flex: 1 }}>
-                          <Box display="flex" alignItems="center" mb={1}>
-                            <IdIcon
-                              sx={{
-                                fontSize: 18,
-                                mr: 1,
-                                color: darkMode ? "#a7ffeb" : "#00838f",
-                              }}
-                            />
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                fontWeight: 500,
-                                color: darkMode ? "#b0bec5" : "#555",
-                              }}
-                            >
-                              ID: {c.id}
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mb={1}>
-                            <NameIcon
-                              sx={{
-                                fontSize: 18,
-                                mr: 1,
-                                color: darkMode ? "#a7ffeb" : "#00838f",
-                              }}
-                            />
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                fontWeight: 700,
-                                color: darkMode ? "#e0e0e0" : "#212121",
-                              }}
-                            >
-                              {c.name || "Unnamed Category"}
-                            </Typography>
-                          </Box>
-                          {c.description && (
-                            <Box display="flex" alignItems="flex-start" mb={1}>
-                              <DescriptionTextIcon
-                                sx={{
-                                  fontSize: 18,
-                                  mt: 0.2,
-                                  mr: 1,
-                                  color: darkMode ? "#a7ffeb" : "#00838f",
-                                }}
-                              />
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                sx={{ color: darkMode ? "#b0bec5" : "text.secondary" }}
-                              >
-                                {c.description}
-                              </Typography>
-                            </Box>
-                          )}
-                          {c.generalSkills && c.generalSkills.length > 0 && (
-                            <Box display="flex" alignItems="center" mt={2}>
-                              <SkillsIcon
-                                sx={{
-                                  fontSize: 18,
-                                  mr: 1,
-                                  color: darkMode ? "#a7ffeb" : "#00838f",
-                                }}
-                              />
-                              <Stack
-                                direction="row"
-                                spacing={1}
-                                flexWrap="wrap"
-                                sx={{ mb: 1 }}
-                              >
-                                {c.generalSkills.map((skill, skillIdx) => (
-                                  <Chip
-                                    key={skillIdx}
-                                    label={skill}
-                                    color="info"
-                                    size="small"
-                                    sx={{
-                                      fontWeight: 600,
-                                      bgcolor: darkMode ? "#1976d2" : "#42a5f5",
-                                      color: "#fff",
-                                    }}
-                                  />
-                                ))}
-                              </Stack>
-                            </Box>
-                          )}
-                        </CardContent>
+<CardContent sx={{ flex: 1 }}>
+  <Box
+    display="flex"
+    alignItems="center"
+    mb={1}
+    sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
+  >
+    <Tooltip title="Category ID" placement="right">
+      <IdIcon
+        sx={{
+          fontSize: 18,
+          mr: 1,
+          color: darkMode ? "#a7ffeb" : "#00838f",
+        }}
+      />
+    </Tooltip>
+    <Tooltip title="Category ID" placement="top">
+      <Typography
+        variant="body2"
+        sx={{
+          fontWeight: 500,
+          color: darkMode ? "#b0bec5" : "#555",
+        }}
+      >
+        ID: {c.id}
+      </Typography>
+    </Tooltip>
+  </Box>
+
+  <Box
+    display="flex"
+    alignItems="center"
+    mb={1}
+    sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
+  >
+    <Tooltip title="Category Name" placement="right">
+      <NameIcon
+        sx={{
+          fontSize: 18,
+          mr: 1,
+          color: darkMode ? "#a7ffeb" : "#00838f",
+        }}
+      />
+    </Tooltip>
+    <Tooltip title="Category Name" placement="top">
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: 700,
+          color: darkMode ? "#e0e0e0" : "#212121",
+        }}
+      >
+        {c.name || "Unnamed Category"}
+      </Typography>
+    </Tooltip>
+  </Box>
+
+  {c.description && (
+    <Box
+      display="flex"
+      alignItems="flex-start"
+      mb={1}
+      sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
+    >
+      <Tooltip title="Description" placement="right">
+        <DescriptionTextIcon
+          sx={{
+            fontSize: 18,
+            mt: 0.2,
+            mr: 1,
+            color: darkMode ? "#a7ffeb" : "#00838f",
+          }}
+        />
+      </Tooltip>
+      <Tooltip title="Description" placement="top">
+        <Typography
+          variant="body2"
+          sx={{ color: darkMode ? "#b0bec5" : "text.secondary" }}
+        >
+          {c.description}
+        </Typography>
+      </Tooltip>
+    </Box>
+  )}
+
+  {c.generalSkills && c.generalSkills.length > 0 && (
+    <Box
+      display="flex"
+      alignItems="center"
+      mt={2}
+      sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
+    >
+      <Tooltip title="General Skills" placement="right">
+        <SkillsIcon
+          sx={{
+            fontSize: 18,
+            mr: 1,
+            color: darkMode ? "#a7ffeb" : "#00838f",
+          }}
+        />
+      </Tooltip>
+      <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1 }}>
+        {c.generalSkills.map((skill, skillIdx) => (
+          <Tooltip key={skillIdx} title="General Skill" placement="top">
+            <Chip
+              label={skill}
+              color="info"
+              size="small"
+              sx={{
+                fontWeight: 600,
+                bgcolor: darkMode ? "#1976d2" : "#42a5f5",
+                color: "#fff",
+              }}
+            />
+          </Tooltip>
+        ))}
+      </Stack>
+    </Box>
+  )}
+</CardContent>
+
                       </Card>
                     </Grid>
                   </Fade>
