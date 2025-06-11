@@ -11,16 +11,44 @@
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\trainingprogramscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\trainingprograms\\all except trainee\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\all except trainee\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\categories\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\categories\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\trainingprograms\\all except trainee\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\all except trainee\\itrainingprogramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\programenrollmentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\programenrollmentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\trainingprograms\\trainee\\programenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainee\\programenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\trainingprograms\\trainee\\iprogramenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainee\\iprogramenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\helpers\\mapsterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\helpers\\mapsterconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\profilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\profilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\registers\\userregistrationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,48 +59,16 @@
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\users\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\profilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\profilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\profiles\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\profiles\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\trainingprograms\\trainee\\programenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainee\\programenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\profiles\\iprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\profiles\\iprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\constantclaims\\customclaimnames.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\constantclaims\\customclaimnames.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\services\\trainingprograms\\trainee\\iprogramenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\services\\trainingprograms\\trainee\\iprogramenrollmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\controllers\\programenrollmentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|solutionrelative:tms.api\\controllers\\programenrollmentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BF77171D-9C9F-4AAD-B29B-7AB31D96EBC6}|TMS.API\\TMS.API.csproj|c:\\users\\asus\\desktop\\tms backend\\tms\\tms.api\\dtos\\trainingprograms\\responses\\traineeenrollmentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -122,8 +118,12 @@
       "DocumentGroups": [
         {
           "DockedHeight": 283,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
@@ -132,14 +132,23 @@
               "RelativeDocumentMoniker": "TMS.API\\Services\\Categories\\CategoryService.cs",
               "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\Categories\\CategoryService.cs",
               "RelativeToolTip": "TMS.API\\Services\\Categories\\CategoryService.cs",
-              "ViewState": "AgIAAGcAAAAAAAAAAAAhwHUAAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAmwGAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-07T22:57:57.219Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\CategoriesController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAA5wE4AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-21T13:54:04.225Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -149,20 +158,20 @@
               "RelativeDocumentMoniker": "TMS.API\\Controllers\\TrainingProgramsController.cs",
               "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\TrainingProgramsController.cs",
               "RelativeToolTip": "TMS.API\\Controllers\\TrainingProgramsController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAqwBQAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAuwGQAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-19T21:17:49.226Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "ITrainingProgramService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\All except Trainee\\ITrainingProgramService.cs",
               "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\All except Trainee\\ITrainingProgramService.cs",
               "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\All except Trainee\\ITrainingProgramService.cs",
               "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\All except Trainee\\ITrainingProgramService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAhwA8AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-04T14:07:45.091Z",
               "EditorCaption": ""
@@ -175,27 +184,105 @@
               "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\All except Trainee\\TrainingProgramService.cs",
               "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\All except Trainee\\TrainingProgramService.cs*",
               "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\All except Trainee\\TrainingProgramService.cs*",
-              "ViewState": "AgIAAGQCAAAAAAAAAAAAAHACAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAOAAAAAAAAAAAAAcwO8AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-04T14:06:29.076Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "CategoriesController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\CategoriesController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\CategoriesController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAAFMAAAAAAAAAAAAIwGIAAAA/AAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "ProgramEnrollmentsController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAwwEEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T13:54:04.225Z",
+              "WhenOpened": "2025-06-11T09:29:40.342Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
+              "Title": "ProgramEnrollmentService.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAgwJwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T17:29:19.56Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IProgramEnrollmentService.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
+              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T17:25:20.209Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MapsterConfig.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Helpers\\MapsterConfig.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Helpers\\MapsterConfig.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Helpers\\MapsterConfig.cs",
+              "RelativeToolTip": "TMS.API\\Helpers\\MapsterConfig.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAvwDQAAABqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-11T09:27:53.101Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAABcBAAAAAAAAAAAswG0AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-03T13:07:04.448Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ProfilesController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProfilesController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\ProfilesController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProfilesController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\ProfilesController.cs",
+              "ViewState": "AgIAAJoAAAAAAAAAAAA3wI0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-01T00:28:17.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "TMS.API\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "TMS.API\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAALUAAAAAAAAAAAAmwCcAAABaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-30T18:33:25.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "UserRegistrationService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\Registers\\UserRegistrationService.cs",
               "RelativeDocumentMoniker": "TMS.API\\Services\\Registers\\UserRegistrationService.cs",
@@ -208,7 +295,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 13,
               "Title": "UserService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\Users\\UserService.cs",
               "RelativeDocumentMoniker": "TMS.API\\Services\\Users\\UserService.cs",
@@ -221,25 +308,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAN0AAAAAAAAAAAAhwOoAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-03T13:07:04.448Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 14,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Program.cs",
               "RelativeDocumentMoniker": "TMS.API\\Program.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Program.cs*",
-              "RelativeToolTip": "TMS.API\\Program.cs*",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Program.cs",
+              "RelativeToolTip": "TMS.API\\Program.cs",
               "ViewState": "AgIAAI4AAAAAAAAAAAAAAJ4AAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-06T17:43:53.188Z",
@@ -247,59 +321,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAmwEwAAABEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T18:33:25.483Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ProfilesController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProfilesController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\ProfilesController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProfilesController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\ProfilesController.cs",
-              "ViewState": "AgIAAKQAAAAAAAAAAAAqwLoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-01T00:28:17.654Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "ProfileService.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\Profiles\\ProfileService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\Profiles\\ProfileService.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\Profiles\\ProfileService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\Profiles\\ProfileService.cs",
-              "ViewState": "AgIAAFEBAAAAAAAAAAAQwF8BAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-07T09:41:18.282Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ProgramEnrollmentService.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\Trainee\\ProgramEnrollmentService.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAWwCQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-04T17:29:19.56Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "IProfileService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\Profiles\\IProfileService.cs",
               "RelativeDocumentMoniker": "TMS.API\\Services\\Profiles\\IProfileService.cs",
@@ -307,25 +329,11 @@
               "RelativeToolTip": "TMS.API\\Services\\Profiles\\IProfileService.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAzwBAAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-07T09:11:36.086Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-07T09:11:36.086Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\appsettings.json",
-              "RelativeDocumentMoniker": "TMS.API\\appsettings.json",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\appsettings.json",
-              "RelativeToolTip": "TMS.API\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-06-06T18:00:55.893Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "CustomClaimNames.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\ConstantClaims\\CustomClaimNames.cs",
               "RelativeDocumentMoniker": "TMS.API\\ConstantClaims\\CustomClaimNames.cs",
@@ -333,12 +341,11 @@
               "RelativeToolTip": "TMS.API\\ConstantClaims\\CustomClaimNames.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-06T18:00:49.382Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-06T18:00:49.382Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 17,
               "Title": "TraineeEnrollmentDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Responses\\TraineeEnrollmentDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Responses\\TraineeEnrollmentDto.cs",
@@ -351,31 +358,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "IProgramEnrollmentService.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
-              "RelativeToolTip": "TMS.API\\Services\\TrainingPrograms\\Trainee\\IProgramEnrollmentService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-04T17:25:20.209Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "ProgramEnrollmentsController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
-              "RelativeDocumentMoniker": "TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
-              "RelativeToolTip": "TMS.API\\Controllers\\ProgramEnrollmentsController.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAA1wB0AAABDAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-04T17:25:08.778Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 18,
               "Title": "AddTrainingProgramDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Requests\\AddTrainingProgramDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Requests\\AddTrainingProgramDto.cs",
@@ -388,7 +371,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 20,
               "Title": "TraineeSpecificDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\Users\\Trainees\\TraineeSpecificDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\Users\\Trainees\\TraineeSpecificDto.cs",
@@ -401,7 +384,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 19,
               "Title": "FeedbackService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\Services\\Feedbacks\\FeedbackService.cs",
               "RelativeDocumentMoniker": "TMS.API\\Services\\Feedbacks\\FeedbackService.cs",
@@ -414,7 +397,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 21,
               "Title": "TrainingProgramSummaryDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\TrainingPrograms\\Responses\\TrainingProgramSummaryDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\TrainingPrograms\\Responses\\TrainingProgramSummaryDto.cs",
@@ -427,7 +410,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 22,
               "Title": "TraineeGeneralDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\Users\\Trainees\\TraineeGeneralDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\Users\\Trainees\\TraineeGeneralDto.cs",
@@ -440,7 +423,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 23,
               "Title": "CategorySummaryDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\Categories\\Responses\\CategorySummaryDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\Categories\\Responses\\CategorySummaryDto.cs",
@@ -453,7 +436,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 24,
               "Title": "SupervisorDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\Users\\Supervisors\\SupervisorDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\Users\\Supervisors\\SupervisorDto.cs",
@@ -465,7 +448,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 25,
               "Title": "UpdateProfileDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\Profiles\\UpdateProfileDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\Profiles\\UpdateProfileDto.cs",
@@ -477,7 +460,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 26,
               "Title": "GetEditProfileDto.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TMS Backend\\TMS\\TMS.API\\DTOs\\Profiles\\GetEditProfileDto.cs",
               "RelativeDocumentMoniker": "TMS.API\\DTOs\\Profiles\\GetEditProfileDto.cs",

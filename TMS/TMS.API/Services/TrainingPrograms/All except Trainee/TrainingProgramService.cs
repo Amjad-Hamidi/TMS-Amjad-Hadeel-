@@ -224,8 +224,8 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
                 throw new UnauthorizedAccessException("You can only edit your own training programs.");
             }
 
-            // approved/rejected اضافة حماية: ممنوع تعديل برامج
-            if (trainingProgramInDb.ApprovalStatus != TrainingProgramStatus.Pending)
+            // Admin الا اذا كان approved/rejected اضافة حماية: ممنوع تعديل برامج
+            if (trainingProgramInDb.ApprovalStatus != TrainingProgramStatus.Pending && role == UserRole.Company.ToString())
                 throw new InvalidOperationException("Only pending programs can be edited.");
 
             // تحقق من التصنيف
@@ -237,6 +237,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
                     throw new ArgumentException("Invalid CategoryId.");
             }
 
+            /* // Temporarily suspended
             // تحقق من المشرف
             if (updateTrainingProgramDto.SupervisorId == null)
                 throw new ArgumentException("SupervisorId is required.");
@@ -244,8 +245,10 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             var supervisorExists = await tMSDbContext.UserAccounts
                 .AnyAsync(userAccount => userAccount.Id == updateTrainingProgramDto.SupervisorId
                 && userAccount.Role == UserRole.Supervisor);
+
             if (!supervisorExists)
                 throw new ArgumentException("Invalid SupervisorId.");
+            */
 
             var now = DateTime.Now;
             DateTime? startDate = updateTrainingProgramDto.StartDate ?? trainingProgramInDb.StartDate;
@@ -511,6 +514,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
                 .Include(tp => tp.Category)
                 .Include(tp => tp.Company).ThenInclude(c => c.ApplicationUser)
                 .Include(tp => tp.Supervisor).ThenInclude(s => s.ApplicationUser)
+                .AsNoTracking()
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -548,11 +552,15 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
                 CategoryId = tp.CategoryId,
                 CategoryName = tp.Category?.Name ?? "N/A",
 
-                SupervisorId = (int)tp.SupervisorId!,
-                SupervisorName = $"{tp.Supervisor.ApplicationUser.FirstName} {tp.Supervisor.ApplicationUser.LastName}",
+                SupervisorId = tp.SupervisorId ?? 0,
+                SupervisorName = tp.Supervisor?.ApplicationUser != null
+                ? $"{tp.Supervisor.ApplicationUser.FirstName} {tp.Supervisor.ApplicationUser.LastName}"
+                : "N/A",
 
                 CompanyId = tp.CompanyId,
-                CompanyName = $"{tp.Company.ApplicationUser.FirstName} {tp.Company.ApplicationUser.LastName}",
+                CompanyName = tp.Company?.ApplicationUser != null
+            ? $"{tp.Company.ApplicationUser.FirstName} {tp.Company.ApplicationUser.LastName}"
+            : "N/A",
 
                 ApprovalStatus = tp.ApprovalStatus
             }).ToList();
@@ -568,7 +576,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
 
 
         // just for Company, (this TP is for specific Company, others no)
-        public async Task<PagedResult<TrainingProgram>> GetApprovedByCompanyAsync(int companyId, string? search, int page, int limit)
+        public async Task<PagedResult<ApprovedProgramDto>> GetApprovedByCompanyAsync(int companyId, string? search, int page, int limit)
         {
             if (page < 1) page = 1;
             if (limit < 1) limit = 10;
@@ -591,9 +599,36 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             var total = await query.CountAsync();
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
 
-            return new PagedResult<TrainingProgram>
+            var dtoItems = items.Select(tp => new ApprovedProgramDto
             {
-                Items = items,
+                TrainingProgramId = tp.TrainingProgramId,
+                Title = tp.Title,
+                Description = tp.Description,
+                DurationInDays = tp.DurationInDays.ToString() + " days",
+                StartDate = tp.StartDate,
+                EndDate = tp.EndDate,
+                Location = tp.Location,
+                Status = tp.Status,
+                ImagePath = tp.ImagePath,
+                SeatsAvailable = tp.SeatsAvailable,
+                Rating = tp.Rating,
+                ContentUrl = tp.ContentUrl,
+                ClassroomUrl = tp.ClassroomUrl,
+                CreatedAt = tp.CreatedAt,
+
+                CategoryId = tp.CategoryId,
+                CategoryName = tp.Category?.Name ?? "N/A",
+
+                SupervisorId = tp.SupervisorId ?? 0,
+                SupervisorName = tp.Supervisor?.ApplicationUser != null
+                       ? $"{tp.Supervisor.ApplicationUser.FirstName} {tp.Supervisor.ApplicationUser.LastName}"
+                       : "N/A",
+                ApprovalStatus = tp.ApprovalStatus
+            }).ToList();
+
+            return new PagedResult<ApprovedProgramDto>
+            {
+                Items = dtoItems,
                 TotalCount = total,
                 Page = page,
                 Limit = limit
@@ -601,7 +636,7 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
         }
 
         // just for Supervisor, (this TP is for specific Supervisor, others no)
-        public async Task<PagedResult<TrainingProgram>> GetBySupervisorAsync(int supervisorId, string? search, int page, int limit)
+        public async Task<PagedResult<SupervisedProgramDto>> GetBySupervisorAsync(int supervisorId, string? search, int page, int limit)
         {
             if (page < 1) page = 1;
             if (limit < 1) limit = 10;
@@ -624,9 +659,37 @@ namespace TMS.API.Services.TrainingPrograms.All_except_Trainee
             var total = await query.CountAsync();
             var items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
 
-            return new PagedResult<TrainingProgram>
+            var dtoItems = items.Select(tp => new SupervisedProgramDto
             {
-                Items = items,
+                TrainingProgramId = tp.TrainingProgramId,
+                Title = tp.Title,
+                Description = tp.Description,
+                DurationInDays = tp.DurationInDays.ToString() + " days",
+                StartDate = tp.StartDate,
+                EndDate = tp.EndDate,
+                Location = tp.Location,
+                Status = tp.Status,
+                ImagePath = tp.ImagePath,
+                SeatsAvailable = tp.SeatsAvailable,
+                Rating = tp.Rating,
+                ContentUrl = tp.ContentUrl,
+                ClassroomUrl = tp.ClassroomUrl,
+                CreatedAt = tp.CreatedAt,
+
+                CategoryId = tp.CategoryId,
+                CategoryName = tp.Category?.Name ?? "N/A",
+
+                CompanyId = tp.CompanyId,
+                CompanyName = tp.Company?.ApplicationUser != null
+                    ? $"{tp.Company.ApplicationUser.FirstName} {tp.Company.ApplicationUser.LastName}"
+                    : "N/A",
+
+                ApprovalStatus = tp.ApprovalStatus
+            }).ToList();
+
+            return new PagedResult<SupervisedProgramDto>
+            {
+                Items = dtoItems,
                 TotalCount = total,
                 Page = page,
                 Limit = limit
