@@ -433,6 +433,12 @@ export default function AdminDashboard() {
                             borderTopRightRadius: 16,
                             borderBottom: "2px solid #f0f0f0",
                             cursor: "pointer", // Add cursor pointer
+                            width: 'fit-content',
+                            maxWidth: "100%",
+                            display: 'block',
+                            "&:hover": {
+                              opacity: 0.8,
+                            },                           
                           }}
                           onClick={() =>
                             handleImageClick(

@@ -209,6 +209,12 @@ const TraineeDashboard = () => {
                                                             borderTopRightRadius: 16,
                                                             borderBottom: "2px solid #f0f0f0",
                                                             cursor: 'pointer',
+                                                            width: 'fit-content',
+                                                            maxWidth: "100%",
+                                                            display: 'block',
+                                                            "&:hover": {
+                                                                opacity: 0.8,
+                                                            },
                                                         }}
                                                         onClick={() => handleImageClick(c.categoryImage.startsWith("http") ? c.categoryImage : `https://amjad-hamidi-tms.runasp.net${c.categoryImage}`)}
                                                     />
