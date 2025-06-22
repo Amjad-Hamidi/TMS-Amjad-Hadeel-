@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import "./AdminLayout.css";
+import "../Responsive/AdminResponsive.css";
 
 const AdminLayout = () => {
   const navigate = useNavigate();

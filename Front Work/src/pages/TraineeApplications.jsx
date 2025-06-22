@@ -161,7 +161,13 @@ export default function TraineeApplications() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 3, md: 4 } }}>
+    <Container  maxWidth="lg"
+      sx={{
+        py: { xs: 2, sm: 3, md: 4 },
+        minHeight: "100vh",          
+        overflowY: "auto", // for Scrolling         
+      }}
+    >
       <Paper elevation={2} sx={{ p: { xs: 2, sm: 3 }, mb: 3, borderRadius: 2, backgroundColor: alpha('#ffffff', 0.9) }}>
         <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main', textAlign: 'center' }}>
           My Training Program Applications

@@ -1,0 +1,241 @@
+@media (max-width: 972px) {
+  /* 🔹 Sidebar (Open Mode) */
+  .company-layout.sidebar-open .sidebar {
+    width: 180px;
+    padding: 10px 8px;
+  }
+
+  .company-layout.sidebar-open .sidebar-header h2 {
+    font-size: 16px;
+  }
+
+  .company-layout.sidebar-open .toggle-btn {
+    font-size: 20px;
+    right: 8px;
+  }
+
+  .company-layout.sidebar-open .nav-links li {
+    margin: 8px 0;
+  }
+
+  .company-layout.sidebar-open .nav-links a {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .company-layout.sidebar-open .nav-links i {
+    font-size: 16px;
+    margin-right: 6px;
+  }
+
+  .company-layout.sidebar-open .nav-links span {
+    font-size: 0.85rem;
+  }
+
+  .company-layout.sidebar-open .main-content {
+  margin-left: 180px;
+  width: calc(100% - 180px);
+  padding-left: 12px; /* بدل 20px أو أكثر */
+  padding-right: 12px;
+  }
+
+  .company-layout.sidebar-closed .main-content {
+    margin-left: 100px;
+    width: calc(100% - 100px);
+  }
+
+  /*Total, Page, Limit*/
+ .MuiChip-root.MuiChip-filled {
+  font-size: 0.7rem !important;
+  height: 24px !important;
+  padding: 0 6px !important;
+  border-radius: 14px !important;
+}
+
+.MuiChip-icon {
+  font-size: 1rem !important;
+  margin-right: 4px !important;
+}
+
+.MuiChip-label {
+  padding: 0 !important;
+  font-weight: 600;
+}
+
+
+
+  /* 🔹 Category Card Typography */
+  .MuiTypography-h6 {
+    font-size: 0.85rem !important;
+  }
+
+  .MuiTypography-body2 {
+    font-size: 0.8rem !important;
+  }
+
+  .MuiChip-root {
+    font-size: 0.75rem !important;
+    padding: 4px 6px !important;
+  }
+
+  .MuiButtonBase-root {
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (max-width: 666px) {
+  .company-layout.sidebar-open .sidebar {
+    width: 150px;
+    padding: 8px 6px;
+  }
+
+  .company-layout.sidebar-open .sidebar-header h2 {
+    font-size: 14px;
+  }
+
+  .company-layout.sidebar-open .toggle-btn {
+    font-size: 18px;
+    right: 6px;
+  }
+
+  .company-layout.sidebar-open .nav-links li {
+    margin: 6px 0;
+  }
+
+  .company-layout.sidebar-open .nav-links a {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  .nav-links i { /* Icons of left sidebar */
+    font-size: 18px; 
+  }
+
+  .company-layout.sidebar-open .nav-links span {
+    font-size: 0.75rem;
+  }
+
+  .company-layout.sidebar-open .main-content {
+    margin-left: 150px;
+    width: calc(100% - 150px);
+  }
+
+  /* 🔸 Logout */
+  .logout-button-container button {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
+  }
+
+  /* 🔸 Typography Inside Cards */
+  .MuiTypography-h6 {
+    font-size: 0.75rem !important;
+  }
+
+  .MuiTypography-body2 {
+    font-size: 0.7rem !important;
+  }
+
+  .MuiButtonBase-root {
+    font-size: 0.75rem !important;
+    padding: 6px 10px !important;
+  }
+
+  .MuiChip-root .MuiChip-filled .MuiChip-sizeSmall .MuiChip-colorInfo {
+    font-size: 0.7rem !important;
+    padding: 0px !important;
+    height: 24px !important;
+  }
+  
+
+.MuiChip-root.MuiChip-sizeSmall .MuiChip-label { /* مسك السكلز الديف كاملة*/
+  padding: 2px !important;
+  font-size: 0.7rem !important;
+  line-height: 1 !important;
+}
+
+  /* 🧠 Tooltip Icons and SVGs inside Cards */
+  .MuiSvgIcon-root {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 500px) {
+  /* 🔹 Smaller Titles */
+  .MuiTypography-h4 {
+    font-size: 1.2rem !important;
+  }
+
+  .MuiTypography-h6 {
+    font-size: 0.7rem !important;
+  }
+
+  /* 🔹 Cards padding */
+  .card {
+    padding: 14px !important;
+  }
+
+  /* 🔹 Button inside cards */
+  .MuiButtonBase-root {
+    font-size: 0.7rem !important;
+    padding: 5px 8px !important;
+  }
+}
+
+
+  @media (max-width: 476px) { 
+    /*Total, Page, Limit*/
+  .css-1irh47u-MuiStack-root {
+    flex-direction: column !important;
+    align-items: normal !important;
+    gap: 6px !important;
+  }
+
+  .css-jp5xsf-MuiChip-root {
+    font-size: 0.65rem !important;
+    padding: 3px 6px !important;
+    height: 24px !important;
+    border-radius: 12px !important;
+  }
+
+  .css-1dybbl5-MuiChip-label {
+    padding: 0 !important;
+    font-weight: 600 !important;
+  }
+
+  .MuiChip-icon {
+    font-size: 0.9rem !important;
+    margin-right: 4px !important;
+  }
+
+
+  .css-jp5xsf-MuiChip-root {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: auto !important;
+  min-height: unset !important;
+}
+
+
+
+.MuiChip-root.MuiChip-filled.MuiChip-sizeSmall.MuiChip-colorInfo.MuiChip-filledInfo {
+  margin: 0 !important;
+}
+
+.MuiChip-root.MuiChip-filled.MuiChip-sizeSmall.MuiChip-colorInfo.MuiChip-filledInfo span {
+  gap: 0 4px;
+  font-size: 10px !important;
+  padding: 0 !important;
+}
+
+  .MuiStack-root.css-1nq2c3j-MuiStack-root { /* General Skills */
+    gap: 5px;
+  }
+
+  button.responsive-view-button { /* View Training Programs Button */
+    font-size: 0.65rem !important;
+    padding: 4px 8px !important;
+  }
+
+
+}
+

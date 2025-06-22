@@ -303,6 +303,7 @@ const CompanyDashboard = () => {
                                                     </Stack>
                                                 )}
                                                 <Button
+                                                    className="responsive-view-button"
                                                     variant="contained"
                                                     color="primary"
                                                     fullWidth

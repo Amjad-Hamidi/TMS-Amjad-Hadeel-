@@ -34,6 +34,8 @@ import DescriptionIcon from '@mui/icons-material/Description'; // Icon for descr
 import PsychologyIcon from '@mui/icons-material/Psychology'; // Icon for general skills
 import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Icon for ID
 
+import "../Responsive/SupervisorResponsive.css";
+
 const SupervisorDashboard = () => {
     const navigate = useNavigate();
 

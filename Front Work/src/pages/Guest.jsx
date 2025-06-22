@@ -47,7 +47,7 @@ import {
   AspectRatio as LimitIcon,
   ImportContacts as TotalPagesIcon,
 } from "@mui/icons-material";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 
 import HomeIcon from "@mui/icons-material/Home";
 import ExtensionIcon from "@mui/icons-material/Extension";
@@ -64,6 +64,8 @@ import "swiper/css/navigation";
 import qrImage from "../images/QR Code-TMS.png";
 import logo from "../images/TMS Logo.png";
 import introVideo from "../videos/Intro-TMS.mp4";
+
+import "../Responsive/GuestResponsive.css";
 
 export default function GuestPage() {
   const [darkMode, setDarkMode] = useState(false);
@@ -128,48 +130,48 @@ export default function GuestPage() {
     },
   ];
 
-const features = [
-  {
-    title: "👤 Guest Access",
-    desc: "Visitors can explore training categories, get an overview of available programs, and build their CVs for free using advanced ATS tools—all without registration or access to profiles of others—providing a safe and open environment to discover opportunities.",
-  },
-  {
-    title: "🎓 Trainee Dashboard",
-    desc: "Build your professional future on a dedicated platform designed to develop both your technical and soft skills, prepare you for the job market, upload and enhance your CV with ATS evaluation, apply to accredited training programs, track your progress, earn certificates, and communicate effectively with supervisors and companies to maximize career and job opportunities.",
-  },
-  {
-    title: "🧑‍🏫 Supervisor Tools",
-    desc: "Work with leading global companies by managing training programs, assigning tasks, monitoring trainee performance, providing instant feedback, scheduling meetings with companies, recommending trainees for jobs or programs, and showcasing your CV to potential employers. Grow your professional career and expand your network with impactful collaborations.",
-  },
-  {
-    title: "🏢 Company Portal",
-    desc: "Elevate your company’s reputation by creating and managing impactful training programs, assigning qualified supervisors, reviewing trainee applications, accessing CVs of trainees and supervisors, recommending and hiring top talent, and transforming ideas into real projects. Facilitate seamless collaboration between your company, supervisors, and trainees to boost training quality and outcomes.",
-  },
-  {
-    title: "🛠️ Admin Panel",
-    desc: "Oversee all platform users and roles, with the ability to block or delete accounts, manage training categories and programs, manually add users, and access detailed reports and analytics to ensure smooth operation and policy compliance across the system.",
-  },
-  {
-    title: "📄 CV Builder & ATS Evaluator",
-    desc: "Create or improve your CV using guided templates, evaluate its compatibility with ATS systems, receive personalized tips for enhancement, and share it confidently with supervisors and companies to increase your career opportunities.",
-  },
-  {
-    title: "📢 Smart Feedback System",
-    desc: "Role-based, real-time feedback channels connecting trainees, supervisors, and companies, fostering continuous growth and maintaining high standards of training quality.",
-  },
-  {
-    title: "🤝 Smart Matching & Auto Recommendations",
-    desc: "Automatically recommend trainees to suitable programs and job opportunities based on their CVs and achievements. Supervisors’ CVs are visible to companies seeking qualified professionals to lead and manage programs, streamlining career advancement and hiring processes.",
-  },
-  {
-    title: "🤖 AI Chat Support",
-    desc: "An integrated AI-powered chat assistant is available 24/7 to guide users with instant help on any questions or issues, enhancing user experience across the platform.",
-  },
-  {
-    title: "📱 Responsive & Intuitive Design",
-    desc: "Our platform features visually stunning, flexible, and highly responsive interfaces designed for ease of use and seamless accessibility across all devices—desktop, tablet, and mobile—ensuring every user enjoys a smooth and intuitive experience.",
-  },
-];
+  const features = [
+    {
+      title: "👤 Guest Access",
+      desc: "Visitors can explore training categories, get an overview of available programs, and build their CVs for free using advanced ATS tools—all without registration or access to profiles of others—providing a safe and open environment to discover opportunities.",
+    },
+    {
+      title: "🎓 Trainee Dashboard",
+      desc: "Build your professional future on a dedicated platform designed to develop both your technical and soft skills, prepare you for the job market, upload and enhance your CV with ATS evaluation, apply to accredited training programs, track your progress, earn certificates, and communicate effectively with supervisors and companies to maximize career and job opportunities.",
+    },
+    {
+      title: "🧑‍🏫 Supervisor Tools",
+      desc: "Work with leading global companies by managing training programs, assigning tasks, monitoring trainee performance, providing instant feedback, scheduling meetings with companies, recommending trainees for jobs or programs, and showcasing your CV to potential employers. Grow your professional career and expand your network with impactful collaborations.",
+    },
+    {
+      title: "🏢 Company Portal",
+      desc: "Elevate your company’s reputation by creating and managing impactful training programs, assigning qualified supervisors, reviewing trainee applications, accessing CVs of trainees and supervisors, recommending and hiring top talent, and transforming ideas into real projects. Facilitate seamless collaboration between your company, supervisors, and trainees to boost training quality and outcomes.",
+    },
+    {
+      title: "🛠️ Admin Panel",
+      desc: "Oversee all platform users and roles, with the ability to block or delete accounts, manage training categories and programs, manually add users, and access detailed reports and analytics to ensure smooth operation and policy compliance across the system.",
+    },
+    {
+      title: "📄 CV Builder & ATS Evaluator",
+      desc: "Create or improve your CV using guided templates, evaluate its compatibility with ATS systems, receive personalized tips for enhancement, and share it confidently with supervisors and companies to increase your career opportunities.",
+    },
+    {
+      title: "📢 Smart Feedback System",
+      desc: "Role-based, real-time feedback channels connecting trainees, supervisors, and companies, fostering continuous growth and maintaining high standards of training quality.",
+    },
+    {
+      title: "🤝 Smart Matching & Auto Recommendations",
+      desc: "Automatically recommend trainees to suitable programs and job opportunities based on their CVs and achievements. Supervisors’ CVs are visible to companies seeking qualified professionals to lead and manage programs, streamlining career advancement and hiring processes.",
+    },
+    {
+      title: "🤖 AI Chat Support",
+      desc: "An integrated AI-powered chat assistant is available 24/7 to guide users with instant help on any questions or issues, enhancing user experience across the platform.",
+    },
+    {
+      title: "📱 Responsive & Intuitive Design",
+      desc: "Our platform features visually stunning, flexible, and highly responsive interfaces designed for ease of use and seamless accessibility across all devices—desktop, tablet, and mobile—ensuring every user enjoys a smooth and intuitive experience.",
+    },
+  ];
 
   const articleData = [
     {
@@ -303,7 +305,7 @@ const features = [
           transition: "0.3s",
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
+        <Toolbar className="navbar" sx={{ justifyContent: "space-between" }}>
           <Box>
             {navItems.map(({ label, icon }) => (
               <Button
@@ -625,7 +627,11 @@ const features = [
       <Container id="categories" sx={{ py: 4 }}>
         <Paper
           elevation={3}
-          sx={{ p: 4, borderRadius: 4, background: darkMode ? "#1c1c1c" : "#fff" }}
+          sx={{
+            p: 4,
+            borderRadius: 4,
+            background: darkMode ? "#1c1c1c" : "#fff",
+          }}
         >
           <Stack
             direction="row"
@@ -652,7 +658,9 @@ const features = [
                   color: darkMode ? "#90caf9" : "#1976d2",
                   borderColor: darkMode ? "#90caf9" : "#1976d2",
                   "&:hover": {
-                    bgcolor: darkMode ? "rgba(144,202,249,0.1)" : "rgba(25,118,210,0.1)",
+                    bgcolor: darkMode
+                      ? "rgba(144,202,249,0.1)"
+                      : "rgba(25,118,210,0.1)",
                   },
                 }}
               >
@@ -668,7 +676,9 @@ const features = [
                   color: darkMode ? "#90caf9" : "#1976d2",
                   borderColor: darkMode ? "#90caf9" : "#1976d2",
                   "&:hover": {
-                    bgcolor: darkMode ? "rgba(144,202,249,0.1)" : "rgba(25,118,210,0.1)",
+                    bgcolor: darkMode
+                      ? "rgba(144,202,249,0.1)"
+                      : "rgba(25,118,210,0.1)",
                   },
                 }}
               >
@@ -684,7 +694,9 @@ const features = [
                   color: darkMode ? "#90caf9" : "#1976d2",
                   borderColor: darkMode ? "#90caf9" : "#1976d2",
                   "&:hover": {
-                    bgcolor: darkMode ? "rgba(144,202,249,0.1)" : "rgba(25,118,210,0.1)",
+                    bgcolor: darkMode
+                      ? "rgba(144,202,249,0.1)"
+                      : "rgba(25,118,210,0.1)",
                   },
                 }}
               >
@@ -700,7 +712,9 @@ const features = [
                   color: darkMode ? "#90caf9" : "#1976d2",
                   borderColor: darkMode ? "#90caf9" : "#1976d2",
                   "&:hover": {
-                    bgcolor: darkMode ? "rgba(144,202,249,0.1)" : "rgba(25,118,210,0.1)",
+                    bgcolor: darkMode
+                      ? "rgba(144,202,249,0.1)"
+                      : "rgba(25,118,210,0.1)",
                   },
                 }}
               >
@@ -767,9 +781,9 @@ const features = [
                                 borderTopRightRadius: 16,
                                 borderBottom: "2px solid #f0f0f0",
                                 cursor: "pointer",
-                                width: 'fit-content',
+                                width: "fit-content",
                                 maxWidth: "100%",
-                                display: 'block',
+                                display: "block",
                                 "&:hover": {
                                   opacity: 0.8,
                                 },
@@ -785,127 +799,177 @@ const features = [
                             />
                           </Tooltip>
                         )}
-<CardContent sx={{ flex: 1 }}>
-  <Box
-    display="flex"
-    alignItems="center"
-    mb={1}
-    sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
-  >
-    <Tooltip title="Category ID" placement="right">
-      <IdIcon
-        sx={{
-          fontSize: 18,
-          mr: 1,
-          color: darkMode ? "#a7ffeb" : "#00838f",
-        }}
-      />
-    </Tooltip>
-    <Tooltip title="Category ID" placement="top">
-      <Typography
-        variant="body2"
-        sx={{
-          fontWeight: 500,
-          color: darkMode ? "#b0bec5" : "#555",
-        }}
-      >
-        ID: {c.id}
-      </Typography>
-    </Tooltip>
-  </Box>
+                        <CardContent sx={{ flex: 1 }}>
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            mb={1}
+                            sx={{
+                              cursor: "pointer",
+                              "&:hover": {
+                                backgroundColor: darkMode
+                                  ? "#263238"
+                                  : "#f5f5f5",
+                                borderRadius: 1,
+                                px: 1,
+                              },
+                            }}
+                          >
+                            <Tooltip title="Category ID" placement="right">
+                              <IdIcon
+                                sx={{
+                                  fontSize: 18,
+                                  mr: 1,
+                                  color: darkMode ? "#a7ffeb" : "#00838f",
+                                }}
+                              />
+                            </Tooltip>
+                            <Tooltip title="Category ID" placement="top">
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  fontWeight: 500,
+                                  color: darkMode ? "#b0bec5" : "#555",
+                                }}
+                              >
+                                ID: {c.id}
+                              </Typography>
+                            </Tooltip>
+                          </Box>
 
-  <Box
-    display="flex"
-    alignItems="center"
-    mb={1}
-    sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
-  >
-    <Tooltip title="Category Name" placement="right">
-      <NameIcon
-        sx={{
-          fontSize: 18,
-          mr: 1,
-          color: darkMode ? "#a7ffeb" : "#00838f",
-        }}
-      />
-    </Tooltip>
-    <Tooltip title="Category Name" placement="top">
-      <Typography
-        variant="h6"
-        sx={{
-          fontWeight: 700,
-          color: darkMode ? "#e0e0e0" : "#212121",
-        }}
-      >
-        {c.name || "Unnamed Category"}
-      </Typography>
-    </Tooltip>
-  </Box>
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            mb={1}
+                            sx={{
+                              cursor: "pointer",
+                              "&:hover": {
+                                backgroundColor: darkMode
+                                  ? "#263238"
+                                  : "#f5f5f5",
+                                borderRadius: 1,
+                                px: 1,
+                              },
+                            }}
+                          >
+                            <Tooltip title="Category Name" placement="right">
+                              <NameIcon
+                                sx={{
+                                  fontSize: 18,
+                                  mr: 1,
+                                  color: darkMode ? "#a7ffeb" : "#00838f",
+                                }}
+                              />
+                            </Tooltip>
+                            <Tooltip title="Category Name" placement="top">
+                              <Typography
+                                variant="h6"
+                                sx={{
+                                  fontWeight: 700,
+                                  color: darkMode ? "#e0e0e0" : "#212121",
+                                }}
+                              >
+                                {c.name || "Unnamed Category"}
+                              </Typography>
+                            </Tooltip>
+                          </Box>
 
-  {c.description && (
-    <Box
-      display="flex"
-      alignItems="flex-start"
-      mb={1}
-      sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
-    >
-      <Tooltip title="Description" placement="right">
-        <DescriptionTextIcon
-          sx={{
-            fontSize: 18,
-            mt: 0.2,
-            mr: 1,
-            color: darkMode ? "#a7ffeb" : "#00838f",
-          }}
-        />
-      </Tooltip>
-      <Tooltip title="Description" placement="top">
-        <Typography
-          variant="body2"
-          sx={{ color: darkMode ? "#b0bec5" : "text.secondary" }}
-        >
-          {c.description}
-        </Typography>
-      </Tooltip>
-    </Box>
-  )}
+                          {c.description && (
+                            <Box
+                              display="flex"
+                              alignItems="flex-start"
+                              mb={1}
+                              sx={{
+                                cursor: "pointer",
+                                "&:hover": {
+                                  backgroundColor: darkMode
+                                    ? "#263238"
+                                    : "#f5f5f5",
+                                  borderRadius: 1,
+                                  px: 1,
+                                },
+                              }}
+                            >
+                              <Tooltip title="Description" placement="right">
+                                <DescriptionTextIcon
+                                  sx={{
+                                    fontSize: 18,
+                                    mt: 0.2,
+                                    mr: 1,
+                                    color: darkMode ? "#a7ffeb" : "#00838f",
+                                  }}
+                                />
+                              </Tooltip>
+                              <Tooltip title="Description" placement="top">
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    color: darkMode
+                                      ? "#b0bec5"
+                                      : "text.secondary",
+                                  }}
+                                >
+                                  {c.description}
+                                </Typography>
+                              </Tooltip>
+                            </Box>
+                          )}
 
-  {c.generalSkills && c.generalSkills.length > 0 && (
-    <Box
-      display="flex"
-      alignItems="center"
-      mt={2}
-      sx={{ cursor: "pointer", "&:hover": { backgroundColor: darkMode ? "#263238" : "#f5f5f5", borderRadius: 1, px: 1 } }}
-    >
-      <Tooltip title="General Skills" placement="right">
-        <SkillsIcon
-          sx={{
-            fontSize: 18,
-            mr: 1,
-            color: darkMode ? "#a7ffeb" : "#00838f",
-          }}
-        />
-      </Tooltip>
-      <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1 }}>
-        {c.generalSkills.map((skill, skillIdx) => (
-          <Tooltip key={skillIdx} title="General Skill" placement="top">
-            <Chip
-              label={skill}
-              color="info"
-              size="small"
-              sx={{
-                fontWeight: 600,
-                bgcolor: darkMode ? "#1976d2" : "#42a5f5",
-                color: "#fff",
-              }}
-            />
-          </Tooltip>
-        ))}
-      </Stack>
-    </Box>
-  )}
-</CardContent>
-
+                          {c.generalSkills && c.generalSkills.length > 0 && (
+                            <Box
+                              display="flex"
+                              alignItems="center"
+                              mt={2}
+                              sx={{
+                                cursor: "pointer",
+                                "&:hover": {
+                                  backgroundColor: darkMode
+                                    ? "#263238"
+                                    : "#f5f5f5",
+                                  borderRadius: 1,
+                                  px: 1,
+                                },
+                              }}
+                            >
+                              <Tooltip title="General Skills" placement="right">
+                                <SkillsIcon
+                                  sx={{
+                                    fontSize: 18,
+                                    mr: 1,
+                                    color: darkMode ? "#a7ffeb" : "#00838f",
+                                  }}
+                                />
+                              </Tooltip>
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                flexWrap="wrap"
+                                sx={{ mb: 1 }}
+                              >
+                                {c.generalSkills.map((skill, skillIdx) => (
+                                  <Tooltip
+                                    key={skillIdx}
+                                    title="General Skill"
+                                    placement="top"
+                                  >
+                                    <Chip
+                                      label={skill}
+                                      color="info"
+                                      size="small"
+                                      sx={{
+                                        fontWeight: 600,
+                                        bgcolor: darkMode
+                                          ? "#1976d2"
+                                          : "#42a5f5",
+                                        color: "#fff",
+                                      }}
+                                    />
+                                  </Tooltip>
+                                ))}
+                              </Stack>
+                            </Box>
+                          )}
+                        </CardContent>
                       </Card>
                     </Grid>
                   </Fade>
@@ -982,7 +1046,7 @@ const features = [
         <IconButton
           onClick={handleCloseImageModal}
           sx={{
-            width: 'fit-content',
+            width: "fit-content",
             position: "absolute",
             top: 10,
             right: 10,
@@ -1193,7 +1257,9 @@ const features = [
         <Typography variant="h5" gutterBottom>
           📬 Stay Connected
         </Typography>
-        <Typography variant="body1">Got questions? Reach out anytime!</Typography>
+        <Typography variant="body1">
+          Got questions? Reach out anytime!
+        </Typography>
         <Box
           sx={{
             display: "flex",
@@ -1373,7 +1439,9 @@ const features = [
         )}
 
         {/* ===== Footer Signature ===== */}
-        <Box sx={{ mt: 4, textAlign: "center", animation: "fadeIn 1s ease-in" }}>
+        <Box
+          sx={{ mt: 4, textAlign: "center", animation: "fadeIn 1s ease-in" }}
+        >
           <Typography
             variant="body2"
             sx={{
@@ -1443,6 +1511,72 @@ const features = [
                 Amjad Hamidi
               </Box>
             </Box>
+            <svg
+              width="50"
+              height="25"
+              viewBox="0 0 100 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ marginLeft: 4 }}
+            >
+              <path
+                d="M0 20 C20 0, 30 30, 50 20 S80 0, 100 20"
+                stroke={darkMode ? "#90caf9" : "#1976d2"}
+                strokeWidth="1.2"
+                fill="transparent"
+              />{" "}
+              {/* <--- تطبيق Dark Mode */}
+            </svg>
+
+            <Box
+              component="a"
+              href="https://github.com/hadeel-404"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="signature-text"
+              sx={{
+                fontWeight: "bold",
+                textDecoration: "none",
+                fontSize: "1rem",
+                color: darkMode ? "#90caf9" : "#1976d2", // <--- تطبيق Dark Mode
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+              }}
+            >
+              <Box
+                component="img"
+                src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                alt="GitHub"
+                sx={{
+                  width: 22,
+                  height: 22,
+                  opacity: 0.9,
+                  transition: "transform 0.4s ease",
+                  "&:hover": {
+                    transform: "rotate(15deg) scale(1.2)",
+                    opacity: 1,
+                  },
+                }}
+              />
+              Hadeel Hamdan
+            </Box>
+            <svg
+              width="50"
+              height="25"
+              viewBox="0 0 100 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ marginLeft: 4 }}
+            >
+              <path
+                d="M0 20 C20 0, 30 30, 50 20 S80 0, 100 20"
+                stroke={darkMode ? "#90caf9" : "#1976d2"}
+                strokeWidth="1.2"
+                fill="transparent"
+              />{" "}
+              {/* <--- تطبيق Dark Mode */}
+            </svg>
 
             <Box
               sx={{
@@ -1450,8 +1584,7 @@ const features = [
                 alignItems: "center",
                 gap: 1,
               }}
-            >
-            </Box>
+            ></Box>
           </Typography>
         </Box>
       </Box>

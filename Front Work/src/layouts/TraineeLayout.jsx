@@ -5,6 +5,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./TraineeLayout.css";
+import "../Responsive/TraineeResponsive.css";
 
 const TraineeLayout = () => {
   const navigate = useNavigate();
@@ -68,11 +69,11 @@ const TraineeLayout = () => {
       </nav>
 
       {/* زر إغلاق وفتح الـ sidebar */}
-      <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 1001 }}>
+      <div className="closeOpenBtn" style={{ position: 'absolute', top: 20, left: 20, zIndex: 1001 }}>
         <Button
           variant="contained"
           onClick={() => setCollapsed(!collapsed)}
-          sx={{ fontWeight: 700, borderRadius: 2, boxShadow: 2 }}
+          sx={{ fontWeight: 700, borderRadius: 2, boxShadow: 2 }}         
         >
           {collapsed ? <MenuIcon /> : <CloseIcon />}
         </Button>

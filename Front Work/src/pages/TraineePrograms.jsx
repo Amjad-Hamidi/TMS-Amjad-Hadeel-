@@ -132,6 +132,8 @@ export default function TraineePrograms() {
           width: "100%",
           maxWidth: 1100,
           mx: "auto",
+          minHeight: "100vh",           
+          overflowY: "auto", // for Scrolling           
           py: 4,
           boxSizing: "border-box",
           paddingLeft: "60px",

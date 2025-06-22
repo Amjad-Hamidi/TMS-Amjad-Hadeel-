@@ -1,0 +1,97 @@
+/* === Base responsive tweaks === */
+@media (max-width: 992px) {
+
+  .trainee-layout .sidebar{
+    width: 11rem;
+  }
+  .trainee-layout .main-content{
+    padding-left: 12px;
+  }
+
+  .trainee-layout .sidebar-header h2{
+    font-size: larger;
+  }
+
+
+  .trainee-layout .nav-links{
+    width: fit-content;
+  }
+  .trainee-layout .sidebar a{
+    font-size: large;
+    padding: 5px 0;
+    gap: 2px;
+  }
+
+  .trainee-layout.collapsed .sidebar {
+    width: 70px;
+  }
+
+  .trainee-layout.collapsed .sidebar-header h2{
+    font-size: 16px;
+    right: 14px;
+  }
+
+  .trainee-layout.collapsed h2 i{
+    font-size: smaller;
+  }
+
+  .trainee-layout.collapsed .main-content {
+    margin-left: 75px;
+    width: calc(100% - 75px);
+  }
+
+  .category-search-input{
+    flex-direction: column;
+    align-items: normal;
+  }
+  
+}
+
+@media (max-width: 900px) {
+    .trainee-layout.collapsed .main-content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+    }
+    .category-search-input{ /* Explore Categories */
+        align-items: normal !important;
+    }
+}
+
+
+@media (max-width: 666px){
+
+    .trainee-layout .main-content{
+        margin-left: 130px;
+    }
+
+    .trainee-layout .sidebar{
+        width: 8rem;
+        padding: 7px;
+    }
+
+    .trainee-layout .sidebar-header{
+        margin-bottom: -9px;
+    }
+    
+    .trainee-layout .sidebar-header h2{
+        font-size: large;
+    }
+
+    .trainee-layout .nav-links a{
+        font-size: small;
+    }
+
+    .trainee-layout .closeOpenBtn{
+        top: 10px;
+        left: 50px;
+    }
+}
+
+
+@media (max-width: 425px){
+    .trainee-layout .trainee-view-programs-btn{
+        font-size: 11px !important;
+        padding: 20px 0 !important; 
+        font-weight: 500 !important;
+    }
+}

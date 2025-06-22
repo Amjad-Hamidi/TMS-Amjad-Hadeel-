@@ -12,10 +12,11 @@
 }
 
 .supervisor-layout.collapsed .sidebar-header h2 {
-  font-size: 16px;
   position: relative;
   right: 26px;
   top: 5px;
+  font-size: large;
+  left: -25px;
 }
 
 .togg-btn{
@@ -25,10 +26,6 @@
   left: 2px;
 }
 
-.supervisor-layout.collapsed .sidebar-header h2{
-  font-size: large;
-  left: -25px;
-}
 
 /* Main Content Area */
 .supervisor-layout .main-content {
