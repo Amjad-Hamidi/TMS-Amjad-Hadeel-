@@ -50,7 +50,7 @@ const [collapsed, setCollapsed] = useState(true);
       </div>
 
       {/* Logout button */}
-      <div style={{ position: 'absolute', top: 20, right: 40, zIndex: 1000 }}>
+      <div className="logout-button-supervisor" style={{ position: 'absolute', top: 20, right: 40, zIndex: 1000 }}>
         <Button
           variant="contained"
           color="error"

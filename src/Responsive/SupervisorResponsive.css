@@ -1,0 +1,188 @@
+@media (max-width: 972px) {
+  
+  .supervisor-layout.collapsed .sidebar{
+    width: 4rem !important;
+  }
+
+
+  .supervisor-layout.collapsed .sidebar {
+    width: 80px;
+    padding: 10px 6px;
+  }
+
+  .supervisor-layout:not(.collapsed) .sidebar {
+    width: 180px;
+    padding: 10px 8px;
+  }
+
+.supervisor-layout.supervisor-layout:not(.collapsed) .main-content {
+  margin-left: 144px;
+}
+
+  .supervisor-layout .sidebar-header h2 {
+    font-size: 16px;
+  }
+  
+  .supervisor-layout .togg-btn{
+    top: -12px;
+    left: -4px !important;
+  }
+.supervisor-layout.collapsed .sidebar .sidebar-header h2 {
+    left: -18px;
+    font-size: 10px !important;
+}
+
+  .supervisor-layout .togg-btn {
+    font-size: 20px;
+  }
+
+  .supervisor-layout .nav-links li {
+    margin: 8px 0;
+  }
+
+  .supervisor-layout .nav-links a {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .supervisor-layout .nav-links i {
+    font-size: 16px;
+    margin-right: 6px;
+  }
+
+  .supervisor-layout .nav-links span {
+    font-size: 0.85rem;
+  }
+
+  .supervisor-layout:not(.collapsed) .main-content {
+    margin-left: 180px;
+    width: calc(100% - 180px);
+    padding: 0 12px;
+  }
+
+  .supervisor-layout.collapsed .main-content {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+    padding: 0 10px;
+  }
+
+  .MuiButtonBase-root {
+    font-size: 0.8rem !important;
+  }
+}
+
+
+@media (max-width: 900px){
+  .supervisor-layout.supervisor-layout.collapsed .main-content {
+    margin-left: 87px;
+    width: calc(100% - 87px);
+  }
+}
+
+/* 🔸 حجم صغير */
+@media (max-width: 666px) {
+
+    .supervisor-layout.supervisor-layout.collapsed .main-content{
+        margin-left: 38px;
+        width: calc(100% - 38px);
+    }
+
+  .supervisor-layout:not(.collapsed) .sidebar {
+    width: 150px;
+    padding: 8px 6px;
+  }
+
+  .supervisor-layout .sidebar-header h2 {
+    font-size: 14px !important;
+  }
+
+  .supervisor-layout .sidebar-header h2 i {
+    font-size: 10px;
+    margin-right: 4px;
+  }
+
+  .supervisor-layout .togg-btn {
+    font-size: 18px;
+  }
+
+  .supervisor-layout .nav-links li {
+    margin: 6px 0;
+  }
+
+  .supervisor-layout .nav-links a {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  .supervisor-layout .nav-links i {
+    font-size: 14px;
+  }
+
+  .supervisor-layout .nav-links span {
+    font-size: 0.75rem;
+  }
+
+  .supervisor-layout:not(.collapsed) .main-content {
+    margin-left: 150px;
+    width: calc(100% - 150px);
+  }
+
+  .supervisor-layout.collapsed .main-content {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+  }
+
+  /* 🔸 Logout Button */
+  .logout-button-container button {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
+  }
+
+  .MuiTypography-h6 {
+    font-size: 0.75rem !important;
+  }
+
+  .MuiTypography-body2 {
+    font-size: 0.7rem !important;
+  }
+
+  .MuiButtonBase-root {
+    font-size: 0.75rem !important;
+    padding: 6px 10px !important;
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 1rem !important;
+  }
+}
+
+
+@media (max-width: 550px){
+    .logout-button-supervisor button {
+        font-size: 10px !important;
+        padding: 0 8px !important;
+        font-weight: bold;
+        left: 15px;
+    }
+    .css-1sh91j5-MuiButton-startIcon{
+        margin-right: 2px !important;
+    }
+}
+
+@media (max-width: 490px){
+  .supervisor-layout .MuiTypography-h4 { /* Explore Categories */
+    width: 100%;
+  }
+  .css-lmi9km-MuiStack-root{
+    align-items: normal !important;
+  }
+}
+
+
+
+
+
+
+
+
+

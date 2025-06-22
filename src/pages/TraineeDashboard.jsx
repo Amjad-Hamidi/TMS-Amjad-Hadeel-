@@ -104,7 +104,7 @@ const TraineeDashboard = () => {
     return (
         <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 1, md: 4 }, minHeight: "100vh", background: "linear-gradient(135deg, #f0f4f8, #d9e2ec)" }}>
             <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, borderRadius: 4, mb: 4, background: "#fff" }}>
-                <Stack direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 3 }}>
+                <Stack className="category-search-input" direction={{ xs: "column", md: "row" }} alignItems="center" justifyContent="space-between" spacing={2} sx={{ mb: 3 }}>
                     <Typography variant="h4" sx={{ fontWeight: 700, color: "#1e3c72" }}>
                         Explore Categories
                     </Typography>
@@ -256,6 +256,7 @@ const TraineeDashboard = () => {
                                                     </Stack>
                                                 )}
                                                 <Button
+                                                    className="trainee-view-programs-btn"
                                                     variant="contained"
                                                     color="primary"
                                                     fullWidth

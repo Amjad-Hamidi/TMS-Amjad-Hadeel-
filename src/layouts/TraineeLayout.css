@@ -16,8 +16,16 @@
   box-sizing: border-box;
 }
 
+.trainee-layout .sidebar{
+  width: 15.5rem;
+}
+
 .trainee-layout.collapsed .sidebar {
   width: 8%;
+}
+
+.trainee-layout.collapsed .closeOpenBtn{
+  left: 4px !important;
 }
 
 .close-open-Btn button{
@@ -28,9 +36,6 @@
   left: 0px;
 }
 
-.collapsed .sidebar-header h2{
-  left: -3px;
-}
 
 
 .sidebar .nav-links {
@@ -52,7 +57,7 @@
   font-size: 1rem;
   padding: 8px;
   border-radius: 4px;
-  transition: background 0.2s, color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .nav-links a i {
@@ -110,7 +115,7 @@
 }
 
 .trainee-layout .main-content{
-  padding-left: 65px;
+  padding-left: 70px;
 }
 
 .main-content::-webkit-scrollbar {

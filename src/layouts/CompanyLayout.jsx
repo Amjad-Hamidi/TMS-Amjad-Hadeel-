@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu"; // زر القائمة
 import "./CompanyLayout.css";
+import "../Responsive/CompanyResponsive.css";
 
 const CompanyLayout = () => {
   const navigate = useNavigate();

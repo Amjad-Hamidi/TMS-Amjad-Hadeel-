@@ -1,0 +1,6 @@
+@media (max-width: 902px){
+    .navbar a{
+        font-size: smaller !important;
+        font-weight: 600;
+    }
+}
