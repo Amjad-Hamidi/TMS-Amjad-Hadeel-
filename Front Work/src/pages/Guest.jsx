@@ -64,6 +64,7 @@ import "swiper/css/navigation";
 import qrImage from "../images/QR Code-TMS.png";
 import logo from "../images/TMS Logo.png";
 import introVideo from "../videos/Intro-TMS.mp4";
+import servicesVideo from "../videos/All TMS Features.mp4";
 
 import "../Responsive/GuestResponsive.css";
 
@@ -276,7 +277,7 @@ export default function GuestPage() {
     if (window.Typed && typedRef.current) {
       const typed = new window.Typed(typedRef.current, {
         strings: [
-          `🔧 Developed by <strong style="color:#1e90ff; transition: transform 0.3s; display:inline-block; cursor: default;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">Amjad Hamidi</strong>. For inquiries or support, please contact via <a href='mailto:amjadhmaidi1@gmail.com' style="color:#0077b6; font-weight:600; transition: transform 0.3s; text-decoration:none;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">Email</a> or <a href='https://www.linkedin.com/in/amjad-hamidi/' target='_blank' rel='noopener noreferrer' style="color:#0077b6; font-weight:600; transition: transform 0.3s; text-decoration:none;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">LinkedIn</a>.`,
+          `🔧 Developed by <strong style="color:#1e90ff; transition: transform 0.3s; display:inline-block; cursor: default;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">Amjad Hamidi and Hadeel Hamdan</strong>. For inquiries or support, please contact via <a href='mailto:amjadhmaidi1@gmail.com' style="color:#0077b6; font-weight:600; transition: transform 0.3s; text-decoration:none;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">Email</a> or <a href='https://www.linkedin.com/in/amjad-hamidi/' target='_blank' rel='noopener noreferrer' style="color:#0077b6; font-weight:600; transition: transform 0.3s; text-decoration:none;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">LinkedIn</a>.`,
           "🚀 TMS: Where Tech Talents Are Born.",
           "🌍 Empowering the Next Million Developers.",
         ],
@@ -1115,6 +1116,46 @@ export default function GuestPage() {
             <Box
               component="video"
               src={introVideo}
+              controls
+              sx={{
+                width: "100%",
+                maxWidth: 640,
+                borderRadius: 2,
+                boxShadow: darkMode
+                  ? "0 4px 16px rgba(144,202,249,0.3)"
+                  : "0 4px 16px rgba(0,0,0,0.2)",
+              }}
+            />
+          </SwiperSlide>
+        </Swiper>
+      </Container>
+
+      {/* ===== Service Video ===== */}
+      <Container
+        id="servicesvideo"
+        sx={{
+          py: 4,
+          textAlign: "center",
+          opacity: 0,
+          animation: "fadeSection 1s 0.6s forwards",
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          🎬 Watch Our Services
+        </Typography>
+        <Swiper
+          modules={[Autoplay, Navigation]}
+          spaceBetween={20}
+          slidesPerView={1}
+          navigation
+          autoplay={{ delay: 3000 }}
+          loop
+          style={{ maxWidth: 700, margin: "0 auto" }}
+        >
+          <SwiperSlide>
+            <Box
+              component="video"
+              src={servicesVideo}
               controls
               sx={{
                 width: "100%",
